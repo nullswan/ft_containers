@@ -1,5 +1,7 @@
 {
 	"cpplint.filters": [
+		"-legal/copyright",
+		"-whitespace/tab",
 	],
 	"cpplint.root": "srcs"
 }

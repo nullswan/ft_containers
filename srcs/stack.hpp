@@ -1,4 +1,5 @@
-#ifndef STACK_HPP
-#define STACK_HPP
+// Copyright (C) 2021 github.com/c3b5aw
+#ifndef STACK_HPP_
+#define STACK_HPP_
 
-#endif
+#endif  // STACK_HPP_

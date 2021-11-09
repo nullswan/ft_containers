@@ -1,4 +1,5 @@
-#ifndef MAP_HPP
-#define MAP_HPP
+// Copyright (C) 2021 github.com/c3b5aw
+#ifndef MAP_HPP_
+#define MAP_HPP_
 
-#endif
+#endif  // MAP_HPP_

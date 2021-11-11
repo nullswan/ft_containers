@@ -55,7 +55,7 @@
 
 ---
 
-# Additional containers
+# Additional classes
 
 ### iterator
 

@@ -1,23 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   stack.hpp                                          :+:      :+:    :+:   */
+/*   ft_itoa.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/09 22:47:19 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/11/10 18:09:28 by c3b5aw           ###   ########.fr       */
+/*   Created: 2021/11/10 18:53:44 by c3b5aw            #+#    #+#             */
+/*   Updated: 2021/11/10 18:55:16 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STACK_HPP_
-#define STACK_HPP_
+/*
+	Convert interer to string
 
-namespace ft {
-class stack {
- public:
- private:
-};
-}  // namespace ft
+	Used by:
+		- vector.hpp
+*/
 
-#endif  // STACK_HPP_
+#ifndef UTILS_FT_ITOA_HPP_
+#define UTILS_FT_ITOA_HPP_
+
+#include <string>
+#include <sstream>
+
+template <typename T>
+std::string ft_itoa(T n) {
+	std::stringstream ss;
+
+	ss << n;
+	return ss.str();
+}
+
+#endif  // UTILS_FT_ITOA_HPP_

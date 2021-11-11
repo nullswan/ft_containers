@@ -1,23 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   stack.hpp                                          :+:      :+:    :+:   */
+/*   lexicographical_compare.hpp                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/09 22:47:19 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/11/10 18:09:28 by c3b5aw           ###   ########.fr       */
+/*   Created: 2021/11/10 17:48:37 by c3b5aw            #+#    #+#             */
+/*   Updated: 2021/11/11 02:12:09 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STACK_HPP_
-#define STACK_HPP_
+/*
+	Link: 
+	https://en.cppreference.com/w/cpp/algorithm/lexicographical_compare
+
+	Used by: 
+		- vector.hpp
+*/
+
+#ifndef ALGORITHM_LEXICOGRAPHICAL_COMPARE_HPP_
+#define ALGORITHM_LEXICOGRAPHICAL_COMPARE_HPP_
 
 namespace ft {
-class stack {
+class lexicographical_compare {
  public:
- private:
 };
 }  // namespace ft
 
-#endif  // STACK_HPP_
+#endif  // ALGORITHM_LEXICOGRAPHICAL_COMPARE_HPP_

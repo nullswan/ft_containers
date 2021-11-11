@@ -1,6 +1,7 @@
 # Result
 
 [![.github/workflows/cpplint.yml](https://github.com/c3b5aw/ft_containers/actions/workflows/cpplint.yml/badge.svg?branch=main)](https://github.com/c3b5aw/ft_containers/actions/workflows/cpplint.yml) <br />
+[![.github/workflows/docs.yml](https://github.com/c3b5aw/ft_containers/actions/workflows/docs.yml/badge.svg?branch=main)](https://github.com/c3b5aw/ft_containers/actions/workflows/docs.yml)
 
 # Mandatory part
 

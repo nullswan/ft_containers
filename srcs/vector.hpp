@@ -244,6 +244,11 @@ class vector {
 	void reserve(size_type n);
 
 	//		- [ ELEMENT ACCESS ] -
+	/*
+		https://www.cplusplus.com/reference/vector/vector/operator[]/
+
+		Returns a reference to the element at position n in the vector container.
+	*/
 	reference		operator[] (size_type n) {
 		return _data[n];
 	}
@@ -251,6 +256,13 @@ class vector {
 		return _data[n];
 	}
 
+	/*
+		https://www.cplusplus.com/reference/vector/vector/at/
+
+		Returns a reference to the element at position n in the vector.
+
+		The function automatically checks whether n is within the bounds of valid elements in the vector, throwing an out_of_range exception if it is not (i.e., if n is greater than, or equal to, its size). This is in contrast with member operator[], that does not check against bounds.
+	*/
 	reference		at(size_type n) {
 		__range_check(n);
 		return _data[n];
@@ -260,6 +272,11 @@ class vector {
 		return _data[n];
 	}
 
+	/*
+		https://www.cplusplus.com/reference/vector/vector/front/
+
+		Returns a reference to the first element in the vector.
+	*/
 	reference		front() {
 		return _data[0];
 	}
@@ -267,6 +284,11 @@ class vector {
 		return _data[0];
 	}
 
+	/*
+		https://www.cplusplus.com/reference/vector/vector/back/
+
+		Returns a reference to the last element in the vector.
+	*/
 	reference		back() {
 		return _data[_size - 1];
 	}

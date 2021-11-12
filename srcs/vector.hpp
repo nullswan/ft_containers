@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:47:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/11/10 19:12:09 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/11/12 03:13:44 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 #include <exception>
 
 #include "utils/ft_itoa.hpp"
+#include "types/type_trait.hpp"
 
 #include "algorithm/equal.hpp"
 #include "algorithm/lexicographical_compare.hpp"
@@ -73,28 +74,93 @@ class vector {
 
  public:
 	// 		- [ CONSTRUCTORS ] -
+	/* 
+		https://www.cplusplus.com/reference/vector/vector/vector/
+
+		(1) empty container constructor (default constructor)
+		Constructs an empty container, with no elements. 
+	*/
 	explicit vector(const allocator_type& alloc = allocator_type())
-		: _alloc(alloc), _size(0), _capacity(0) {}
+		: _alloc(alloc), _size(0), _capacity(0) {
+		_data = NULL;
+	}
+
+	/*
+		(2) fill constructor
+    	Constructs a container with n elements. Each element is a copy of val.
+	*/
 	explicit vector(size_type n, const value_type& val = value_type(), \
 		const allocator_type& alloc = allocator_type())
 		: _alloc(alloc), _size(n), _capacity(n) {
+		_data = NULL;
+
 		reserve(n);
 		for (size_type i = 0; i < n; i++)
 			_alloc.construct(&_data[i], val);
 	}
+
+	/*
+		(3) range constructor
+    	Constructs a container with as many elements as the range [first,last), with each element constructed from its corresponding element in that range, in the same order.
+	*/
 	template <class InputIterator>
 	vector(InputIterator first, InputIterator last, \
-		const allocator_type& alloc = allocator_type());
-	vector(const vector& x);
+		const allocator_type& alloc = allocator_type())
+		: _alloc(alloc), _size(0), _capacity(0) {
+		_data = NULL;
+
+		size_type n = last - first;
+
+		_size = n;
+		reserve(n);
+		for (size_type i = 0; i < n; i++)
+			_alloc.construct(&_data[i], *(first + i));
+	}
+
+	/*
+		(4) copy constructor
+    	Constructs a container with a copy of each of the elements in x, in the same order.
+	*/
+	vector(const vector& x)
+		: _alloc(x._alloc), _size(x._size), _capacity(x._capacity) {
+		_data = _alloc.allocate(_capacity);
+		for (size_type i = 0; i < _size; i++)
+			_alloc.construct(&_data[i], x._data[i]);
+	}
 
 	//		- [ DESTRUCTOR ] -
+	/*
+		https://www.cplusplus.com/reference/vector/vector/~vector/
+
+		This destroys all container elements, and deallocates all the storage capacity allocated by the vector using its allocator.
+	*/
 	~vector() {
 		clear();
 		_alloc.deallocate(_data, _capacity);
 	}
 
 	// 		- [ ASSIGNEMENT OPERATOR ] -
-	vector& operator=(const vector& x);
+	/*
+		https://www.cplusplus.com/reference/vector/vector/operator=/
+
+		Assigns new contents to the container, replacing its current contents, and modifying its size accordingly.
+		- C++98:
+			Copies all the elements from x into the container.
+			* Using: https://en.cppreference.com/w/cpp/memory/allocator/construct
+			The container preserves its current allocator, which is used to allocate storage in case of reallocation.
+	*/
+	vector& operator=(const vector& x) {
+		if (this != &x) {
+			clear();
+			_alloc.deallocate(_data, _capacity);
+			_size = x._size;
+			_capacity = x._capacity;
+			_data = _alloc.allocate(_capacity);
+			for (size_type i = 0; i < _size; i++)
+				_alloc.construct(&_data[i], x._data[i]);
+		}
+		return *this;
+	}
 
 	// 		- [ ITERATORS ] -
 	/*
@@ -172,7 +238,29 @@ class vector {
 		return _alloc.max_size();
 	}
 
-	void resize(size_type n, value_type val = value_type());
+	/*
+		https://www.cplusplus.com/reference/vector/vector/resize/
+
+		Resizes the container so that it contains n elements.
+		If n is smaller than the current container size, the content is reduced to its first n elements, removing those beyond (and destroying them).
+		If n is greater than the current container size, the content is expanded by inserting at the end as many elements as needed to reach a size of n. If val is specified, the new elements are initialized as copies of val, otherwise, they are value-initialized.
+		If n is also greater than the current container capacity, an automatic reallocation of the allocated storage space takes place.
+	*/
+
+	void resize(size_type n, value_type val = value_type()) {
+		if (n < _size) {
+			for (size_type i = n; i < _size; i++)
+				_alloc.destroy(&_data[i]);
+			_size = n;
+		} else if (n > _size) {
+			/* We must allocate here even though it comes after in reference */
+			if (n > _capacity)
+				reserve(n);
+			for (size_type i = _size; i < n; i++)
+				_alloc.construct(&_data[i], val);
+			_size = n;
+		}
+	}
 
 	/*
 		https://www.cplusplus.com/reference/vector/vector/capacity/
@@ -193,9 +281,36 @@ class vector {
 		return _size == 0;
 	}
 
-	void reserve(size_type n);
+	/*
+		https://www.cplusplus.com/reference/vector/vector/reserve/
+		Requests that the vector capacity be at least enough to contain n elements.
+		If n is greater than the current vector capacity, the function causes the container to reallocate its storage increasing its capacity to n (or greater).
+		In all other cases, the function call does not cause a reallocation and the vector capacity is not affected.
+		
+	*/
+	void reserve(size_type n) {
+		if (n > _alloc.max_size())
+			throw std::length_error("vector::reserve::bad_alloc");
+		if (n > _capacity) {
+			pointer tmp = _alloc.allocate(n);
+
+			for (size_type i = 0; i < _size; i++)
+				_alloc.construct(&tmp[i], _data[i]);
+			for (size_type i = 0; i < _size; i++)
+				_alloc.destroy(&_data[i]);
+
+			_alloc.deallocate(_data, _capacity);
+			_data = tmp;
+			_capacity = n;
+		}
+	}
 
 	//		- [ ELEMENT ACCESS ] -
+	/*
+		https://www.cplusplus.com/reference/vector/vector/operator[]/
+
+		Returns a reference to the element at position n in the vector container.
+	*/
 	reference		operator[] (size_type n) {
 		return _data[n];
 	}
@@ -203,6 +318,13 @@ class vector {
 		return _data[n];
 	}
 
+	/*
+		https://www.cplusplus.com/reference/vector/vector/at/
+
+		Returns a reference to the element at position n in the vector.
+
+		The function automatically checks whether n is within the bounds of valid elements in the vector, throwing an out_of_range exception if it is not (i.e., if n is greater than, or equal to, its size). This is in contrast with member operator[], that does not check against bounds.
+	*/
 	reference		at(size_type n) {
 		__range_check(n);
 		return _data[n];
@@ -212,6 +334,11 @@ class vector {
 		return _data[n];
 	}
 
+	/*
+		https://www.cplusplus.com/reference/vector/vector/front/
+
+		Returns a reference to the first element in the vector.
+	*/
 	reference		front() {
 		return _data[0];
 	}
@@ -219,6 +346,11 @@ class vector {
 		return _data[0];
 	}
 
+	/*
+		https://www.cplusplus.com/reference/vector/vector/back/
+
+		Returns a reference to the last element in the vector.
+	*/
 	reference		back() {
 		return _data[_size - 1];
 	}
@@ -227,23 +359,93 @@ class vector {
 	}
 
 	//		- [ MODIFIERS ] -
+	/*
+		https://www.cplusplus.com/reference/vector/vector/assign/
+
+		Assigns new contents to the vector, replacing its current contents, and modifying its size accordingly.
+		In the range version (1), the new contents are elements constructed from each of the elements in the range between first and last, in the same order.
+		In the fill version (2), the new contents are n elements, each initialized to a copy of val.
+	*/
+
 	template <class InputIterator>
-	void assign(InputIterator first, InputIterator last);
-	void assign(size_type n, const value_type& val);
+	void assign(InputIterator first, InputIterator last, \
+		// std::enable_if_t<std::is_integral<Integer>::value, bool> = true
+		ft::enable_if<ft::is_integral<InputIterator>::value, bool> = true) {
+		size_type n = last - first;
 
-	void push_back(const value_type& val);
+		if (n > _capacity)
+			reserve(n);
+		for (size_type i = 0; i < n; i++, first++) {
+			_alloc.destroy(&_data[i]);
+			_alloc.construct(&_data[i], *first);
+		}
+		_size = n;
+	}
+	void assign(size_type n, const value_type& val) {
+		if (n > _capacity)
+			reserve(n);
+		for (size_type i = 0; i < n; i++) {
+			_alloc.destroy(&_data[i]);
+			_alloc.construct(&_data[i], val);
+		}
+		_size = n;
+	}
 
-	void pop_back();
+	/*
+		https://www.cplusplus.com/reference/vector/vector/push_back/
 
+		Adds a new element at the end of the vector, after its current last element. The content of val is copied (or moved) to the new element.
+		This effectively increases the container size by one, which causes an automatic reallocation of the allocated storage space if -and only if- the new vector size surpasses the current vector capacity.
+	*/
+	void push_back(const value_type& val) {
+		if (_size == _capacity)
+			reserve(__new_size());
+		_alloc.construct(&_data[_size++], val);
+	}
+
+	/*
+		https://www.cplusplus.com/reference/vector/vector/pop_back/
+
+		Removes the last element in the vector, effectively reducing the container size by one.
+		This destroys the removed element.
+	*/
+	void pop_back() {
+		_alloc.destroy(&_data[--_size]);
+	}
+
+	/*
+		https://www.cplusplus.com/reference/vector/vector/insert/
+
+		The vector is extended by inserting new elements before the element at the specified position, effectively increasing the container size by the number of elements inserted.
+		This causes an automatic reallocation of the allocated storage space if -and only if- the new vector size surpasses the current vector capacity.
+	*/
 	iterator insert(iterator position, const value_type& val);
 	void insert(iterator position, size_type n, const value_type& val);
 	template <class InputIterator>
 	void insert(iterator position, InputIterator first, InputIterator last);
 
+	/*
+		https://www.cplusplus.com/reference/vector/vector/erase/
+
+		Removes from the vector either a single element (position) or a range of elements ([first,last)).
+		This effectively reduces the container size by the number of elements removed, which are destroyed.
+	*/
 	iterator erase(iterator position);
 	iterator erase(iterator first, iterator last);
 
-	void swap(vector& x);
+	/*
+		https://www.cplusplus.com/reference/vector/vector/swap/
+
+		Exchanges the content of the container by the content of x, which is another vector object of the same type. Sizes may differ.
+		After the call to this member function, the elements in this container are those which were in x before the call, and the elements of x are those which were in this. All iterators, references and pointers remain valid for the swapped objects.
+	*/
+	void swap(vector& x) {
+		std::swap(_data, x._data);
+		std::swap(_size, x._size);
+		std::swap(_capacity, x._capacity);
+		/* Unsure about _alloc but we must probably swap every variables */
+		std::swap(_alloc, x._alloc);
+	}
 
 	/*  
 		https://www.cplusplus.com/reference/vector/vector/clear/
@@ -252,8 +454,10 @@ class vector {
 		leaving the container with a size of 0. 
 	*/
 	void clear() {
-		for (size_type i = 0; i < _size; i++)
-			_alloc.destroy(&_data[i]);
+		if (_data) {
+			for (size_type i = 0; i < _size; i++)
+				_alloc.destroy(&_data[i]);
+		}
 		_size = 0;
 	}
 
@@ -275,6 +479,10 @@ class vector {
 				std::string("n (which is ") + ft_itoa(n) + \
 				std::string(") >= this->size() (which is ") + \
 				ft_itoa(_size) + std::string(")"));
+	}
+
+	size_type	__new_size() {
+		return _size == 0 ? 1 : _size * 2;
 	}
 };
 	//		- [ NON-MEMBER FUNCTION OVERLOADS ] -

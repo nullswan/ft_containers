@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 18:05:40 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/11/10 18:20:51 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/11/12 14:00:16 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ class random_access_iterator {
  private:
 	T	*_ptr;
  public:
-	random_access_iterator() {}
+	random_access_iterator() {
+		_ptr = NULL;
+	}
 
 	random_access_iterator(const random_access_iterator &rhs)
 	: _ptr(rhs._ptr) {}

@@ -359,8 +359,11 @@ class vector {
 
 	//		- [ MODIFIERS ] -
 	template <class InputIterator>
-	void assign(InputIterator first, InputIterator last);
-	void assign(size_type n, const value_type& val);
+	void push_back(const value_type& val) {
+		if (_size == _capacity)
+			reserve(_capacity * 2 + 1);
+		_alloc.construct(&_data[_size++], val);
+	}
 
 	/*
 		https://www.cplusplus.com/reference/vector/vector/pop_back/

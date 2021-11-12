@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 23:31:00 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/11/12 14:36:23 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/11/12 14:47:57 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,34 +149,87 @@ class reverse_iterator {
 
  private:
 	iterator_type	_base;
-
+};
 /*
 	https://www.cplusplus.com/reference/iterator/reverse_iterator/operators/
+
+	Relational operators for reverse_iterator
+	Performs the appropriate comparison operation between the reverse_iterator objects lhs and rhs.
+
+	Internally, the function compares directly the base iterators using the reflexively equivalent relational operator:
+
+	operator on
+	reverse iterators	equivalent used on base iterators
+	==					==
+	!=					!=
+	<					>
+	<=					>=
+	>					<
+	>=					<=
 */
 template <class Iterator>
 bool operator==	(const reverse_iterator<Iterator>& lhs, \
-	const reverse_iterator<Iterator>& rhs);
-
+	const reverse_iterator<Iterator>& rhs) {
+	return lhs._base == rhs._base;
+}
 template <class Iterator>
 bool operator!=	(const reverse_iterator<Iterator>& lhs, \
-	const reverse_iterator<Iterator>& rhs);
-
+	const reverse_iterator<Iterator>& rhs) {
+	return lhs._base != rhs._base;
+}
 template <class Iterator>
 bool operator<	(const reverse_iterator<Iterator>& lhs, \
-	const reverse_iterator<Iterator>& rhs);
-
+	const reverse_iterator<Iterator>& rhs) {
+	return lhs._base > rhs._base;
+}
 template <class Iterator>
 bool operator<=	(const reverse_iterator<Iterator>& lhs, \
-	const reverse_iterator<Iterator>& rhs);
-
+	const reverse_iterator<Iterator>& rhs) {
+	return lhs._base >= rhs._base;
+}
 template <class Iterator>
 bool operator>	(const reverse_iterator<Iterator>& lhs, \
-	const reverse_iterator<Iterator>& rhs);
-
+	const reverse_iterator<Iterator>& rhs) {
+	return lhs._base < rhs._base;
+}
 template <class Iterator>
 bool operator>=	(const reverse_iterator<Iterator>& lhs, \
-	const reverse_iterator<Iterator>& rhs);
-};
+	const reverse_iterator<Iterator>& rhs) {
+	return lhs._base <= rhs._base;
+}
+
+/*
+	https://www.cplusplus.com/reference/iterator/reverse_iterator/operator_plus-free/
+
+	Addition operator
+	Returns a reverse iterator pointing to the element located n positions away from the element pointed to by rev_it.
+	The function returns the same as: rev_it+n (see reverse_iterator::operator+).
+	This operator is also overloaded as a member function to return a reverse iterator offset by -n element positions (see reverse_iterator::operator-).
+
+*/
+
+template <class Iterator>
+reverse_iterator<Iterator> operator+ ( \
+	typename reverse_iterator<Iterator>::difference_type n, \
+	const reverse_iterator<Iterator>& rev_it) {
+	return rev_it + n;
+}
+
+/*
+	https://www.cplusplus.com/reference/iterator/reverse_iterator/operator_minus-free/
+
+	Subtraction operator
+	Returns the distance between lhs and rhs.
+	The function returns the same as subtracting lhs's base iterator from rhs's base iterator.
+
+*/
+
+template <class Iterator>
+typename reverse_iterator<Iterator>::difference_type operator- ( \
+	const reverse_iterator<Iterator>& lhs, \
+	const reverse_iterator<Iterator>& rhs) {
+	return rhs._base - lhs._base;
+}
 }  // namespace ft
 
 #endif  // ITERATOR_REVERSE_ITERATOR_HPP_

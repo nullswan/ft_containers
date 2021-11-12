@@ -220,7 +220,29 @@ class vector {
 		return _alloc.max_size();
 	}
 
-	void resize(size_type n, value_type val = value_type());
+	/*
+		https://www.cplusplus.com/reference/vector/vector/resize/
+
+		Resizes the container so that it contains n elements.
+		If n is smaller than the current container size, the content is reduced to its first n elements, removing those beyond (and destroying them).
+		If n is greater than the current container size, the content is expanded by inserting at the end as many elements as needed to reach a size of n. If val is specified, the new elements are initialized as copies of val, otherwise, they are value-initialized.
+		If n is also greater than the current container capacity, an automatic reallocation of the allocated storage space takes place.
+	*/
+
+	void resize(size_type n, value_type val = value_type()) {
+		if (n < _size) {
+			for (size_type i = n; i < _size; i++)
+				_alloc.destroy(&_data[i]);
+			_size = n;
+		} else if (n > _size) {
+			/* We must allocate here even though it comes after in reference */
+			if (n > _capacity)
+				reserve(n);
+			for (size_type i = _size; i < n; i++)
+				_alloc.construct(&_data[i], val);
+			_size = n;
+		}
+	}
 
 	/*
 		https://www.cplusplus.com/reference/vector/vector/capacity/

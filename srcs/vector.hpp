@@ -83,9 +83,16 @@ class vector {
 		: _alloc(alloc), _size(0), _capacity(0) {
 		_data = NULL;
 	}
+
+	/*
+		(2) fill constructor
+    	Constructs a container with n elements. Each element is a copy of val.
+	*/
 	explicit vector(size_type n, const value_type& val = value_type(), \
 		const allocator_type& alloc = allocator_type())
 		: _alloc(alloc), _size(n), _capacity(n) {
+		_data = NULL;
+
 		reserve(n);
 		for (size_type i = 0; i < n; i++)
 			_alloc.construct(&_data[i], val);

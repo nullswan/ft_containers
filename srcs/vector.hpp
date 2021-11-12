@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:47:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/11/12 03:13:44 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/11/12 03:44:29 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@
 #ifndef VECTOR_HPP_
 #define VECTOR_HPP_
 
-#include <stddef.h>  // Provide size_t
+#include <stddef.h>		// Provide size_t
 
 #include <string>
-#include <memory>
+#include <memory>		// provides std::alocator
 #include <exception>
 
-#include "utils/ft_itoa.hpp"
+#include "utility/ft_itoa.hpp"
 #include "types/type_trait.hpp"
 
 #include "algorithm/equal.hpp"

@@ -9,24 +9,24 @@
 
 | **Member** | **State** | **Description** |
 |:--------------------:|:-----:|:-----:|
-| *Member types* | 1/1 | 2021/11/11 |
-| *Member function* | 3/3 | 2021/11/12  |
+| *Member types* | 1/1 | * |
+| *Member function* | 3/3 | **  |
 | (constructor) | OK | Construct vector (public member function ) 	|
 | (destructor) 	| OK | Vector destructor (public member function ) 	|
 | operator= 	| OK | Assign content (public member function ) 		|
-| *Iterators* | 4/4 | 2021/11/11 |
+| *Iterators* | 4/4 | * |
 | begin 	| OK | Return iterator to beginning (public member function ) 						|
 | end 		| OK | Return iterator to end (public member function ) 								|
 | rbegin 	| OK | Return reverse iterator to reverse beginning (public member function ) 		|
 | rend 		| OK | Return reverse iterator to reverse end (public member function ) 				|
-| *Capacity* | 6/6 | 2021/11/12 |
+| *Capacity* | 6/6 | ** |
 | size 			| OK |  Return size (public member function )									|
 | max_size 		| OK |  Return maximum size (public member function )						|
 | resize 		| OK |  Change size (public member function )								|
 | capacity 		| OK |  Return size of allocated storage capacity (public member function )	|
 | empty 		| OK |  Test whether vector is empty (public member function )				|
 | reserve 		| OK |  Request a change in capacity (public member function )				|
-| *Element access* | 4/4 | 2021/11/11 |
+| *Element access* | 4/4 | * |
 | operator[] 	| OK | Access element (public member function ) 			|
 | at 			| OK | Access element (public member function ) 			|
 | front 		| OK | Access first element (public member function )	|
@@ -39,9 +39,9 @@
 | erase 	| x | Erase elements (public member function )			|
 | swap 		| OK | Swap content (public member function )			|
 | clear 	| OK | Clear content (public member function )			|
-| *Allocator* | 1/1 | 2021/11/11 |
+| *Allocator* | 1/1 | * |
 | get_allocator | OK | Get allocator (public member function ) |
-| *Non-member function overloads* | 2/2 | 2021/11/11 |
+| *Non-member function overloads* | 2/2 | * |
 | relational  	| OK | operators Relational operators for vector (function template )|
 | swap Exchange | OK | contents of vectors (function template )						|
 

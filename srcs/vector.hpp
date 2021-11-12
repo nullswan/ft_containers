@@ -322,8 +322,10 @@ class vector {
 		leaving the container with a size of 0. 
 	*/
 	void clear() {
+		if (_data) {
 		for (size_type i = 0; i < _size; i++)
 			_alloc.destroy(&_data[i]);
+		}
 		_size = 0;
 	}
 

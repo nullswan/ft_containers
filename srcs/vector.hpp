@@ -111,6 +111,11 @@ class vector {
 	}
 
 	//		- [ DESTRUCTOR ] -
+	/*
+		https://www.cplusplus.com/reference/vector/vector/~vector/
+
+		This destroys all container elements, and deallocates all the storage capacity allocated by the vector using its allocator.
+	*/
 	~vector() {
 		clear();
 		_alloc.deallocate(_data, _capacity);

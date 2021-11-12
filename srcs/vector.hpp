@@ -73,8 +73,16 @@ class vector {
 
  public:
 	// 		- [ CONSTRUCTORS ] -
+	/* 
+		https://www.cplusplus.com/reference/vector/vector/vector/
+
+		(1) empty container constructor (default constructor)
+		Constructs an empty container, with no elements. 
+	*/
 	explicit vector(const allocator_type& alloc = allocator_type())
-		: _alloc(alloc), _size(0), _capacity(0) {}
+		: _alloc(alloc), _size(0), _capacity(0) {
+		_data = NULL;
+	}
 	explicit vector(size_type n, const value_type& val = value_type(), \
 		const allocator_type& alloc = allocator_type())
 		: _alloc(alloc), _size(n), _capacity(n) {

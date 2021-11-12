@@ -97,8 +97,25 @@ class vector {
 		for (size_type i = 0; i < n; i++)
 			_alloc.construct(&_data[i], val);
 	}
+
+	/*
+		(3) range constructor
+    	Constructs a container with as many elements as the range [first,last), with each element constructed from its corresponding element in that range, in the same order.
+	*/
 	template <class InputIterator>
 	vector(InputIterator first, InputIterator last, \
+		const allocator_type& alloc = allocator_type())
+		: _alloc(alloc), _size(0), _capacity(0) {
+		_data = NULL;
+
+		size_type n = last - first;
+
+		_size = n;
+		reserve(n);
+		for (size_type i = 0; i < n; i++)
+			_alloc.construct(&_data[i], *(first + i));
+	}
+
 	/*
 		(4) copy constructor
     	Constructs a container with a copy of each of the elements in x, in the same order.

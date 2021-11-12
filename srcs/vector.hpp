@@ -301,9 +301,15 @@ class vector {
 	void assign(InputIterator first, InputIterator last);
 	void assign(size_type n, const value_type& val);
 
-	void push_back(const value_type& val);
+	/*
+		https://www.cplusplus.com/reference/vector/vector/pop_back/
 
-	void pop_back();
+		Removes the last element in the vector, effectively reducing the container size by one.
+		This destroys the removed element.
+	*/
+	void pop_back() {
+		_alloc.destroy(&_data[--_size]);
+	}
 
 	iterator insert(iterator position, const value_type& val);
 	void insert(iterator position, size_type n, const value_type& val);

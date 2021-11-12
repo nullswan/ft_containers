@@ -358,7 +358,38 @@ class vector {
 	}
 
 	//		- [ MODIFIERS ] -
+	/*
+		https://www.cplusplus.com/reference/vector/vector/assign/
+
+		Assigns new contents to the vector, replacing its current contents, and modifying its size accordingly.
+		In the range version (1), the new contents are elements constructed from each of the elements in the range between first and last, in the same order.
+		In the fill version (2), the new contents are n elements, each initialized to a copy of val.
+	*/
+
 	template <class InputIterator>
+	void assign(InputIterator first, InputIterator last, \
+		// std::enable_if_t<std::is_integral<Integer>::value, bool> = true
+		ft::enable_if<ft::is_integral<InputIterator>::value, bool> = true) {
+		size_type n = last - first;
+
+		if (n > _capacity)
+			reserve(n);
+		for (size_type i = 0; i < n; i++, first++) {
+			_alloc.destroy(&_data[i]);
+			_alloc.construct(&_data[i], *first);
+		}
+		_size = n;
+	}
+	void assign(size_type n, const value_type& val) {
+		if (n > _capacity)
+			reserve(n);
+		for (size_type i = 0; i < n; i++) {
+			_alloc.destroy(&_data[i]);
+			_alloc.construct(&_data[i], val);
+		}
+		_size = n;
+	}
+
 	/*
 		https://www.cplusplus.com/reference/vector/vector/push_back/
 

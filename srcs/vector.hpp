@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:47:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/11/12 02:59:57 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/11/12 03:13:44 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -413,11 +413,23 @@ class vector {
 		_alloc.destroy(&_data[--_size]);
 	}
 
+	/*
+		https://www.cplusplus.com/reference/vector/vector/insert/
+
+		The vector is extended by inserting new elements before the element at the specified position, effectively increasing the container size by the number of elements inserted.
+		This causes an automatic reallocation of the allocated storage space if -and only if- the new vector size surpasses the current vector capacity.
+	*/
 	iterator insert(iterator position, const value_type& val);
 	void insert(iterator position, size_type n, const value_type& val);
 	template <class InputIterator>
 	void insert(iterator position, InputIterator first, InputIterator last);
 
+	/*
+		https://www.cplusplus.com/reference/vector/vector/erase/
+
+		Removes from the vector either a single element (position) or a range of elements ([first,last)).
+		This effectively reduces the container size by the number of elements removed, which are destroyed.
+	*/
 	iterator erase(iterator position);
 	iterator erase(iterator first, iterator last);
 

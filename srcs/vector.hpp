@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:47:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/11/10 19:12:09 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/11/12 02:59:57 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 #include <exception>
 
 #include "utils/ft_itoa.hpp"
+#include "types/type_trait.hpp"
 
 #include "algorithm/equal.hpp"
 #include "algorithm/lexicographical_compare.hpp"
@@ -442,8 +443,8 @@ class vector {
 	*/
 	void clear() {
 		if (_data) {
-		for (size_type i = 0; i < _size; i++)
-			_alloc.destroy(&_data[i]);
+			for (size_type i = 0; i < _size; i++)
+				_alloc.destroy(&_data[i]);
 		}
 		_size = 0;
 	}

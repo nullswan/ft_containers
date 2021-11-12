@@ -359,6 +359,12 @@ class vector {
 
 	//		- [ MODIFIERS ] -
 	template <class InputIterator>
+	/*
+		https://www.cplusplus.com/reference/vector/vector/push_back/
+
+		Adds a new element at the end of the vector, after its current last element. The content of val is copied (or moved) to the new element.
+		This effectively increases the container size by one, which causes an automatic reallocation of the allocated storage space if -and only if- the new vector size surpasses the current vector capacity.
+	*/
 	void push_back(const value_type& val) {
 		if (_size == _capacity)
 			reserve(_capacity * 2 + 1);

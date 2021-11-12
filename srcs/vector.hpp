@@ -399,7 +399,7 @@ class vector {
 	*/
 	void push_back(const value_type& val) {
 		if (_size == _capacity)
-			reserve(_capacity * 2 + 1);
+			reserve(__new_size());
 		_alloc.construct(&_data[_size++], val);
 	}
 
@@ -479,6 +479,10 @@ class vector {
 				std::string("n (which is ") + ft_itoa(n) + \
 				std::string(") >= this->size() (which is ") + \
 				ft_itoa(_size) + std::string(")"));
+	}
+
+	size_type	__new_size() {
+		return _size == 0 ? 1 : _size * 2;
 	}
 };
 	//		- [ NON-MEMBER FUNCTION OVERLOADS ] -

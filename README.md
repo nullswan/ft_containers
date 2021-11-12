@@ -66,3 +66,9 @@
 
 - equal
 - lexigraphical_compare
+
+### types
+
+- type_trait
+	- is_integral
+	- enable_if

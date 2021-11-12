@@ -122,7 +122,27 @@ class vector {
 	}
 
 	// 		- [ ASSIGNEMENT OPERATOR ] -
-	vector& operator=(const vector& x);
+	/*
+		https://www.cplusplus.com/reference/vector/vector/operator=/
+
+		Assigns new contents to the container, replacing its current contents, and modifying its size accordingly.
+		- C++98:
+			Copies all the elements from x into the container.
+			* Using: https://en.cppreference.com/w/cpp/memory/allocator/construct
+			The container preserves its current allocator, which is used to allocate storage in case of reallocation.
+	*/
+	vector& operator=(const vector& x) {
+		if (this != &x) {
+			clear();
+			_alloc.deallocate(_data, _capacity);
+			_size = x._size;
+			_capacity = x._capacity;
+			_data = _alloc.allocate(_capacity);
+			for (size_type i = 0; i < _size; i++)
+				_alloc.construct(&_data[i], x._data[i]);
+		}
+		return *this;
+	}
 
 	// 		- [ ITERATORS ] -
 	/*

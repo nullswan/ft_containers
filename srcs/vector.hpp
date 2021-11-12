@@ -241,7 +241,29 @@ class vector {
 		return _size == 0;
 	}
 
-	void reserve(size_type n);
+	/*
+		https://www.cplusplus.com/reference/vector/vector/reserve/
+		Requests that the vector capacity be at least enough to contain n elements.
+		If n is greater than the current vector capacity, the function causes the container to reallocate its storage increasing its capacity to n (or greater).
+		In all other cases, the function call does not cause a reallocation and the vector capacity is not affected.
+		
+	*/
+	void reserve(size_type n) {
+		if (n > _alloc.max_size())
+			throw std::length_error("vector::reserve::bad_alloc");
+		if (n > _capacity) {
+			pointer tmp = _alloc.allocate(n);
+
+			for (size_type i = 0; i < _size; i++)
+				_alloc.construct(&tmp[i], _data[i]);
+			for (size_type i = 0; i < _size; i++)
+				_alloc.destroy(&_data[i]);
+
+			_alloc.deallocate(_data, _capacity);
+			_data = tmp;
+			_capacity = n;
+		}
+	}
 
 	//		- [ ELEMENT ACCESS ] -
 	/*

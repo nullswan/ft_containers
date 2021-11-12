@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 23:31:00 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/11/12 15:37:57 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/11/12 15:39:44 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,9 @@ class reverse_iterator {
 	typedef typename iterator_traits<Iterator>::difference_type difference_type;
 	typedef typename iterator_traits<Iterator>::pointer pointer;
 	typedef typename iterator_traits<Iterator>::reference reference;
+
+ private:
+	iterator_type	_base;
 
  public:
 	/*
@@ -206,9 +209,6 @@ class reverse_iterator {
 	reference operator[] (difference_type n) const {
 		return base()[-n-1];
 	}
-
- private:
-	iterator_type	_base;
 };
 /*
 	https://www.cplusplus.com/reference/iterator/reverse_iterator/operators/

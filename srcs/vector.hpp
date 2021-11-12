@@ -313,7 +313,19 @@ class vector {
 	iterator erase(iterator position);
 	iterator erase(iterator first, iterator last);
 
-	void swap(vector& x);
+	/*
+		https://www.cplusplus.com/reference/vector/vector/swap/
+
+		Exchanges the content of the container by the content of x, which is another vector object of the same type. Sizes may differ.
+		After the call to this member function, the elements in this container are those which were in x before the call, and the elements of x are those which were in this. All iterators, references and pointers remain valid for the swapped objects.
+	*/
+	void swap(vector& x) {
+		std::swap(_data, x._data);
+		std::swap(_size, x._size);
+		std::swap(_capacity, x._capacity);
+		/* Unsure about _alloc but we must probably swap every variables */
+		std::swap(_alloc, x._alloc);
+	}
 
 	/*  
 		https://www.cplusplus.com/reference/vector/vector/clear/

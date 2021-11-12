@@ -99,8 +99,16 @@ class vector {
 	}
 	template <class InputIterator>
 	vector(InputIterator first, InputIterator last, \
-		const allocator_type& alloc = allocator_type());
-	vector(const vector& x);
+	/*
+		(4) copy constructor
+    	Constructs a container with a copy of each of the elements in x, in the same order.
+	*/
+	vector(const vector& x)
+		: _alloc(x._alloc), _size(x._size), _capacity(x._capacity) {
+		_data = _alloc.allocate(_capacity);
+		for (size_type i = 0; i < _size; i++)
+			_alloc.construct(&_data[i], x._data[i]);
+	}
 
 	//		- [ DESTRUCTOR ] -
 	~vector() {

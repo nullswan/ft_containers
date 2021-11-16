@@ -81,9 +81,7 @@ class vector {
 		Constructs an empty container, with no elements. 
 	*/
 	explicit vector(const allocator_type& alloc = allocator_type())
-		: _alloc(alloc), _size(0), _capacity(0) {
-		_data = NULL;
-	}
+		: _alloc(alloc), _data(0), _size(0), _capacity(0) {}
 
 	/*
 		(2) fill constructor
@@ -91,9 +89,7 @@ class vector {
 	*/
 	explicit vector(size_type n, const value_type& val = value_type(), \
 		const allocator_type& alloc = allocator_type())
-		: _alloc(alloc), _size(n), _capacity(n) {
-		_data = NULL;
-
+		: _alloc(alloc), _data(0), _size(n), _capacity(n) {
 		reserve(n);
 		for (size_type i = 0; i < n; i++)
 			_alloc.construct(&_data[i], val);
@@ -106,15 +102,13 @@ class vector {
 	template <class InputIterator>
 	vector(InputIterator first, InputIterator last, \
 		const allocator_type& alloc = allocator_type())
-		: _alloc(alloc), _size(0), _capacity(0) {
-		_data = NULL;
-
+		: _alloc(alloc), _data(0), _size(0), _capacity(0) {
 		size_type n = last - first;
 
 		_size = n;
 		reserve(n);
 		for (size_type i = 0; i < n; i++)
-			_alloc.construct(&_data[i], *(first + i));
+			_alloc.construct(&_data[i], first + i);
 	}
 
 	/*
@@ -424,21 +418,35 @@ class vector {
 		if (_size == _capacity)
 			reserve(__new_size());
 
-		size_type n = position - begin();
-		__translate_asc(n, 1);
-		_alloc.construct(&_data[n], val);
+		size_type i = position - begin();
+		__translate_asc(i, 1);
+		_alloc.construct(&_data[i], val);
 		++_size;
+		return iterator(&_data[i]);
 	}
 
 	void insert(iterator position, size_type n, const value_type &val) {
 		__n_reserve(n);
+
+		size_type i = position - begin();
+		__translate_asc(i, n);
+		for (size_type k = 0; k < n; k++)
+			_alloc.construct(&_data[n], val);
+		_size += n;
 	}
 
 	template <class InputIterator>
 	void insert(iterator position, InputIterator first, InputIterator last) {
 		size_type n = last - first;
-
+		size_type i = position - begin();
 		__n_reserve(n);
+
+		__translate_asc(i, n);
+		while (first != last) {
+			_alloc.construct(&_data[i + n], _data[i]);
+			++n;
+			++first;
+		}
 	}
 
 	/*
@@ -527,14 +535,14 @@ class vector {
 
 	void	__translate_dsc(size_type i, size_type n) {
 		for (; i < _size; i++) {
-			_alloc.construct(&_data[i], &_data[i + n]);
+			_alloc.construct(&_data[i], _data[i + n]);
 			_alloc.destroy(&_data[i]);
 		}
 	}
 
 	void	__translate_asc(size_type i, size_type n) {
 		for (; i < _size; i++) {
-			_alloc.construct(&_data[i + n], &_data[i]);
+			_alloc.construct(&_data[i + n], _data[i]);
 			_alloc.destroy(&_data[i]);
 		}
 	}

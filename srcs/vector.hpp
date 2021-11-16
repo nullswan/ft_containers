@@ -21,7 +21,7 @@
 #include <stddef.h>		// Provide size_t
 
 #include <string>
-#include <memory>		// provides std::alocator
+#include <memory>		// provides std::allocator
 #include <exception>
 
 #include "utility/ft_itoa.hpp"
@@ -430,8 +430,24 @@ class vector {
 		Removes from the vector either a single element (position) or a range of elements ([first,last)).
 		This effectively reduces the container size by the number of elements removed, which are destroyed.
 	*/
-	iterator erase(iterator position);
-	iterator erase(iterator first, iterator last);
+	iterator erase(iterator position) {
+		size_type	n = position - begin();
+
+		_alloc.destroy(&_data[n]);
+		__translate(n, -1);
+		--_size;
+		return iterator(&_data[n]);
+	}
+	iterator erase(iterator first, iterator last) {
+		size_type	diff = last - first;
+		size_type	n = first - begin();
+		size_type	i = last - begin();
+
+		__destroy_range(first, last);
+		__translate(n, -(i - n));
+		_size -= diff;
+		return (iterator(&_data[n]));
+	}
 
 	/*
 		https://www.cplusplus.com/reference/vector/vector/swap/
@@ -483,6 +499,19 @@ class vector {
 
 	size_type	__new_size() {
 		return _size == 0 ? 1 : _size * 2;
+	}
+	void	__destroy_range(iterator first, iterator last) {
+		while (*first != *last) {
+			_alloc.destroy(first);
+			++first;
+		}
+	}
+
+	void	__translate(size_type i, size_type n) {
+		for (; i < _size; i++) {
+			_alloc.construct(&_data[i], &_data[i + n]);
+			_alloc.destroy(&_data[i]);
+		}
 	}
 };
 	//		- [ NON-MEMBER FUNCTION OVERLOADS ] -

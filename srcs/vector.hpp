@@ -419,10 +419,27 @@ class vector {
 		The vector is extended by inserting new elements before the element at the specified position, effectively increasing the container size by the number of elements inserted.
 		This causes an automatic reallocation of the allocated storage space if -and only if- the new vector size surpasses the current vector capacity.
 	*/
-	iterator insert(iterator position, const value_type& val);
-	void insert(iterator position, size_type n, const value_type& val);
+
+	iterator insert(iterator position, const value_type& val) {
+		if (_size == _capacity)
+			reserve(__new_size());
+
+		size_type n = position - begin();
+		__translate_asc(n, 1);
+		_alloc.construct(&_data[n], val);
+		++_size;
+	}
+
+	void insert(iterator position, size_type n, const value_type &val) {
+		__n_reserve(n);
+	}
+
 	template <class InputIterator>
-	void insert(iterator position, InputIterator first, InputIterator last);
+	void insert(iterator position, InputIterator first, InputIterator last) {
+		size_type n = last - first;
+
+		__n_reserve(n);
+	}
 
 	/*
 		https://www.cplusplus.com/reference/vector/vector/erase/
@@ -434,7 +451,7 @@ class vector {
 		size_type	n = position - begin();
 
 		_alloc.destroy(&_data[n]);
-		__translate(n, -1);
+		__translate_dsc(n, -1);
 		--_size;
 		return iterator(&_data[n]);
 	}
@@ -444,7 +461,7 @@ class vector {
 		size_type	i = last - begin();
 
 		__destroy_range(first, last);
-		__translate(n, -(i - n));
+		__translate_dsc(n, -(i - n));
 		_size -= diff;
 		return (iterator(&_data[n]));
 	}
@@ -498,8 +515,9 @@ class vector {
 	}
 
 	size_type	__new_size() {
-		return _size == 0 ? 1 : _size * 2;
+		return _size == 0 ? 8 : _size * 2;
 	}
+
 	void	__destroy_range(iterator first, iterator last) {
 		while (*first != *last) {
 			_alloc.destroy(first);
@@ -507,11 +525,23 @@ class vector {
 		}
 	}
 
-	void	__translate(size_type i, size_type n) {
+	void	__translate_dsc(size_type i, size_type n) {
 		for (; i < _size; i++) {
 			_alloc.construct(&_data[i], &_data[i + n]);
 			_alloc.destroy(&_data[i]);
 		}
+	}
+
+	void	__translate_asc(size_type i, size_type n) {
+		for (; i < _size; i++) {
+			_alloc.construct(&_data[i + n], &_data[i]);
+			_alloc.destroy(&_data[i]);
+		}
+	}
+
+	void	__n_reserve(size_type n) {
+		if (_size + n > _capacity)
+			reserve(_size + n);
 	}
 };
 	//		- [ NON-MEMBER FUNCTION OVERLOADS ] -

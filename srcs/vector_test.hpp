@@ -23,9 +23,7 @@ class VectorTest {
 		log.success("constructor_alloc");
 	}
 
-	~VectorTest() {
-
-	}
+	~VectorTest() {}
 
  private:
 	void test_constructor_default() {

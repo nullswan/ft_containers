@@ -6,7 +6,7 @@
 #    By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/10 17:01:52 by c3b5aw            #+#    #+#              #
-#    Updated: 2021/11/10 18:23:58 by c3b5aw           ###   ########.fr        #
+#    Updated: 2021/11/21 02:07:43 by c3b5aw           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,3 +61,7 @@ lint	:
 	@	cpplint --recursive --root=srcs \
 		--filter=-whitespace/tab,-legal/copyright,-build/include_what_you_use \
 		srcs/
+
+.PHONY	: test
+test	: all
+	@	valgrind --leak-check=full ./ft_containers

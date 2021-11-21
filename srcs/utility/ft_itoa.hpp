@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 18:53:44 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/11/10 18:55:16 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/11/12 03:44:50 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 		- vector.hpp
 */
 
-#ifndef UTILS_FT_ITOA_HPP_
-#define UTILS_FT_ITOA_HPP_
+#ifndef UTILITY_FT_ITOA_HPP_
+#define UTILITY_FT_ITOA_HPP_
 
 #include <string>
 #include <sstream>
@@ -31,4 +31,4 @@ std::string ft_itoa(T n) {
 	return ss.str();
 }
 
-#endif  // UTILS_FT_ITOA_HPP_
+#endif  // UTILITY_FT_ITOA_HPP_

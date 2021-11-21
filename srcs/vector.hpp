@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:47:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/11/12 03:13:44 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/11/21 01:38:10 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@
 #ifndef VECTOR_HPP_
 #define VECTOR_HPP_
 
-#include <stddef.h>  // Provide size_t
+#include <stddef.h>		// Provide size_t
 
 #include <string>
-#include <memory>
+#include <memory>		// provides std::allocator
 #include <exception>
 
-#include "utils/ft_itoa.hpp"
+#include "utility/ft_itoa.hpp"
 #include "types/type_trait.hpp"
 
 #include "algorithm/equal.hpp"
@@ -81,9 +81,7 @@ class vector {
 		Constructs an empty container, with no elements. 
 	*/
 	explicit vector(const allocator_type& alloc = allocator_type())
-		: _alloc(alloc), _size(0), _capacity(0) {
-		_data = NULL;
-	}
+		: _alloc(alloc), _data(0), _size(0), _capacity(0) {}
 
 	/*
 		(2) fill constructor
@@ -91,12 +89,11 @@ class vector {
 	*/
 	explicit vector(size_type n, const value_type& val = value_type(), \
 		const allocator_type& alloc = allocator_type())
-		: _alloc(alloc), _size(n), _capacity(n) {
-		_data = NULL;
-
+		: _alloc(alloc), _data(0), _size(0), _capacity(0) {
 		reserve(n);
 		for (size_type i = 0; i < n; i++)
 			_alloc.construct(&_data[i], val);
+		_size = n;
 	}
 
 	/*
@@ -105,16 +102,15 @@ class vector {
 	*/
 	template <class InputIterator>
 	vector(InputIterator first, InputIterator last, \
-		const allocator_type& alloc = allocator_type())
-		: _alloc(alloc), _size(0), _capacity(0) {
-		_data = NULL;
-
+		const allocator_type& alloc = allocator_type(),
+		ft::enable_if<ft::is_integral<InputIterator>::value, bool> = true)
+		: _alloc(alloc), _data(0), _size(0), _capacity(0) {
 		size_type n = last - first;
 
-		_size = n;
 		reserve(n);
 		for (size_type i = 0; i < n; i++)
-			_alloc.construct(&_data[i], *(first + i));
+			_alloc.construct(&_data[i], first + i);
+		_size = n;
 	}
 
 	/*
@@ -419,10 +415,42 @@ class vector {
 		The vector is extended by inserting new elements before the element at the specified position, effectively increasing the container size by the number of elements inserted.
 		This causes an automatic reallocation of the allocated storage space if -and only if- the new vector size surpasses the current vector capacity.
 	*/
-	iterator insert(iterator position, const value_type& val);
-	void insert(iterator position, size_type n, const value_type& val);
+
+	iterator insert(iterator position, const value_type& val) {
+		if (_size == _capacity)
+			reserve(__new_size());
+
+		size_type i = position - begin();
+		__translate_asc(i, 1);
+		_alloc.construct(&_data[i], val);
+		++_size;
+		return iterator(&_data[i]);
+	}
+
+	void insert(iterator position, size_type n, const value_type &val) {
+		__n_reserve(n);
+
+		size_type i = position - begin();
+		__translate_asc(i, n);
+		for (size_type k = 0; k < n; k++)
+			_alloc.construct(&_data[n], val);
+		_size += n;
+	}
+
 	template <class InputIterator>
-	void insert(iterator position, InputIterator first, InputIterator last);
+	void insert(iterator position, InputIterator first, InputIterator last,
+		ft::enable_if<ft::is_integral<InputIterator>::value, bool> = true) {
+		size_type n = last - first;
+		size_type i = position - begin();
+		__n_reserve(n);
+
+		__translate_asc(i, n);
+		while (first != last) {
+			_alloc.construct(&_data[i + n], _data[i]);
+			++n;
+			++first;
+		}
+	}
 
 	/*
 		https://www.cplusplus.com/reference/vector/vector/erase/
@@ -430,8 +458,24 @@ class vector {
 		Removes from the vector either a single element (position) or a range of elements ([first,last)).
 		This effectively reduces the container size by the number of elements removed, which are destroyed.
 	*/
-	iterator erase(iterator position);
-	iterator erase(iterator first, iterator last);
+	iterator erase(iterator position) {
+		size_type	n = position - begin();
+
+		_alloc.destroy(&_data[n]);
+		__translate_dsc(n, -1);
+		--_size;
+		return iterator(&_data[n]);
+	}
+	iterator erase(iterator first, iterator last) {
+		size_type	diff = last - first;
+		size_type	n = first - begin();
+		size_type	i = last - begin();
+
+		__destroy_range(first, last);
+		__translate_dsc(n, -(i - n));
+		_size -= diff;
+		return (iterator(&_data[n]));
+	}
 
 	/*
 		https://www.cplusplus.com/reference/vector/vector/swap/
@@ -482,7 +526,33 @@ class vector {
 	}
 
 	size_type	__new_size() {
-		return _size == 0 ? 1 : _size * 2;
+		return _size == 0 ? 8 : _size * 2;
+	}
+
+	void	__destroy_range(iterator first, iterator last) {
+		while (*first != *last) {
+			_alloc.destroy(first);
+			++first;
+		}
+	}
+
+	void	__translate_dsc(size_type i, size_type n) {
+		for (; i < _size; i++) {
+			_alloc.construct(&_data[i], _data[i + n]);
+			_alloc.destroy(&_data[i]);
+		}
+	}
+
+	void	__translate_asc(size_type i, size_type n) {
+		for (; i < _size; i++) {
+			_alloc.construct(&_data[i + n], _data[i]);
+			_alloc.destroy(&_data[i]);
+		}
+	}
+
+	void	__n_reserve(size_type n) {
+		if (_size + n > _capacity)
+			reserve(_size + n);
 	}
 };
 	//		- [ NON-MEMBER FUNCTION OVERLOADS ] -
@@ -500,30 +570,30 @@ class vector {
 		a>=b		!(a<b)
 	*/
 	template <class T, class Alloc>
-	bool operator==(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs) {
+	bool operator==	(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs) {
 		if (lhs.size() != rhs.size())
 			return false;
 		return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
 	}
 	template <class T, class Alloc>
-	bool operator!=(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs) {
+	bool operator!=	(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs) {
 		return !(lhs == rhs);
 	}
 	template <class T, class Alloc>
-	bool operator<(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs) {
+	bool operator<	(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs) {
 		return ft::lexicographical_compare(
 			lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 	}
 	template <class T, class Alloc>
-	bool operator<=(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs) {
+	bool operator<=	(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs) {
 		return !(rhs < lhs);
 	}
 	template <class T, class Alloc>
-	bool operator>(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs) {
+	bool operator>	(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs) {
 		return (rhs < lhs);
 	}
 	template <class T, class Alloc>
-	bool operator>=(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs) {
+	bool operator>=	(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs) {
 		return !(lhs < rhs);
 	}
 

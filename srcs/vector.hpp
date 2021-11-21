@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:47:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/11/12 03:44:29 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/11/21 01:38:10 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,11 @@ class vector {
 	*/
 	explicit vector(size_type n, const value_type& val = value_type(), \
 		const allocator_type& alloc = allocator_type())
-		: _alloc(alloc), _data(0), _size(n), _capacity(n) {
+		: _alloc(alloc), _data(0), _size(0), _capacity(0) {
 		reserve(n);
 		for (size_type i = 0; i < n; i++)
 			_alloc.construct(&_data[i], val);
+		_size = n;
 	}
 
 	/*
@@ -101,14 +102,15 @@ class vector {
 	*/
 	template <class InputIterator>
 	vector(InputIterator first, InputIterator last, \
-		const allocator_type& alloc = allocator_type())
+		const allocator_type& alloc = allocator_type(),
+		ft::enable_if<ft::is_integral<InputIterator>::value, bool> = true)
 		: _alloc(alloc), _data(0), _size(0), _capacity(0) {
 		size_type n = last - first;
 
-		_size = n;
 		reserve(n);
 		for (size_type i = 0; i < n; i++)
 			_alloc.construct(&_data[i], first + i);
+		_size = n;
 	}
 
 	/*
@@ -436,7 +438,8 @@ class vector {
 	}
 
 	template <class InputIterator>
-	void insert(iterator position, InputIterator first, InputIterator last) {
+	void insert(iterator position, InputIterator first, InputIterator last,
+		ft::enable_if<ft::is_integral<InputIterator>::value, bool> = true) {
 		size_type n = last - first;
 		size_type i = position - begin();
 		__n_reserve(n);

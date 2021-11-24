@@ -6,7 +6,7 @@
 #    By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/10 17:01:52 by c3b5aw            #+#    #+#              #
-#    Updated: 2021/11/24 13:58:26 by c3b5aw           ###   ########.fr        #
+#    Updated: 2021/11/24 14:05:51 by c3b5aw           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,7 +67,7 @@ valgrind: all
 .PHONY	: lint
 lint	:
 	@	cpplint --recursive --root=srcs \
-		--filter=-whitespace/tab,-legal/copyright,-build/include_what_you_use \
+		--filter=-whitespace/tab,-legal/copyright,-build/include_what_you_use,-build/storage_class,-runtime/int \
 		srcs/
 
 .PHONY	: tests

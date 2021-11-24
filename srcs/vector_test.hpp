@@ -204,7 +204,8 @@ void	vector() {
 	v_log->section("BENCHMARKS");
 	ft_test::run(v_log, &benchmark_constructor, "Benchmark Constructor");
 	ft_test::run(v_log, &benchmark_destructor, "Benchmark Destructor");
-	ft_test::run(v_log, &benchmark_assignement_operator, "Benchmark Assignement Operator");
+	ft_test::run(v_log, &benchmark_assignement_operator,
+		"Benchmark Assignement Operator");
 
 	delete v_log;
 }

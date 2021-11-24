@@ -21,16 +21,17 @@ class Logger {
 	}
 
 	void	success(const char *test_name) {
-		std::cout << "\033[1;42mPASSED\033[0m " << test_name << std::endl;
+		std::cout << "\033[1;42;37mPASSED\033[0m " << test_name << std::endl;
 		if (_pending_success != "") {
-			std::cout << "\033[0;42m" << _pending_success << "\033[0m" << std::endl;
+			std::cout << "\033[0;42;37m" << _pending_success << "\033[0m" << std::endl;
 			_pending_success = "";
 		}
 	}
 	void	error(const char *test_name) {
-		std::cerr << "\033[1;41mFAILED\033[0m " << test_name << std::endl;
+		std::cerr << "\033[1;41;37mFAILED\033[0m " << test_name << std::endl;
 		if (_pending_err != "") {
-			std::cerr << "\033[0;41m" << _pending_err.c_str() << "\033[0m" << std::endl;
+			std::cerr << "\033[0;41;37m"
+				<< _pending_err.c_str() << "\033[0m" << std::endl;
 			_pending_err = "";
 		}
 	}

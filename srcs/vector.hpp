@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:47:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/11/21 01:38:10 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/11/24 13:55:22 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,13 +103,14 @@ class vector {
 	template <class InputIterator>
 	vector(InputIterator first, InputIterator last, \
 		const allocator_type& alloc = allocator_type(),
-		ft::enable_if<ft::is_integral<InputIterator>::value, bool> = true)
+		typename ft::enable_if<!ft::is_integral<InputIterator>::value,
+			InputIterator>::type* = NULL)
 		: _alloc(alloc), _data(0), _size(0), _capacity(0) {
 		size_type n = last - first;
 
 		reserve(n);
 		for (size_type i = 0; i < n; i++)
-			_alloc.construct(&_data[i], first + i);
+			_alloc.construct(&_data[i], *(first + i));
 		_size = n;
 	}
 
@@ -131,7 +132,7 @@ class vector {
 		This destroys all container elements, and deallocates all the storage capacity allocated by the vector using its allocator.
 	*/
 	~vector() {
-		clear();
+		clear();  // Apparently not cleared in original stl container
 		_alloc.deallocate(_data, _capacity);
 	}
 
@@ -148,12 +149,18 @@ class vector {
 	vector& operator=(const vector& x) {
 		if (this != &x) {
 			clear();
-			_alloc.deallocate(_data, _capacity);
+			if (_capacity < x._size)
+				reserve(x._size);
 			_size = x._size;
-			_capacity = x._capacity;
-			_data = _alloc.allocate(_capacity);
-			for (size_type i = 0; i < _size; i++)
-				_alloc.construct(&_data[i], x._data[i]);
+			if (_data)
+				_alloc.deallocate(_data, _size);
+			if (x._data) {
+				_data = _alloc.allocate(_capacity);
+				for (size_type i = 0; i < _size; i++)
+					_alloc.construct(&_data[i], x._data[i]);
+			} else {
+				_data = NULL;
+			}
 		}
 		return *this;
 	}

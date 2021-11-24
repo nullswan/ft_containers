@@ -6,14 +6,14 @@
 #    By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/10 17:01:52 by c3b5aw            #+#    #+#              #
-#    Updated: 2021/11/21 02:15:57 by c3b5aw           ###   ########.fr        #
+#    Updated: 2021/11/24 13:58:26 by c3b5aw           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	:= ft_containers
 CC		:= clang++
 
-CFLAGS	:= -Wall -Wextra -Werror -std=c++98 -g3
+CFLAGS	:= -Wall -Wextra -Werror -std=c++98
 DFLAGS	= -MMD -MF $(@:.o=.d)
 
 FILES	= main.cpp
@@ -31,12 +31,20 @@ all		: $(NAME)
 -include $(DEPS)
 $(NAME)	: $(OBJS)
 	@	printf "Compiling $(NAME)\n"
-	@	$(CC) $(CFLAGS) $^ -o $@
+ifeq ($(MODE), benchmark)
+	@	$(CC) $(CFLAGS) $^ -o $@ -O3
+else
+	@	$(CC) $(CFLAGS) $^ -o $@ -g3
+endif
 
 $(OBJS_DIR)%.o : $(SRCS_DIR)%.cpp
 	@	mkdir -p $(dir $@)
 	@	printf "Compiling: $<"
-	@	$(CC) $(CFLAGS) -c $< -o $@ $(DFLAGS)
+ifeq ($(MODE), benchmark)
+	@	$(CC) $(CFLAGS) -c $< -o $@ $(DFLAGS) -O3
+else
+	@	$(CC) $(CFLAGS) -c $< -o $@ $(DFLAGS) -g3
+endif
 	@	printf " -> OK\n"
 
 .PHONY	: clean
@@ -63,5 +71,5 @@ lint	:
 		srcs/
 
 .PHONY	: tests
-tests	: all
-	@	valgrind --leak-check=full ./ft_containers
+tests	: re
+	@	./ft_containers

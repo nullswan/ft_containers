@@ -2,6 +2,7 @@
 
 [![.github/workflows/cpplint.yml](https://github.com/c3b5aw/ft_containers/actions/workflows/cpplint.yml/badge.svg?branch=main)](https://github.com/c3b5aw/ft_containers/actions/workflows/cpplint.yml) <br />
 [![.github/workflows/docs.yml](https://github.com/c3b5aw/ft_containers/actions/workflows/docs.yml/badge.svg?branch=main)](https://github.com/c3b5aw/ft_containers/actions/workflows/docs.yml)
+[![.github/workflows/docs.yml](https://github.com/c3b5aw/ft_containers/actions/workflows/unit_test.yml/badge.svg?branch=main)](https://github.com/c3b5aw/ft_containers/actions/workflows/unit_test.yml)
 
 # Mandatory part
 
@@ -31,12 +32,12 @@
 | at 			| OK | Access element (public member function ) 			|
 | front 		| OK | Access first element (public member function )	|
 | back 			| OK | Access last element (public member function )		|
-| *Modifiers* | 5/7 | |
+| *Modifiers* | 5/7 | *** |
 | assign 	| OK | Assign vector content (public member function )	|
 | push_back | OK | Add element at the end (public member function )	|
 | pop_back 	| OK | Delete last element (public member function )		|
-| insert 	| x | Insert elements (public member function )			|
-| erase 	| x | Erase elements (public member function )			|
+| insert 	| KO | Insert elements (public member function )			|
+| erase 	| KO | Erase elements (public member function )			|
 | swap 		| OK | Swap content (public member function )			|
 | clear 	| OK | Clear content (public member function )			|
 | *Allocator* | 1/1 | * |

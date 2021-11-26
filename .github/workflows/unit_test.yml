@@ -9,4 +9,6 @@ jobs:
       - name: install valgrind
         run: sudo apt update && sudo apt install -y valgrind
       - name: make tests
-        run: make tests
+        run: make tests MODE=benchmark > log 2>&1
+      - name: verify
+        run: cat log && grep -v "FAILED" log

@@ -2,7 +2,9 @@
 	"cpplint.filters": [
 		"-legal/copyright",
 		"-whitespace/tab",
-		"-build/include_what_you_use"
+		"-build/include_what_you_use",
+		"-build/storage_class",
+		"-runtime/int"
 	],
 	"cpplint.root": "srcs",
 	"files.associations": {
@@ -49,6 +51,7 @@
 		"sstream": "cpp",
 		"stdexcept": "cpp",
 		"streambuf": "cpp",
-		"typeinfo": "cpp"
+		"typeinfo": "cpp",
+		"iomanip": "cpp"
 	}
 }

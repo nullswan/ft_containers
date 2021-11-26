@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 02:34:53 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/11/12 03:12:47 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/11/24 12:49:24 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 	https://en.cppreference.com/w/cpp/types/is_integral
 
-	* Implementation is also given.
+	* Implementation of types is also given.
 
 	Checks whether T is an integral type. 
 	Provides the member constant value which is equal to true, if T is the type bool, char, char8_t (since C++20), char16_t, char32_t, wchar_t, short, int, long, long long, or any implementation-defined extended integer types, including any signed, unsigned, and cv-qualified variants. Otherwise, value is equal to false.
@@ -34,9 +34,53 @@
 #ifndef TYPES_TYPE_TRAIT_HPP_
 #define TYPES_TYPE_TRAIT_HPP_
 
+#include <uchar.h>
+
 namespace ft {
-template<class T>
-struct is_integral;
+template <typename T>
+struct is_integral {
+	const static bool value = false;
+};
+
+template <>
+struct is_integral<char> {
+	const static bool value = true;
+};
+
+template <>
+struct is_integral<char16_t> {
+	const static bool value = true;
+};
+
+template <>
+struct is_integral<char32_t> {
+	const static bool value = true;
+};
+
+template <>
+struct is_integral<wchar_t> {
+	const static bool value = true;
+};
+
+template <>
+struct is_integral<short> {
+	const static bool value = true;
+};
+
+template <>
+struct is_integral<int> {
+	const static bool value = true;
+};
+
+template <>
+struct is_integral<long> {
+	const static bool value = true;
+};
+
+template <>
+struct is_integral<long long> {
+	const static bool value = true;
+};
 
 template<bool B, class T = void>
 struct enable_if {};

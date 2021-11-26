@@ -159,6 +159,32 @@ bool	test_end() {
 			return v_log->err("1: content() differs");
 	return true;
 }
+bool	test_rbegin() {
+	ft::vector<int> v(5);
+	std::vector<int> v_og(5);
+
+	ft::vector<int>::reverse_iterator it = v.rbegin();
+	std::vector<int>::reverse_iterator it_og = v_og.rbegin();
+	for (int i = 0; it != v.rend(); ++it)
+		*it = ++i;
+	for (int i = 0; it_og != v_og.rend(); ++it_og)
+		*it_og = ++i;
+
+	for (int i = 0; i < 5; i++)
+		if (v[i] != v_og[i])
+			return v_log->err("1: content() differs");
+
+	int i = 1;
+	for (ft::vector<int>::const_reverse_iterator it = v.rbegin();
+		it != v.rend(); it++)
+		if (*it != i++)
+			return v_log->err("2: content() differs");
+	return true;
+}
+bool	test_rend() {
+	return true;
+}
+
 bool	test_size() {
 	ft::vector<int> v(10, 42);
 	std::vector<int> v_og(10, 42);
@@ -366,6 +392,95 @@ bool	test_back() {
 	return true;
 }
 
+bool	test_assign() {
+	ft::vector<int> first;
+	ft::vector<int> second;
+	ft::vector<int> third;
+
+	first.assign(7, 100);
+
+	ft::vector<int>::iterator it = first.begin() + 1;
+	second.assign(it, first.end() - 1);
+	int myints[] = {1776, 7, 4};
+	third.assign(myints, myints + 3);
+
+	if (first.size() != 7)
+		return v_log->err("1: size() differs");
+	if (second.size() != 5)
+		return v_log->err("2: size() differs");
+	if (third.size() != 3)
+		return v_log->err("3: size() differs");
+	return true;
+}
+
+bool	test_push_back() {
+	ft::vector<int> v;
+
+	for (int i = 0; i < 10; i++)
+		v.push_back(i);
+	if (v.size() != 10)
+		return v_log->err("1: size() differs");
+	for (int i = 0; i < 10; i++) {
+		if (v[i] != i)
+			return v_log->err("2: content() differs");
+	}
+	return true;
+}
+
+bool	test_pop_back() {
+	ft::vector<int> v;
+
+	int sum(0);
+	v.push_back(100);
+	v.push_back(200);
+	v.push_back(300);
+
+	while (!v.empty()) {
+		sum += v.back();
+		v.pop_back();
+	}
+	if (sum != 600)
+		return v_log->err("1: sum() differs");
+	return true;
+}
+
+bool	test_swap() {
+	ft::vector<int> v1(3, 100);
+	ft::vector<int> v2(5, 100);
+
+	v1.swap(v2);
+	if (v1.size() != 5 || v1.capacity() != 5 || v1[0] != 100 || v1[1] != 100
+		|| v1[2] != 100 || v1[3] != 100 || v1[4] != 100)
+		return v_log->err("1: swap failed");
+	if (v2.size() != 3 || v2.capacity() != 3 || v2[0] != 100 || v2[1] != 100
+		|| v2[2] != 100)
+		return v_log->err("2: swap failed");
+	return true;
+}
+
+bool	test_clear() {
+	ft::vector<int> myvector;
+	myvector.push_back(100);
+	myvector.push_back(200);
+	myvector.push_back(300);
+
+	int	nums[] = {100, 200, 300};
+	for (unsigned i = 0; i < myvector.size(); i++)
+		if (myvector[i] != nums[i])
+			return v_log->err("1: content() differs");
+
+	myvector.clear();
+	myvector.push_back(1101);
+	myvector.push_back(2202);
+
+	int nums2[] = {1101, 2202};
+	for (unsigned i = 0; i < myvector.size(); i++)
+		if (myvector[i] != nums2[i])
+			return v_log->err("2: content() differs");
+
+	return true;
+}
+
 bool	test_allocator() {
 	ft::vector<int> v;
 	int	*p = 0;
@@ -510,6 +625,8 @@ void	vector() {
 	v_log->section("ITERATORS");
 	ft_test::run(v_log, &test_begin, "Begin");
 	ft_test::run(v_log, &test_end, "End");
+	ft_test::run(v_log, &test_rbegin, "RBegin");
+	ft_test::run(v_log, &test_rend, "REnd");
 
 	v_log->section("CAPACITY");
 	ft_test::run(v_log, &test_size, "Size");
@@ -528,16 +645,13 @@ void	vector() {
 
 
 	v_log->section("MODIFIERS");
-	// ft_test::run(v_log, &test_assign, "Assign");
-	// ft_test::run(v_log, &test_assign_it, "Assign it");
-	// ft_test::run(v_log, &test_push_back, "Push Back");
-	// ft_test::run(v_log, &test_pop_back, "Pop Back");
+	ft_test::run(v_log, &test_assign, "Assign");
+	ft_test::run(v_log, &test_push_back, "Push Back");
+	ft_test::run(v_log, &test_pop_back, "Pop Back");
 	// ft_test::run(v_log, &test_insert, "Insert");
-	// ft_test::run(v_log, &test_insert_it, "Insert it");
 	// ft_test::run(v_log, &test_erase, "Erase");
-	// ft_test::run(v_log, &test_erase_it, "Erase it");
-	// ft_test::run(v_log, &test_swap, "Swap");
-	// ft_test::run(v_log, &test_clear, "Clear");
+	ft_test::run(v_log, &test_swap, "Swap");
+	ft_test::run(v_log, &test_clear, "Clear");
 
 
 	v_log->section("ALLOCATOR");

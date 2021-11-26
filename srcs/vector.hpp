@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:47:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/11/26 12:32:51 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/11/26 17:03:52 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ class vector {
 		: _alloc(alloc), _data(0), _size(0), _capacity(0) {
 		reserve(n);
 		for (size_type i = 0; i < n; i++)
-			_alloc.construct(&_data[i], val);
+			_alloc.construct(_data + i, val);
 		_size = n;
 	}
 
@@ -110,7 +110,7 @@ class vector {
 
 		reserve(n);
 		for (size_type i = 0; i < n; i++)
-			_alloc.construct(&_data[i], *(first + i));
+			_alloc.construct(_data + i, *(first + i));
 		_size = n;
 	}
 
@@ -122,7 +122,7 @@ class vector {
 		: _alloc(x._alloc), _size(x._size), _capacity(x._capacity) {
 		_data = _alloc.allocate(_capacity);
 		for (size_type i = 0; i < _size; i++)
-			_alloc.construct(&_data[i], x._data[i]);
+			_alloc.construct(_data + i, x._data[i]);
 	}
 
 	//		- [ DESTRUCTOR ] -
@@ -157,7 +157,7 @@ class vector {
 			if (x._data) {
 				_data = _alloc.allocate(_capacity);
 				for (size_type i = 0; i < _size; i++)
-					_alloc.construct(&_data[i], x._data[i]);
+					_alloc.construct(_data + i, x._data[i]);
 			} else {
 				_data = NULL;
 			}
@@ -253,14 +253,14 @@ class vector {
 	void resize(size_type n, value_type val = value_type()) {
 		if (n < _size) {
 			for (size_type i = n; i < _size; i++)
-				_alloc.destroy(&_data[i]);
+				_alloc.destroy(_data + i);
 			_size = n;
 		} else if (n > _size) {
 			/* We must allocate here even though it comes after in reference */
 			if (n > _capacity)
 				reserve(n);
 			for (size_type i = _size; i < n; i++)
-				_alloc.construct(&_data[i], val);
+				_alloc.construct(_data + i, val);
 			_size = n;
 		}
 	}
@@ -298,9 +298,9 @@ class vector {
 			pointer tmp = _alloc.allocate(n);
 
 			for (size_type i = 0; i < _size; i++)
-				_alloc.construct(&tmp[i], _data[i]);
+				_alloc.construct(tmp + i, _data[i]);
 			for (size_type i = 0; i < _size; i++)
-				_alloc.destroy(&_data[i]);
+				_alloc.destroy(_data + i);
 
 			_alloc.deallocate(_data, _capacity);
 			_data = tmp;
@@ -372,15 +372,15 @@ class vector {
 
 	template <class InputIterator>
 	void assign(InputIterator first, InputIterator last, \
-		// std::enable_if_t<std::is_integral<Integer>::value, bool> = true
-		ft::enable_if<ft::is_integral<InputIterator>::value, bool> = true) {
+		typename ft::enable_if<!ft::is_integral<InputIterator>::value,
+			InputIterator>::type* = NULL) {
 		size_type n = last - first;
 
 		if (n > _capacity)
 			reserve(n);
 		for (size_type i = 0; i < n; i++, first++) {
-			_alloc.destroy(&_data[i]);
-			_alloc.construct(&_data[i], *first);
+			_alloc.destroy(_data + i);
+			_alloc.construct(_data + i, *first);
 		}
 		_size = n;
 	}
@@ -388,8 +388,8 @@ class vector {
 		if (n > _capacity)
 			reserve(n);
 		for (size_type i = 0; i < n; i++) {
-			_alloc.destroy(&_data[i]);
-			_alloc.construct(&_data[i], val);
+			_alloc.destroy(_data + i);
+			_alloc.construct(_data + i, val);
 		}
 		_size = n;
 	}
@@ -403,7 +403,7 @@ class vector {
 	void push_back(const value_type& val) {
 		if (_size == _capacity)
 			reserve(__new_size());
-		_alloc.construct(&_data[_size++], val);
+		_alloc.construct(_data + _size++, val);
 	}
 
 	/*
@@ -413,7 +413,7 @@ class vector {
 		This destroys the removed element.
 	*/
 	void pop_back() {
-		_alloc.destroy(&_data[--_size]);
+		_alloc.destroy(_data + --_size);
 	}
 
 	/*
@@ -446,7 +446,8 @@ class vector {
 
 	template <class InputIterator>
 	void insert(iterator position, InputIterator first, InputIterator last,
-		ft::enable_if<ft::is_integral<InputIterator>::value, bool> = true) {
+		typename ft::enable_if<!ft::is_integral<InputIterator>::value,
+			InputIterator>::type* = NULL) {
 		size_type n = last - first;
 		size_type i = position - begin();
 		__n_reserve(n);
@@ -468,10 +469,10 @@ class vector {
 	iterator erase(iterator position) {
 		size_type	n = position - begin();
 
-		_alloc.destroy(&_data[n]);
+		_alloc.destroy(_data + n);
 		__translate_dsc(n, -1);
 		--_size;
-		return iterator(&_data[n]);
+		return iterator(_data + n);
 	}
 	iterator erase(iterator first, iterator last) {
 		size_type	diff = last - first;
@@ -481,7 +482,7 @@ class vector {
 		__destroy_range(first, last);
 		__translate_dsc(n, -(i - n));
 		_size -= diff;
-		return (iterator(&_data[n]));
+		return (iterator(_data + n));
 	}
 
 	/*
@@ -507,7 +508,7 @@ class vector {
 	void clear() {
 		if (_data) {
 			for (size_type i = 0; i < _size; i++)
-				_alloc.destroy(&_data[i]);
+				_alloc.destroy(_data + i);
 		}
 		_size = 0;
 	}

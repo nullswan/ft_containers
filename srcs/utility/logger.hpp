@@ -2,6 +2,7 @@
 #define UTILITY_LOGGER_HPP_
 
 #include <string.h>
+#include <unistd.h>
 
 #include <string>
 #include <iostream>
@@ -34,6 +35,7 @@ class Logger {
 				<< _pending_err.c_str() << "\033[0m" << std::endl;
 			_pending_err = "";
 		}
+		sleep(1);
 	}
 
 	bool	err(const char *msg) {
@@ -46,13 +48,9 @@ class Logger {
 
 		std::stringstream ss;
 
-		if (ref_ms == 0) {
-			container_ms = 0;
-		}
-
 		ss << "container: " << container_ms << "ms, ref: " << ref_ms << "ms";
-		ss << " -> diff " << float(container_ms) / float(ref_ms) << "x";
-		if (container_ms > ref_ms * 20) {
+		ss << " -> diff " << float(container) / float(ref) << "x";
+		if (container > ref * 20) {
 			_pending_err = ss.str();
 			return false;
 		}

@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:47:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/11/24 13:55:22 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/11/26 12:32:51 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -533,7 +533,7 @@ class vector {
 	}
 
 	size_type	__new_size() {
-		return _size == 0 ? 8 : _size * 2;
+		return _size == 0 ? 1 : _size * 2;
 	}
 
 	void	__destroy_range(iterator first, iterator last) {

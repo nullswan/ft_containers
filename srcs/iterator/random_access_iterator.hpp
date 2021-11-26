@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 18:05:40 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/11/13 15:36:47 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/11/26 11:54:50 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,11 @@ class random_access_iterator {
 		return *this;
 	}
 	virtual ~random_access_iterator() {}
+
+	/* const_iterator cast support */
+	operator random_access_iterator<T const>() const {
+		return random_access_iterator<T const>(_base);
+	}
 
 	/*
 		Can be compared for equivalence using the equality/inequality operators

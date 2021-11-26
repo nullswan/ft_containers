@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:47:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/11/26 17:03:52 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/11/26 18:00:29 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -539,7 +539,7 @@ class vector {
 
 	void	__destroy_range(iterator first, iterator last) {
 		while (*first != *last) {
-			_alloc.destroy(first);
+			_alloc.destroy(&(*first));
 			++first;
 		}
 	}

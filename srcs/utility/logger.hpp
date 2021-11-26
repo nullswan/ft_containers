@@ -22,18 +22,23 @@ class Logger {
 	}
 
 	void	success(const char *test_name) {
-		std::cout << "\033[1;42;37mPASSED\033[0m " << test_name << std::endl;
+		std::cout << "\033[1;42;37mPASSED\033[0m " << test_name;
 		if (_pending_success != "") {
-			std::cout << "\033[0;42;37m" << _pending_success << "\033[0m" << std::endl;
+			std::cout << "\t\t\t\033[0;37m" << _pending_success
+				<< "\033[0m" << std::endl;
 			_pending_success = "";
+		} else {
+			std::cout << std::endl;
 		}
 	}
 	void	error(const char *test_name) {
-		std::cerr << "\033[1;41;37mFAILED\033[0m " << test_name << std::endl;
+		std::cerr << "\033[1;41;37mFAILED\033[0m " << test_name;
 		if (_pending_err != "") {
-			std::cerr << "\033[0;41;37m"
+			std::cerr << "\t\t\t\033[0;37m"
 				<< _pending_err.c_str() << "\033[0m" << std::endl;
 			_pending_err = "";
+		} else {
+			std::cerr << std::endl;
 		}
 		sleep(1);
 	}
@@ -48,11 +53,16 @@ class Logger {
 
 		std::stringstream ss;
 
-		ss << "container: " << container_ms << "ms, ref: " << ref_ms << "ms";
-		ss << " -> diff " << float(container) / float(ref) << "x";
-		if (container > ref * 20) {
-			_pending_err = ss.str();
-			return false;
+		ss << "ft: " << container_ms << "ms, std: " << ref_ms << "ms";
+		if (ref_ms == 0) {
+			ss << " -> diff: too quick";
+		} else {
+			ss << " -> diff " << float(container) / float(ref) << "x";
+
+			if (container > ref * 20) {
+				_pending_err = ss.str();
+				return false;
+			}
 		}
 		_pending_success = ss.str();
 		return true;

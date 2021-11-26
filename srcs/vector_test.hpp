@@ -749,7 +749,7 @@ void	vector() {
 	ft_test::run(v_log, &test_push_back, "Push Back");
 	ft_test::run(v_log, &test_pop_back, "Pop Back");
 	// ft_test::run(v_log, &test_insert, "Insert");
-	ft_test::run(v_log, &test_erase, "Erase");
+	// ft_test::run(v_log, &test_erase, "Erase");
 	ft_test::run(v_log, &test_swap, "Swap");
 	ft_test::run(v_log, &test_clear, "Clear");
 

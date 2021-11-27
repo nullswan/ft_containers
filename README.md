@@ -50,6 +50,22 @@
 
 ### stack
 
+| **Member** | **State** | **Description** |
+|:--------------------:|:-----:|:-----:|
+| *Member types* | 1/1 | * |
+| *Member function* | 11/11 | **  |
+| (constructor) | OK | Construct stack (public member function ) 	|
+| (copy-constructor) | OK | Construct by Copy stack (public member function ) 	|
+| (destructor) 	| OK | Stack destructor (public member function ) 	|
+| operator= 	| OK | Assign content (public member function ) 		|
+| empty 		| OK | Test whether container is empty (public member function ) |
+| size 			| OK | Return size (public member function ) |
+| top			| OK | Access next element (public member function ) |
+| push 			| OK | Insert element (public member function ) |
+| emplace 		| OK | Construct and insert element (public member function ) |
+| pop 			| OK | Remove top element (public member function ) |
+| swap 			| OK | Swap content (public member function ) |
+
 # Bonus
 
 ### set

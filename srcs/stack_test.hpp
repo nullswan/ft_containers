@@ -145,7 +145,7 @@ bool	test_stack_push() {
 
 	if (first.top() != 1)
 		return s_log->err("1: push failed");
-	
+
 	if (first.size() != 1)
 		return s_log->err("2: push failed");
 

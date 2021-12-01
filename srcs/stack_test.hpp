@@ -10,7 +10,7 @@
 #include "utility/run_test.hpp"
 
 namespace ft_test {
-ft_test::Logger *s_log = new ft_test::Logger("stack ");
+ft_test::Logger *s_log;
 
 bool	test_stack_constructor() {
 	ft::vector<int> myvector(2, 200);
@@ -238,6 +238,8 @@ bool	benchmark_stack_pop() {
 }
 
 void	stack() {
+	s_log = new ft_test::Logger("stack ");
+
 	ft_test::run(s_log, &test_stack_constructor, "Constructor");
 	ft_test::run(s_log, &test_stack_copy_constructor, "Copy Constructor");
 	ft_test::run(s_log, &test_stack_assignment_operator, "Assignement Operator");

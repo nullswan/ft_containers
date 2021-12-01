@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:47:19 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/11/26 20:28:37 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/01 20:19:43 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@
 #include "vector.hpp"
 
 namespace ft {
-template <class T, class Container = ft::vector<T> > class stack {
+template <class T, class Container = ft::vector<T> >
+class stack {
  public:
 	/*
 		Member types

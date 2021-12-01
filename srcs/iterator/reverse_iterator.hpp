@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 23:31:00 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/11/26 16:31:20 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/01 20:18:10 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -313,6 +313,12 @@ reverse_iterator<Iterator> operator+ ( \
 	const reverse_iterator<Iterator>& rev_it) {
 	return rev_it + n;
 }
+template <class IteratorA, class IteratorB>
+reverse_iterator<IteratorA> operator+ ( \
+	typename reverse_iterator<IteratorA>::difference_type n, \
+	const reverse_iterator<IteratorB>& rev_it) {
+	return rev_it + n;
+}
 
 /*
 	https://www.cplusplus.com/reference/iterator/reverse_iterator/operator_minus-free/
@@ -329,6 +335,13 @@ typename reverse_iterator<Iterator>::difference_type operator- ( \
 	const reverse_iterator<Iterator>& rhs) {
 	return rhs._base - lhs._base;
 }
+template <class IteratorA, class IteratorB>
+typename reverse_iterator<IteratorA>::difference_type operator- ( \
+	const reverse_iterator<IteratorA>& lhs, \
+	const reverse_iterator<IteratorB>& rhs) {
+	return rhs._base - lhs._base;
+}
+
 }  // namespace ft
 
 #endif  // ITERATOR_REVERSE_ITERATOR_HPP_

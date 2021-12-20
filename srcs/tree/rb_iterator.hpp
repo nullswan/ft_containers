@@ -1,41 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rb_node.hpp                                        :+:      :+:    :+:   */
+/*   rb_iterator.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/20 07:45:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/20 07:45:01 by c3b5aw           ###   ########.fr       */
+/*   Created: 2021/12/20 07:44:49 by c3b5aw            #+#    #+#             */
+/*   Updated: 2021/12/20 07:52:48 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TREE_RB_NODE_HPP_
-#define TREE_RB_NODE_HPP_
+#ifndef TREE_RB_ITERATOR_HPP_
+#define TREE_RB_ITERATOR_HPP_
 
 namespace ft {
 
-enum _rb_color : bool {
-	RB_BLACK, RB_RED
-};
-
 template <class T>
-class rb_node {
+class rb_tree_iterator {
  public:
-	typedef typename T value_type;
-
-	rb_node		*parent;
-	rb_node		*left;
-	rb_node		*right;
-
-	T			value;
-	_rb_color	color;
+	typedef T	value_type;
 
  public:
-	explicit rb_node(T const &val)
-	: value(val) {}
+	rb_tree_iterator() : {}
+	~rb_tree_iterator() {}
 };
 
 }  // namespace ft
 
-#endif  // TREE_RB_NODE_HPP_
+#endif  // TREE_RB_ITERATOR_HPP_

@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:50:07 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/08 08:09:59 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/20 07:57:29 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,24 @@ class map {
 	typedef value_type*			pointer;
 	typedef const value_type*	const_pointer;
 
-	// iterator
-	// const_iterator
-	// reverse_iterator
-	// const_reverse_iterator
 
-	typedef std::ptrdiff_t		difference_type;
+	typedef typename ft::rb_tree<value_type, key_compare>::iterator iterator;
+	typedef typename ft::rb_tree
+		<value_type, key_compare>::const_iterator const_iterator;
+	typedef typename ft::rb_tree
+		<value_type, key_compare>::reverse_iterator reverse_iterator;
+	typedef typename ft::rb_tree
+		<value_type, key_compare>::const_reverse_iterator const_reverse_iterator;
+
+	typedef std::ptrdiff_t	difference_type;
 	typedef std::size_t		size_type;
 
  private:
-	rb_tree<value_type, value_compare>	_tree;
 	allocator_type	_alloc;
 	key_compare		_key_compare;
 	value_compare	_value_compare;
+
+	rb_tree<value_type, value_compare>	_tree;
 
  public:
 	/*
@@ -339,7 +344,8 @@ class map {
 
 		If no matches are found, the range returned has a length of zero, with both iterators pointing to the first element that has a key considered to go after k according to the container's internal comparison object (key_comp).
 	*/
-	ft::pair<const_iterator, const_iterator> equal_range(const key_type& k) const {}
+	ft::pair<const_iterator, const_iterator>
+	equal_range(const key_type& k) const {}
 	ft::pair<iterator, iterator> equal_range(const key_type& k) {}
 
 	/*
@@ -355,8 +361,10 @@ class map {
 	}
 
  private:
-
 };
+
+// non-member overloads
+
 }  // namespace ft
 
 #endif  // MAP_HPP_

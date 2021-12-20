@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 18:05:40 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/11/26 11:54:50 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/20 08:16:02 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,21 @@ class random_access_iterator {
 		: _base(NULL) {}
 	random_access_iterator(const random_access_iterator &rhs)
 		: _base(rhs._base) {}
+
 	/*
-		no matching conversion for functional-style cast from 
-		'ft::vector<int, std::allocator<int> >::pointer' 
-			(aka 'int *')
-		to
-		'ft::vector<int, std::allocator<int> >::iterator' 
-			(aka 'random_access_iterator<int>')
+		Fix for:
+		"""
+			no matching conversion for functional-style cast from 
+			'ft::vector<int, std::allocator<int> >::pointer' 
+				(aka 'int *')
+			to
+			'ft::vector<int, std::allocator<int> >::iterator' 
+				(aka 'random_access_iterator<int>')
+		"""
 	*/
 	explicit random_access_iterator(pointer base)
 		: _base(base) {}
+
 	random_access_iterator &operator=(const random_access_iterator &rhs) {
 		if (this != &rhs)
 			_base = rhs._base;
@@ -86,7 +91,7 @@ class random_access_iterator {
 		- a != b
 	*/
 	bool	operator==	(const random_access_iterator &rhs) const {
-		return (_base == rhs._base);
+		return _base == rhs._base;
 	}
 	bool	operator!=	(const random_access_iterator &rhs) const {
 		return _base != rhs._base;

@@ -31,10 +31,13 @@ class rb_tree {
 
  private:
 	allocator_type	_alloc;
+	pointer			_root;
 	size_type		_size;
 
  public:
-	rb_tree();
+	rb_tree()
+		: _root(NULL), _size(0) {}
+
 	~rb_tree();
 };
 

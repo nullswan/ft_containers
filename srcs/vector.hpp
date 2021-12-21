@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:47:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/21 18:28:34 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/21 18:30:01 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -449,14 +449,14 @@ class vector {
 	void insert(iterator position, InputIterator first, InputIterator last,
 		typename ft::enable_if<!ft::is_integral<InputIterator>::value,
 			InputIterator>::type* = NULL) {
+		size_type elem_pos = position - begin();
 		size_type n = last - first;
 		if (_size + n > _capacity)
 			reserve(_capacity + n);
-		size_type i = position - begin();
 
-		__shift_right(i, n);
+		__translate_asc(elem_pos, n);
 		while (first != last) {
-			_alloc.construct(&_data[i + n], _data[i]);
+			_alloc.construct(&_data[elem_pos + n], _data[elem_pos]);
 			++n;
 			++first;
 		}

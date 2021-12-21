@@ -470,22 +470,22 @@ bool	test_vector_insert() {
 		}
 	}
 
-	// ft::vector<int> v2(2, 400);
-	// v.insert(it + 2, v2.begin(), v2.end());
+	ft::vector<int> v2(2, 400);
+	v.insert(it + 2, v2.begin(), v2.end());
 
-	// int myarray[] = {501, 502, 503};
-	// v.insert(v.begin(), myarray, myarray + 3);
+	int myarray[] = {501, 502, 503};
+	v.insert(v.begin(), myarray, myarray + 3);
 
-	// int nums[] = {501, 502, 503, 300, 300, 400, 400, 200, 100, 100, 100};
-	// int i = 0;
-	// for (it = v.begin(); it != v.end(); it++, i++) {
-	// 	if (*it != nums[i]) {
-	// 		for (unsigned k = 0; k < v.size(); k++)
-	// 			std::cout << v[k] << " ";
-	// 		std::cout << std::endl;
-	// 		return v_log->err("2: content() differs");
-	// 	}
-	// }
+	int nums[] = {501, 502, 503, 300, 300, 400, 400, 200, 100, 100, 100};
+	int i = 0;
+	for (it = v.begin(); it != v.end(); it++, i++) {
+		if (*it != nums[i]) {
+			for (unsigned k = 0; k < v.size(); k++)
+				std::cout << v[k] << " ";
+			std::cout << std::endl;
+			return v_log->err("2: content() differs");
+		}
+	}
 	return true;
 }
 

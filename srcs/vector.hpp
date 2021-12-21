@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:47:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/11/26 18:00:29 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/21 13:38:26 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -470,7 +470,7 @@ class vector {
 		size_type	n = position - begin();
 
 		_alloc.destroy(_data + n);
-		__translate_dsc(n, -1);
+		__translate_dsc(n, 1);
 		--_size;
 		return iterator(_data + n);
 	}
@@ -480,7 +480,7 @@ class vector {
 		size_type	i = last - begin();
 
 		__destroy_range(first, last);
-		__translate_dsc(n, -(i - n));
+		__translate_dsc(n, i - n);
 		_size -= diff;
 		return (iterator(_data + n));
 	}

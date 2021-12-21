@@ -488,13 +488,24 @@ bool	test_vector_erase() {
 	// erase the 6th element
 	myvector.erase(myvector.begin()+5);
 
+	for (unsigned i = 0; i < myvector.size(); i++)
+		std::cout << myvector[i] << std::endl;
+	int nums1[] = {1, 2, 3, 4, 5, 7, 8, 9, 10};
+	for (unsigned i = 0; i < myvector.size(); i++)
+		if (myvector[i] != nums1[i])
+			return v_log->err("1: content() differs");
+
 	// erase the first 3 elements:
 	myvector.erase(myvector.begin(), myvector.begin() + 3);
 
-	int nums[] = {4, 5, 7, 8, 9, 10};
-	for (unsigned i = 0; i < myvector.size(); ++i)
-		if (myvector[i] != nums[i])
-			return v_log->err("1: content() differs");
+	int nums2[] = {4, 5, 7, 8, 9, 10};
+	for (unsigned i = 0; i < myvector.size(); ++i) {
+		if (myvector[i] != nums2[i]) {
+			for (unsigned k = 0; k < myvector.size(); ++k)
+				std::cout << myvector[k] << " ";
+			return v_log->err("2: content() differs");
+		}
+	}
 	return true;
 }
 
@@ -689,24 +700,24 @@ bool	benchmark_vector_push_back() {
 // 	delete v_og;
 // 	return v_log->benchmark(end - start, end_og - start_og);
 // }
-// bool	benchmark_vector_erase() {
-// 	ft::vector<int> *v = new ft::vector<int>(100000, 42);
-// 	std::vector<int> *v_og = new std::vector<int>(100000, 42);
+bool	benchmark_vector_erase() {
+	ft::vector<int> *v = new ft::vector<int>(100000, 42);
+	std::vector<int> *v_og = new std::vector<int>(100000, 42);
 
-// 	time_t start = clock();
-// 	for (size_t i = 0; i < 10000; i++)
-// 		v->erase(v->begin());
-// 	time_t end = clock();
+	time_t start = clock();
+	for (size_t i = 0; i < 10000; i++)
+		v->erase(v->begin());
+	time_t end = clock();
 
-// 	time_t start_og = clock();
-// 	for (size_t i = 0; i < 10000; i++)
-// 		v_og->erase(v_og->begin());
-// 	time_t end_og = clock();
+	time_t start_og = clock();
+	for (size_t i = 0; i < 10000; i++)
+		v_og->erase(v_og->begin());
+	time_t end_og = clock();
 
-// 	delete v;
-// 	delete v_og;
-// 	return v_log->benchmark(end - start, end_og - start_og);
-// }
+	delete v;
+	delete v_og;
+	return v_log->benchmark(end - start, end_og - start_og);
+}
 
 void	vector() {
 	v_log = new ft_test::Logger("vector");
@@ -745,16 +756,14 @@ void	vector() {
 	ft_test::run(v_log, &test_vector_front, "Front");
 	ft_test::run(v_log, &test_vector_back, "Back");
 
-
 	v_log->section("MODIFIERS");
 	ft_test::run(v_log, &test_vector_assign, "Assign");
 	ft_test::run(v_log, &test_vector_push_back, "Push Back");
 	ft_test::run(v_log, &test_vector_pop_back, "Pop Back");
 	// ft_test::run(v_log, &test_vector_insert, "Insert");
-	// ft_test::run(v_log, &test_vector_erase, "Erase");
+	ft_test::run(v_log, &test_vector_erase, "Erase");
 	ft_test::run(v_log, &test_vector_swap, "Swap");
 	ft_test::run(v_log, &test_vector_clear, "Clear");
-
 
 	v_log->section("ALLOCATOR");
 	ft_test::run(v_log, &test_vector_allocator, "Allocator");
@@ -774,7 +783,7 @@ void	vector() {
 		ft_test::run(v_log, &benchmark_vector_assign, "Benchmark Assign\t");
 		ft_test::run(v_log, &benchmark_vector_push_back, "Benchmark Push Back");
 		// ft_test::run(v_log, &benchmark_vector_insert, "Benchmark Insert");
-		// ft_test::run(v_log, &benchmark_vector_erase, "Benchmark Erase\t");
+		ft_test::run(v_log, &benchmark_vector_erase, "Benchmark Erase\t");
 	#endif
 	delete v_log;
 }

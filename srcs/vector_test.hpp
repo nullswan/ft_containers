@@ -452,31 +452,42 @@ bool	test_vector_pop_back() {
 	return true;
 }
 
-// bool	test_vector_insert() {
-// 	ft::vector<int> v(3, 100);
-// 	ft::vector<int>::iterator it;
+bool	test_vector_insert() {
+	ft::vector<int> v(3, 100);
+	ft::vector<int>::iterator it;
 
-// 	it = v.begin();
-// 	it = v.insert(it, 200);
+	it = v.begin();
+	it = v.insert(it, 200);
 
-// 	v.insert(it, 2, 300);
+	v.insert(it, 2, 300);
+	it = v.begin();
+	int nums1[] = {300, 300, 200, 100, 100, 100};
+	for (int i = 0; i < 6; i++) {
+		if (v[i] != nums1[i]) {
+			for (unsigned k = 0; k < v.size(); k++)
+				std::cout << v[k] << " ";
+			return v_log->err("1: content() differs");
+		}
+	}
 
-// 	it = v.begin();
+	// ft::vector<int> v2(2, 400);
+	// v.insert(it + 2, v2.begin(), v2.end());
 
-// 	ft::vector<int> v2(2, 400);
-// 	v.insert(it + 2, v2.begin(), v2.end());
+	// int myarray[] = {501, 502, 503};
+	// v.insert(v.begin(), myarray, myarray + 3);
 
-// 	int myarray[] = {501, 502, 503};
-// 	v.insert(v.begin(), myarray, myarray + 3);
-
-// 	int nums[] = {501, 502, 503, 300, 300, 400, 400, 200, 100, 100, 100};
-// 	int i = 0;
-// 	for (it = v.begin(); it != v.end(); it++, i++) {
-// 		if (*it != nums[i])
-// 			return v_log->err("1: content() differs");
-// 	}
-// 	return true;
-// }
+	// int nums[] = {501, 502, 503, 300, 300, 400, 400, 200, 100, 100, 100};
+	// int i = 0;
+	// for (it = v.begin(); it != v.end(); it++, i++) {
+	// 	if (*it != nums[i]) {
+	// 		for (unsigned k = 0; k < v.size(); k++)
+	// 			std::cout << v[k] << " ";
+	// 		std::cout << std::endl;
+	// 		return v_log->err("2: content() differs");
+	// 	}
+	// }
+	return true;
+}
 
 bool	test_vector_erase() {
 	ft::vector<int> myvector;
@@ -488,8 +499,6 @@ bool	test_vector_erase() {
 	// erase the 6th element
 	myvector.erase(myvector.begin()+5);
 
-	for (unsigned i = 0; i < myvector.size(); i++)
-		std::cout << myvector[i] << std::endl;
 	int nums1[] = {1, 2, 3, 4, 5, 7, 8, 9, 10};
 	for (unsigned i = 0; i < myvector.size(); i++)
 		if (myvector[i] != nums1[i])
@@ -682,24 +691,24 @@ bool	benchmark_vector_push_back() {
 	delete v_og;
 	return v_log->benchmark(end - start, end_og - start_og);
 }
-// bool	benchmark_vector_insert() {
-// 	ft::vector<int> *v = new ft::vector<int>(10000000, 42);
-// 	std::vector<int> *v_og = new std::vector<int>(10000000, 42);
+bool	benchmark_vector_insert() {
+	ft::vector<int> *v = new ft::vector<int>(10000000, 42);
+	std::vector<int> *v_og = new std::vector<int>(10000000, 42);
 
-// 	time_t start = clock();
-// 	for (size_t i = 0; i < 10000000; i++)
-// 		v->insert(v->begin(), 42);
-// 	time_t end = clock();
+	time_t start = clock();
+	for (size_t i = 0; i < 10000000; i++)
+		v->insert(v->begin(), 42);
+	time_t end = clock();
 
-// 	time_t start_og = clock();
-// 	for (size_t i = 0; i < 10000000; i++)
-// 		v_og->insert(v_og->begin(), 42);
-// 	time_t end_og = clock();
+	time_t start_og = clock();
+	for (size_t i = 0; i < 10000000; i++)
+		v_og->insert(v_og->begin(), 42);
+	time_t end_og = clock();
 
-// 	delete v;
-// 	delete v_og;
-// 	return v_log->benchmark(end - start, end_og - start_og);
-// }
+	delete v;
+	delete v_og;
+	return v_log->benchmark(end - start, end_og - start_og);
+}
 bool	benchmark_vector_erase() {
 	ft::vector<int> *v = new ft::vector<int>(100000, 42);
 	std::vector<int> *v_og = new std::vector<int>(100000, 42);
@@ -722,57 +731,57 @@ bool	benchmark_vector_erase() {
 void	vector() {
 	v_log = new ft_test::Logger("vector");
 
-	v_log->section("CONSTRUCTORS");
-	ft_test::run(v_log, &test_vector_empty_constructor, "Empty Constructor");
-	ft_test::run(v_log, &test_vector_fill_constructor, "Fill Constructor");
-	ft_test::run(v_log, &test_vector_range_constructor, "Range Constructor");
-	ft_test::run(v_log, &test_vector_copy_constructor, "Copy Constructor");
+	// v_log->section("CONSTRUCTORS");
+	// ft_test::run(v_log, &test_vector_empty_constructor, "Empty Constructor");
+	// ft_test::run(v_log, &test_vector_fill_constructor, "Fill Constructor");
+	// ft_test::run(v_log, &test_vector_range_constructor, "Range Constructor");
+	// ft_test::run(v_log, &test_vector_copy_constructor, "Copy Constructor");
 
-	v_log->section("DESTRUCTOR");
-	ft_test::run(v_log, &test_vector_destructor, "Destructor");
+	// v_log->section("DESTRUCTOR");
+	// ft_test::run(v_log, &test_vector_destructor, "Destructor");
 
-	v_log->section("ASSIGNEMENT OPERATOR");
-	ft_test::run(v_log, &test_vector_assignement_operator, "Assignement Operator");
-
-
-	v_log->section("ITERATORS");
-	ft_test::run(v_log, &test_vector_begin, "Begin");
-	ft_test::run(v_log, &test_vector_end, "End");
-	ft_test::run(v_log, &test_vector_rbegin, "RBegin");
-	ft_test::run(v_log, &test_vector_rend, "REnd");
-
-	v_log->section("CAPACITY");
-	ft_test::run(v_log, &test_vector_size, "Size");
-	ft_test::run(v_log, &test_vector_max_size, "Max Size");
-	ft_test::run(v_log, &test_vector_resize, "Resize");
-	ft_test::run(v_log, &test_vector_capacity, "Capacity");
-	ft_test::run(v_log, &test_vector_empty, "Empty");
-	ft_test::run(v_log, &test_vector_reserve, "Reserve");
+	// v_log->section("ASSIGNEMENT OPERATOR");
+	// ft_test::run(v_log, &test_vector_assignement_operator, "Assignement Operator");
 
 
-	v_log->section("ELEMENT ACCESS");
-	ft_test::run(v_log, &test_vector_operator_access, "Operator []");
-	ft_test::run(v_log, &test_vector_at, "At");
-	ft_test::run(v_log, &test_vector_front, "Front");
-	ft_test::run(v_log, &test_vector_back, "Back");
+	// v_log->section("ITERATORS");
+	// ft_test::run(v_log, &test_vector_begin, "Begin");
+	// ft_test::run(v_log, &test_vector_end, "End");
+	// ft_test::run(v_log, &test_vector_rbegin, "RBegin");
+	// ft_test::run(v_log, &test_vector_rend, "REnd");
 
-	v_log->section("MODIFIERS");
-	ft_test::run(v_log, &test_vector_assign, "Assign");
-	ft_test::run(v_log, &test_vector_push_back, "Push Back");
-	ft_test::run(v_log, &test_vector_pop_back, "Pop Back");
-	// ft_test::run(v_log, &test_vector_insert, "Insert");
-	ft_test::run(v_log, &test_vector_erase, "Erase");
-	ft_test::run(v_log, &test_vector_swap, "Swap");
-	ft_test::run(v_log, &test_vector_clear, "Clear");
+	// v_log->section("CAPACITY");
+	// ft_test::run(v_log, &test_vector_size, "Size");
+	// ft_test::run(v_log, &test_vector_max_size, "Max Size");
+	// ft_test::run(v_log, &test_vector_resize, "Resize");
+	// ft_test::run(v_log, &test_vector_capacity, "Capacity");
+	// ft_test::run(v_log, &test_vector_empty, "Empty");
+	// ft_test::run(v_log, &test_vector_reserve, "Reserve");
 
-	v_log->section("ALLOCATOR");
-	ft_test::run(v_log, &test_vector_allocator, "Allocator");
 
-	v_log->section("NON-MEMBER FUNCTION OVERLOADS");
-	ft_test::run(v_log, &test_vector_non_member_function_operator,
-		"Non-member function operators");
-	ft_test::run(v_log, &test_vector_non_member_function_swap,
-		"Non-member function swap");
+	// v_log->section("ELEMENT ACCESS");
+	// ft_test::run(v_log, &test_vector_operator_access, "Operator []");
+	// ft_test::run(v_log, &test_vector_at, "At");
+	// ft_test::run(v_log, &test_vector_front, "Front");
+	// ft_test::run(v_log, &test_vector_back, "Back");
+
+	// v_log->section("MODIFIERS");
+	// ft_test::run(v_log, &test_vector_assign, "Assign");
+	// ft_test::run(v_log, &test_vector_push_back, "Push Back");
+	// ft_test::run(v_log, &test_vector_pop_back, "Pop Back");
+	ft_test::run(v_log, &test_vector_insert, "Insert");
+	// ft_test::run(v_log, &test_vector_erase, "Erase");
+	// ft_test::run(v_log, &test_vector_swap, "Swap");
+	// ft_test::run(v_log, &test_vector_clear, "Clear");
+
+	// v_log->section("ALLOCATOR");
+	// ft_test::run(v_log, &test_vector_allocator, "Allocator");
+
+	// v_log->section("NON-MEMBER FUNCTION OVERLOADS");
+	// ft_test::run(v_log, &test_vector_non_member_function_operator,
+	// 	"Non-member function operators");
+	// ft_test::run(v_log, &test_vector_non_member_function_swap,
+	// 	"Non-member function swap");
 
 	#ifdef FT_BENCHMARK
 		v_log->section("BENCHMARKS");
@@ -782,7 +791,7 @@ void	vector() {
 			"Benchmark Assign Op");
 		ft_test::run(v_log, &benchmark_vector_assign, "Benchmark Assign\t");
 		ft_test::run(v_log, &benchmark_vector_push_back, "Benchmark Push Back");
-		// ft_test::run(v_log, &benchmark_vector_insert, "Benchmark Insert");
+		ft_test::run(v_log, &benchmark_vector_insert, "Benchmark Insert");
 		ft_test::run(v_log, &benchmark_vector_erase, "Benchmark Erase\t");
 	#endif
 	delete v_log;

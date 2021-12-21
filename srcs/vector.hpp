@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:47:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/21 13:38:26 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/21 18:28:34 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,16 +291,16 @@ class vector {
 		In all other cases, the function call does not cause a reallocation and the vector capacity is not affected.
 		
 	*/
+
 	void reserve(size_type n) {
 		if (n > _alloc.max_size())
 			throw std::length_error("vector::reserve::bad_alloc");
 		if (n > _capacity) {
 			pointer tmp = _alloc.allocate(n);
-
-			for (size_type i = 0; i < _size; i++)
+			for (size_type i = 0; i < _size; i++) {
 				_alloc.construct(tmp + i, _data[i]);
-			for (size_type i = 0; i < _size; i++)
 				_alloc.destroy(_data + i);
+			}
 
 			_alloc.deallocate(_data, _capacity);
 			_data = tmp;
@@ -424,23 +424,24 @@ class vector {
 	*/
 
 	iterator insert(iterator position, const value_type& val) {
-		if (_size == _capacity)
-			reserve(__new_size());
+		size_type elem_pos = position - begin();
 
-		size_type i = position - begin();
-		__translate_asc(i, 1);
-		_alloc.construct(&_data[i], val);
+		if (_size + 1 > _capacity)
+			reserve(__new_size());
+		__translate_asc(elem_pos, 1);
+		_alloc.construct(_data + elem_pos, val);
 		++_size;
-		return iterator(&_data[i]);
+		return iterator(_data);
 	}
 
 	void insert(iterator position, size_type n, const value_type &val) {
-		__n_reserve(n);
+		size_type elem_pos = position - begin();
 
-		size_type i = position - begin();
-		__translate_asc(i, n);
-		for (size_type k = 0; k < n; k++)
-			_alloc.construct(&_data[n], val);
+		if (_size + n > _capacity)
+			reserve(_capacity + n);
+		__translate_asc(elem_pos, n);
+		for (size_type i = 0; i < n; i++)
+			_alloc.construct(&_data[elem_pos + i], val);
 		_size += n;
 	}
 
@@ -449,10 +450,11 @@ class vector {
 		typename ft::enable_if<!ft::is_integral<InputIterator>::value,
 			InputIterator>::type* = NULL) {
 		size_type n = last - first;
+		if (_size + n > _capacity)
+			reserve(_capacity + n);
 		size_type i = position - begin();
-		__n_reserve(n);
 
-		__translate_asc(i, n);
+		__shift_right(i, n);
 		while (first != last) {
 			_alloc.construct(&_data[i + n], _data[i]);
 			++n;
@@ -556,11 +558,6 @@ class vector {
 			_alloc.construct(&_data[i + n], _data[i]);
 			_alloc.destroy(&_data[i]);
 		}
-	}
-
-	void	__n_reserve(size_type n) {
-		if (_size + n > _capacity)
-			reserve(_size + n);
 	}
 };
 	//		- [ NON-MEMBER FUNCTION OVERLOADS ] -

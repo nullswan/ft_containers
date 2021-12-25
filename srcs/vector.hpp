@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:47:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/21 18:30:01 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/25 13:11:45 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -440,6 +440,7 @@ class vector {
 		if (_size + n > _capacity)
 			reserve(_capacity + n);
 		__translate_asc(elem_pos, n);
+
 		for (size_type i = 0; i < n; i++)
 			_alloc.construct(&_data[elem_pos + i], val);
 		_size += n;
@@ -451,15 +452,17 @@ class vector {
 			InputIterator>::type* = NULL) {
 		size_type elem_pos = position - begin();
 		size_type n = last - first;
-		if (_size + n > _capacity)
-			reserve(_capacity + n);
+		if (_size + n > _capacity) {
+			if (__new_size() < _size + n)
+				reserve(__new_size());
+			else
+				reserve(_size + n);
+		}
 
 		__translate_asc(elem_pos, n);
-		while (first != last) {
-			_alloc.construct(&_data[elem_pos + n], _data[elem_pos]);
-			++n;
-			++first;
-		}
+		for (size_type i = 0; i < n; i++, first++)
+			_alloc.construct(&_data[elem_pos + i], *first);
+		_size += n;
 	}
 
 	/*
@@ -546,17 +549,19 @@ class vector {
 		}
 	}
 
-	void	__translate_dsc(size_type i, size_type n) {
-		for (; i < _size; i++) {
-			_alloc.construct(&_data[i], _data[i + n]);
-			_alloc.destroy(&_data[i]);
+	void	__translate_dsc(size_type elem_pos, size_type n) {
+		for (; elem_pos < _size; elem_pos++) {
+			_alloc.construct(_data + elem_pos, _data[elem_pos + n]);
+			_alloc.destroy(_data + elem_pos + n);
 		}
 	}
 
-	void	__translate_asc(size_type i, size_type n) {
-		for (; i < _size; i++) {
-			_alloc.construct(&_data[i + n], _data[i]);
-			_alloc.destroy(&_data[i]);
+	void	__translate_asc(size_type elem_pos, size_type n) {
+		for (size_type i = _size - 1; i >= elem_pos; i--) {
+			_alloc.construct(_data + i + n, _data[i]);
+			_alloc.destroy(_data + i);
+			if (i == 0)
+				break;
 		}
 	}
 };

@@ -199,16 +199,14 @@ bool	test_stack_relationnal_operators() {
 
 bool	benchmark_stack_push() {
 	ft::stack<int> mystack;
-
 	time_t start = clock();
-	for (int i = 0; i < 1000000; i++)
+	for (int i = 0; i < 10000000; i++)
 		mystack.push(i);
 	time_t end = clock();
 
 	std::stack<int> stdstack;
-
 	time_t start2 = clock();
-	for (int i = 0; i < 1000000; i++)
+	for (int i = 0; i < 10000000; i++)
 		stdstack.push(i);
 	time_t end2 = clock();
 
@@ -217,7 +215,6 @@ bool	benchmark_stack_push() {
 
 bool	benchmark_stack_pop() {
 	ft::stack<int> mystack;
-
 	for (int i = 0; i < 10000000; i++)
 		mystack.push(i);
 	time_t start = clock();
@@ -226,7 +223,6 @@ bool	benchmark_stack_pop() {
 	time_t end = clock();
 
 	std::stack<int> stdstack;
-
 	for (int i = 0; i < 10000000; i++)
 		stdstack.push(i);
 	time_t start2 = clock();

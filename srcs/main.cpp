@@ -3,5 +3,5 @@
 
 int	main() {
 	ft_test::vector();
-	// ft_test::stack();
+	ft_test::stack();
 }

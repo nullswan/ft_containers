@@ -53,6 +53,9 @@
 		"streambuf": "cpp",
 		"typeinfo": "cpp",
 		"iomanip": "cpp",
-		"ranges": "cpp"
+		"ranges": "cpp",
+		"compare": "cpp",
+		"concepts": "cpp",
+		"cinttypes": "cpp"
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:47:19 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/01 20:19:43 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/21 17:23:59 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ class stack {
 
 	typedef typename Container::size_type size_type;
 
- private:
+ protected:
 	container_type _container;
 
  public:

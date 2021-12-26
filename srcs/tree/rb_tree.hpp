@@ -101,8 +101,12 @@ class rb_tree {
 
 	// ft::pair<iterator, bool> insert(value_type const &value) {}
 	// iterator insert(iterator pos, const value_type &value) {}
-	// size_type erase(value_type const &value) {}
+	// template <class InputIterator>
+	// 	void insert(InputIterator first, InputIterator last) {}
+
 	// void	erase(iterator pos) {}
+	// size_type erase(value_type const &value) {}
+	// void	erase(iterator first, iterator last) {}
 
 	void	swap(rb_tree &rhs) {
 		std::swap(_alloc, rhs._alloc);

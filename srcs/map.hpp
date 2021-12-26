@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:50:07 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/26 17:45:37 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/26 18:38:15 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 #include <functional>   // provides std::less
 
 #include "utility/pair.hpp"
+#include "algorithm/equal.hpp"
+#include "algorithm/lexicographical_compare.hpp"
 
 namespace ft {
 template <
@@ -73,7 +75,11 @@ class map {
     	Constructs an empty container, with no elements.
 	*/
 	explicit map(const key_compare &comp = key_compare(),
-		const allocator_type &alloc = allocator_type) {}
+		const allocator_type &alloc = allocator_type)
+	:	_alloc(alloc),
+		_key_compare(comp),
+		_value_compare(),
+		_tree(_alloc) {}
 
 	/* 
 		(2) range constructor
@@ -83,13 +89,23 @@ class map {
 	template <class InputIterator>
 	map(InputIterator first, InputIterator last,
 		const key_compare& comp = key_compare(),
-		const allocator_type& alloc = allocator_type()) {}
+		const allocator_type& alloc = allocator_type())
+	:	_alloc(alloc),
+		_key_compare(comp),
+		_value_compare(),
+		_tree(_alloc) {
+		insert(first, last);
+	}
 
 	/*
 		(3) copy constructor
     	Constructs a container with a copy of each of the elements in x.
 	*/
-	map(const map &x) {}
+	map(const map &x)
+	:	_alloc(x._alloc),
+		_key_compare(x._key_compare),
+		_value_compare(x._value_compare),
+		_tree(x._tree) {}
 
 	/*
 		- [ DESTRUCTOR ] -
@@ -105,7 +121,13 @@ class map {
 		
 		Assigns new contents to the container, replacing its current content.
 	*/
-	map &operator=(const map &other) {}
+	map &operator=(const map &other) {
+		_alloc = other._alloc;
+		_key_compare = other._key_compare;
+		_value_compare = other._value_compare;
+		_tree = other._tree;
+		return *this;
+	}
 
 	/*
 		- [ ITERATORS ] -
@@ -217,18 +239,24 @@ class map {
 
 		(1) single element
 	*/
-	ft::pair<iterator, bool> insert(const value_type& val) {}
+	ft::pair<iterator, bool> insert(const value_type& val) {
+		return (_tree.insert(val));
+	}
 
 	/*
 		(2) with hint
 	*/
-	iterator insert(iterator position, const value_type& val) {}
+	iterator insert(iterator position, const value_type& val) {
+		return (_tree.insert(position, val));
+	}
 
 	/*
 		(3) range
 	*/
 	template <class InputIterator>
-	void insert(InputIterator first, InputIterator last) {}
+	void insert(InputIterator first, InputIterator last) {
+		return (_tree.insert(first, last));
+	}
 
 	/*
 		https://www.cplusplus.com/reference/map/map/erase/
@@ -250,7 +278,12 @@ class map {
 
 		After the call to this member function, the elements in this container are those which were in x before the call, and the elements of x are those which were in this. All iterators, references and pointers remain valid for the swapped objects.
 	*/
-	void swap(map& x) {}
+	void swap(map& x) {
+		std::swap(_alloc, x._alloc);
+		std::swap(_key_compare, x._key_compare);
+		std::swap(_value_compare, x._value_compare);
+		_tree.swap(x._tree);
+	}
 
 	/*
 		https://www.cplusplus.com/reference/map/map/clear/
@@ -298,9 +331,12 @@ class map {
 
 		Two keys are considered equivalent if the container's comparison object returns false reflexively (i.e., no matter the order in which the elements are passed as arguments).
 	*/
-	iterator find(const key_type& k) {}
-	const_iterator find(const key_type& k) const {}
-
+	iterator find(const key_type& k) {
+		return (_tree.find(ft::make_pair(k, mapped_type())));
+	}
+	const_iterator find(const key_type& k) const {
+		return (_tree.find(ft::make_pair(k, mapped_type())));
+	}
 
 	/*
 		https://www.cplusplus.com/reference/map/map/count/
@@ -310,7 +346,13 @@ class map {
 
 		Because all elements in a map container are unique, the function can only return 1 (if the element is found) or zero (otherwise).
 	*/
-	size_type count(const key_type& k) const {}
+	size_type count(const key_type& k) const {
+		iterator ret = _tree.find(ft::make_pair(k, mapped_type()));
+
+		if (ret != _tree.end())
+			return 1;
+		return 0;
+	}
 
 	/*
 		https://www.cplusplus.com/reference/map/map/lower_bound/	
@@ -320,8 +362,12 @@ class map {
 
 		The function uses its internal comparison object (key_comp) to determine this, returning an iterator to the first element for which key_comp(element_key,k) would return false.
 	*/
-	iterator lower_bound(const key_type& k) {}
-	const_iterator lower_bound(const key_type& k) const {}
+	iterator lower_bound(const key_type& k) {
+		return (_tree.lower_bound(ft::make_pair(k, mapped_type())));
+	}
+	const_iterator lower_bound(const key_type& k) const {
+		return (_tree.lower_bound(ft::make_pair(k, mapped_type())));
+	}
 
 	/*
 		https://www.cplusplus.com/reference/map/map/upper_bound/
@@ -331,8 +377,12 @@ class map {
 
 		The function uses its internal comparison object (key_comp) to determine this, returning an iterator to the first element for which key_comp(k,element_key) would return true.
 	*/
-	iterator upper_bound(const key_type& k) {}
-	const_iterator upper_bound(const key_type& k) const {}
+	iterator upper_bound(const key_type& k) {
+		return (_tree.upper_bound(ft::make_pair(k, mapped_type())));
+	}
+	const_iterator upper_bound(const key_type& k) const {
+		return (_tree.upper_bound(ft::make_pair(k, mapped_type())));
+	}
 
 	/*
 		https://www.cplusplus.com/reference/map/map/equal_range/
@@ -344,9 +394,10 @@ class map {
 
 		If no matches are found, the range returned has a length of zero, with both iterators pointing to the first element that has a key considered to go after k according to the container's internal comparison object (key_comp).
 	*/
-	ft::pair<const_iterator, const_iterator>
-	equal_range(const key_type& k) const {}
-	ft::pair<iterator, iterator> equal_range(const key_type& k) {}
+	// ToDo: Implements
+	// ft::pair<const_iterator, const_iterator>
+	// equal_range(const key_type& k) const {}
+	// ft::pair<iterator, iterator> equal_range(const key_type& k) {}
 
 	/*
 		- [ ALLOCATOR ] -
@@ -359,11 +410,52 @@ class map {
 	allocator_type	get_allocator() const {
 		return _alloc;
 	}
-
- private:
 };
 
-// non-member overloads
+/*
+		- [ COMPARISON OPERATORS ] -
+	
+	https://en.cppreference.com/w/cpp/container/map/operator_cmp
+*/
+
+template<class Key, class T, class Compare, class Alloc>
+bool operator==(const ft::map<Key, T, Compare, Alloc>& lhs,
+	const ft::map<Key, T, Compare, Alloc>& rhs) {
+	if (lhs.size() != rhs.size())
+		return false;
+	return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+}
+
+template<class Key, class T, class Compare, class Alloc>
+bool operator!=(const ft::map<Key, T, Compare, Alloc>& lhs,
+	const ft::map<Key, T, Compare, Alloc>& rhs) {
+	return !(lhs == rhs);
+}
+
+template<class Key, class T, class Compare, class Alloc>
+bool operator<(const ft::map<Key, T, Compare, Alloc>& lhs,
+	const ft::map<Key, T, Compare, Alloc>& rhs) {
+	return ft::lexicographical_compare(
+		lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+}
+
+template<class Key, class T, class Compare, class Alloc>
+bool operator<=(const ft::map<Key, T, Compare, Alloc>& lhs,
+	const ft::map<Key, T, Compare, Alloc>& rhs) {
+	return !(rhs < lhs);
+}
+
+template<class Key, class T, class Compare, class Alloc>
+bool operator>(const ft::map<Key, T, Compare, Alloc>& lhs,
+	const ft::map<Key, T, Compare, Alloc>& rhs) {
+	return rhs < lhs;
+}
+
+template<class Key, class T, class Compare, class Alloc>
+bool operator>=(const ft::map<Key, T, Compare, Alloc>& lhs,
+	const ft::map<Key, T, Compare, Alloc>& rhs) {
+	return !(lhs < rhs);
+}
 
 }  // namespace ft
 

@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 07:44:49 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/20 08:52:51 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/26 17:28:22 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ class rb_tree_iterator {
 	typedef typename T* node;
 
 	typedef typename T::value_type			&reference;
-	// typedef typename T::value_type const	&const_reference;
+	typedef typename T::value_type const	&const_reference;
 	typedef typename T::value_type			*pointer;
-	// typedef typename T::value_type const	*const_pointer;
+	typedef typename T::value_type const	*const_pointer;
 
  private:
 	node	_base;
@@ -57,18 +57,23 @@ class rb_tree_iterator {
 		return _base != rhs._base;
 	}
 
-	reference	operator* () const {
+	reference	operator*		() const {
 		return _base->data;
 	}
-	pointer		operator-> () const {
+	const_reference operator*	() const {
+		return _base->data;
+	}
+
+	pointer		operator->	() const {
+		return &_base->data;
+	}
+	const_pointer operator->() const {
 		return &_base->data;
 	}
 
 	rb_tree_iterator&	operator++ () {
-		_base = _base->next();
-		// _base = _node->right;
-		// while (_base->left)
-		// 	_base = _base->left;
+		if (_base)
+			_base = _base->next();
 		return *this;
 	}
 	rb_tree_iterator	operator++ (int) {
@@ -78,16 +83,8 @@ class rb_tree_iterator {
 	}
 
 	rb_tree_iterator&	operator-- () {
-		_base = _base->prev();
-		// if (_base->left) {
-		// 	_base = _base->left;
-		// 	while (_base->right)
-		// 		_base = _base->right;
-		// } else {
-		// 	while (_base->parent && _base->parent->right == _base)
-		// 		_base = _base->parent;
-		// 	_base = _base->parent;
-		// }
+		if (_base)
+			_base = _base->prev();
 		return *this;
 	}
 	rb_tree_iterator	operator-- (int) {

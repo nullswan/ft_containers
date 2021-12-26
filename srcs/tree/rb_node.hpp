@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 07:45:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/20 14:15:36 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/26 17:25:55 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,37 @@ class rb_node {
  public:
 	explicit rb_node(const_reference val)
 		: value(val) {}
+
+	~rb_node() {}
+
+	rb_node *prev() {
+		rb_node *node = this;
+		if (node->left) {
+			// max
+			node = node->left;
+			while (node->right)
+				node = node->right;
+		} else {
+			while (node->parent && node == node->parent->left)
+				node = node->parent;
+			node = node->parent;
+		}
+		return node;
+	}
+	rb_node	*next() {
+		rb_node *node = this;
+		if (node->right) {
+			// min
+			node = node->right;
+			while (node->left)
+				node = node->left;
+		} else {
+			while (node->parent && node == node->parent->right)
+				node = node->parent;
+			node = node->parent;
+		}
+		return node;
+	}
 };
 
 }  // namespace ft

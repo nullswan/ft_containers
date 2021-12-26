@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:50:07 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/26 18:38:15 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/26 19:11:55 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,11 @@
 #include <functional>   // provides std::less
 
 #include "utility/pair.hpp"
+
 #include "algorithm/equal.hpp"
 #include "algorithm/lexicographical_compare.hpp"
+
+#include "tree/rb_tree.hpp"
 
 namespace ft {
 template <
@@ -225,7 +228,8 @@ class map {
 		If k matches the key of an element in the container, the function returns a reference to its mapped value.
 		If k does not match the key of any element in the container, the function inserts a new element with that key and returns a reference to its mapped value. Notice that this always increases the container size by one, even if no mapped value is assigned to the element (the element is constructed using its default constructor).
 	*/
-	mapped_type &operator[](const key_type &key) {}
+	// ToDo: implement operator[]
+	// mapped_type &operator[](const key_type &key) {}
 
 
 	/*
@@ -240,14 +244,14 @@ class map {
 		(1) single element
 	*/
 	ft::pair<iterator, bool> insert(const value_type& val) {
-		return (_tree.insert(val));
+		return _tree.insert(val);
 	}
 
 	/*
 		(2) with hint
 	*/
 	iterator insert(iterator position, const value_type& val) {
-		return (_tree.insert(position, val));
+		return _tree.insert(position, val);
 	}
 
 	/*
@@ -255,7 +259,7 @@ class map {
 	*/
 	template <class InputIterator>
 	void insert(InputIterator first, InputIterator last) {
-		return (_tree.insert(first, last));
+		return _tree.insert(first, last);
 	}
 
 	/*
@@ -266,9 +270,10 @@ class map {
 
 		This effectively reduces the container size by the number of elements removed, which are destroyed.
 	*/
-	void erase(iterator position) {}
-	size_type erase(const key_type& k) {}
-	void erase(iterator first, iterator last) {}
+	// ToDo: implement erase
+	// void erase(iterator position) {}
+	// size_type erase(const key_type& k) {}
+	// void erase(iterator first, iterator last) {}
 
 	/*
 		https://www.cplusplus.com/reference/map/map/swap/
@@ -332,10 +337,10 @@ class map {
 		Two keys are considered equivalent if the container's comparison object returns false reflexively (i.e., no matter the order in which the elements are passed as arguments).
 	*/
 	iterator find(const key_type& k) {
-		return (_tree.find(ft::make_pair(k, mapped_type())));
+		return _tree.find(ft::make_pair(k, mapped_type()));
 	}
 	const_iterator find(const key_type& k) const {
-		return (_tree.find(ft::make_pair(k, mapped_type())));
+		return _tree.find(ft::make_pair(k, mapped_type()));
 	}
 
 	/*
@@ -347,11 +352,9 @@ class map {
 		Because all elements in a map container are unique, the function can only return 1 (if the element is found) or zero (otherwise).
 	*/
 	size_type count(const key_type& k) const {
-		iterator ret = _tree.find(ft::make_pair(k, mapped_type()));
+		iterator it = find(k);
 
-		if (ret != _tree.end())
-			return 1;
-		return 0;
+		return it == end() ? 0 : 1;
 	}
 
 	/*
@@ -363,10 +366,10 @@ class map {
 		The function uses its internal comparison object (key_comp) to determine this, returning an iterator to the first element for which key_comp(element_key,k) would return false.
 	*/
 	iterator lower_bound(const key_type& k) {
-		return (_tree.lower_bound(ft::make_pair(k, mapped_type())));
+		return _tree.lower_bound(ft::make_pair(k, mapped_type()));
 	}
 	const_iterator lower_bound(const key_type& k) const {
-		return (_tree.lower_bound(ft::make_pair(k, mapped_type())));
+		return _tree.lower_bound(ft::make_pair(k, mapped_type()));
 	}
 
 	/*
@@ -378,10 +381,10 @@ class map {
 		The function uses its internal comparison object (key_comp) to determine this, returning an iterator to the first element for which key_comp(k,element_key) would return true.
 	*/
 	iterator upper_bound(const key_type& k) {
-		return (_tree.upper_bound(ft::make_pair(k, mapped_type())));
+		return _tree.upper_bound(ft::make_pair(k, mapped_type()));
 	}
 	const_iterator upper_bound(const key_type& k) const {
-		return (_tree.upper_bound(ft::make_pair(k, mapped_type())));
+		return _tree.upper_bound(ft::make_pair(k, mapped_type()));
 	}
 
 	/*

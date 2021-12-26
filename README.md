@@ -36,8 +36,8 @@
 | assign 	| OK | Assign vector content (public member function )	|
 | push_back | OK | Add element at the end (public member function )	|
 | pop_back 	| OK | Delete last element (public member function )		|
-| insert 	| KO | Insert elements (public member function )			|
-| erase 	| KO | Erase elements (public member function )			|
+| insert 	| OK | Insert elements (public member function )			|
+| erase 	| OK | Erase elements (public member function )			|
 | swap 		| OK | Swap content (public member function )			|
 | clear 	| OK | Clear content (public member function )			|
 | *Allocator* | 1/1 | * |
@@ -74,18 +74,18 @@
 
 # Additional classes
 
-### iterator
-
+### iterator	
 - random_access_iterator
 - reverse_iterator
 
 ### algorithm
-
 - equal
 - lexigraphical_compare
 
 ### types
-
 - type_trait
 	- is_integral
 	- enable_if
+
+### tree
+- rb_tree

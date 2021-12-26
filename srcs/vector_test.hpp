@@ -1,6 +1,8 @@
 #ifndef VECTOR_TEST_HPP_
 #define VECTOR_TEST_HPP_
 
+#include <stdlib.h>
+
 #include <string>
 #include <vector>
 #include <iostream>
@@ -452,31 +454,48 @@ bool	test_vector_pop_back() {
 	return true;
 }
 
-// bool	test_vector_insert() {
-// 	ft::vector<int> v(3, 100);
-// 	ft::vector<int>::iterator it;
+bool	test_vector_insert() {
+	ft::vector<int> v(3, 100);
+	ft::vector<int>::iterator it;
 
-// 	it = v.begin();
-// 	it = v.insert(it, 200);
+	it = v.begin();
+	it = v.insert(it, 200);
+	int	nums0[] = {200, 100, 100, 100};
+	for (unsigned i = 0; i < v.size(); i++) {
+		if (v[i] != nums0[i])
+			return v_log->err("0: content() differs");
+	}
 
-// 	v.insert(it, 2, 300);
+	v.insert(it, 2, 300);
+	it = v.begin();
+	int nums1[] = {300, 300, 200, 100, 100, 100};
+	for (unsigned i = 0; i < v.size(); i++) {
+		if (v[i] != nums1[i]) {
+			for (unsigned k = 0; k < v.size(); k++)
+				std::cout << v[k] << " ";
+			return v_log->err("1: content() differs");
+		}
+	}
 
-// 	it = v.begin();
+	ft::vector<int> v2(2, 400);
+	v.insert(it + 2, v2.begin(), v2.end());
 
-// 	ft::vector<int> v2(2, 400);
-// 	v.insert(it + 2, v2.begin(), v2.end());
+	int myarray[] = {501, 502, 503};
+	v.insert(v.begin(), myarray, myarray + 3);
 
-// 	int myarray[] = {501, 502, 503};
-// 	v.insert(v.begin(), myarray, myarray + 3);
-
-// 	int nums[] = {501, 502, 503, 300, 300, 400, 400, 200, 100, 100, 100};
-// 	int i = 0;
-// 	for (it = v.begin(); it != v.end(); it++, i++) {
-// 		if (*it != nums[i])
-// 			return v_log->err("1: content() differs");
-// 	}
-// 	return true;
-// }
+	int nums[] = {501, 502, 503, 300, 300, 400, 400, 200, 100, 100, 100};
+	int i = 0;
+	for (it = v.begin(); it != v.end(); it++, i++) {
+		if (*it != nums[i]) {
+			std::cout << "Had: ";
+			for (unsigned k = 0; k < v.size(); k++)
+				std::cout << v[k] << " ";
+			std::cout << std::endl;
+			return v_log->err("2: content() differs");
+		}
+	}
+	return true;
+}
 
 bool	test_vector_erase() {
 	ft::vector<int> myvector;
@@ -488,13 +507,22 @@ bool	test_vector_erase() {
 	// erase the 6th element
 	myvector.erase(myvector.begin()+5);
 
+	int nums1[] = {1, 2, 3, 4, 5, 7, 8, 9, 10};
+	for (unsigned i = 0; i < myvector.size(); i++)
+		if (myvector[i] != nums1[i])
+			return v_log->err("1: content() differs");
+
 	// erase the first 3 elements:
 	myvector.erase(myvector.begin(), myvector.begin() + 3);
 
-	int nums[] = {4, 5, 7, 8, 9, 10};
-	for (unsigned i = 0; i < myvector.size(); ++i)
-		if (myvector[i] != nums[i])
-			return v_log->err("1: content() differs");
+	int nums2[] = {4, 5, 7, 8, 9, 10};
+	for (unsigned i = 0; i < myvector.size(); ++i) {
+		if (myvector[i] != nums2[i]) {
+			for (unsigned k = 0; k < myvector.size(); ++k)
+				std::cout << myvector[k] << " ";
+			return v_log->err("2: content() differs");
+		}
+	}
 	return true;
 }
 
@@ -671,42 +699,108 @@ bool	benchmark_vector_push_back() {
 	delete v_og;
 	return v_log->benchmark(end - start, end_og - start_og);
 }
-// bool	benchmark_vector_insert() {
-// 	ft::vector<int> *v = new ft::vector<int>(10000000, 42);
-// 	std::vector<int> *v_og = new std::vector<int>(10000000, 42);
+bool	benchmark_vector_insert_regular() {
+	ft::vector<int> *v = new ft::vector<int>(1000000, 42);
+	std::vector<int> *v_og = new std::vector<int>(1000000, 42);
 
-// 	time_t start = clock();
-// 	for (size_t i = 0; i < 10000000; i++)
-// 		v->insert(v->begin(), 42);
-// 	time_t end = clock();
+	time_t start = clock();
+	for (size_t i = 0; i < 1000; i++)
+		v->insert(v->begin(), 42);
+	time_t end = clock();
 
-// 	time_t start_og = clock();
-// 	for (size_t i = 0; i < 10000000; i++)
-// 		v_og->insert(v_og->begin(), 42);
-// 	time_t end_og = clock();
+	time_t start_og = clock();
+	for (size_t i = 0; i < 1000; i++)
+		v_og->insert(v_og->begin(), 42);
+	time_t end_og = clock();
 
-// 	delete v;
-// 	delete v_og;
-// 	return v_log->benchmark(end - start, end_og - start_og);
-// }
-// bool	benchmark_vector_erase() {
-// 	ft::vector<int> *v = new ft::vector<int>(100000, 42);
-// 	std::vector<int> *v_og = new std::vector<int>(100000, 42);
+	if (v_og->size() != v->size())
+		return v_log->err("size differs");
+	for (size_t i = 0; i < v_og->size(); i++)
+		if (v->at(i) != v_og->at(i))
+			return v_log->err("content differs from original container");
 
-// 	time_t start = clock();
-// 	for (size_t i = 0; i < 10000; i++)
-// 		v->erase(v->begin());
-// 	time_t end = clock();
+	delete v;
+	delete v_og;
+	return v_log->benchmark(end - start, end_og - start_og);
+}
+bool	benchmark_vector_insert_n() {
+	ft::vector<int> *v = new ft::vector<int>(10000, 42);
+	std::vector<int> *v_og = new std::vector<int>(10000, 42);
+	std::vector<int> n;
+	size_t	num_it = 1000;
 
-// 	time_t start_og = clock();
-// 	for (size_t i = 0; i < 10000; i++)
-// 		v_og->erase(v_og->begin());
-// 	time_t end_og = clock();
+	unsigned int seed = time(NULL);
+	for (size_t i = 0; i < num_it; i++) {
+		int buf;
+		buf = rand_r(&seed) % 100 + 1;
+		n.push_back(buf);
+	}
 
-// 	delete v;
-// 	delete v_og;
-// 	return v_log->benchmark(end - start, end_og - start_og);
-// }
+	time_t start = clock();
+	for (size_t i = 0; i < num_it; i++)
+		v->insert(v->begin(), 42, n[i]);
+	time_t end = clock();
+
+	time_t start_og = clock();
+	for (size_t i = 0; i < num_it; i++)
+		v_og->insert(v_og->begin(), 42, n[i]);
+	time_t end_og = clock();
+
+	if (v_og->size() != v->size())
+		return v_log->err("size differs");
+	for (size_t i = 0; i < v_og->size(); i++)
+		if (v->at(i) != v_og->at(i))
+			return v_log->err("content differs from original container");
+
+	delete v;
+	delete v_og;
+	return v_log->benchmark(end - start, end_og - start_og);
+}
+bool	benchmark_vector_insert_range() {
+	ft::vector<int> *v = new ft::vector<int>(1000000, 42);
+	std::vector<int> *v_og = new std::vector<int>(1000000, 42);
+
+	int	myArr[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+	int	arrSize = 10;
+
+	time_t start = clock();
+	for (size_t i = 0; i < 1000; i++)
+		v->insert(v->begin(), myArr, myArr + arrSize);
+	time_t end = clock();
+
+	time_t start_og = clock();
+	for (size_t i = 0; i < 1000; i++)
+		v_og->insert(v_og->begin(), myArr, myArr + arrSize);
+	time_t end_og = clock();
+
+	if (v_og->size() != v->size())
+		return v_log->err("size differs");
+	for (size_t i = 0; i < v_og->size(); i++)
+		if (v->at(i) != v_og->at(i))
+			return v_log->err("content differs from original container");
+
+	delete v;
+	delete v_og;
+	return v_log->benchmark(end - start, end_og - start_og);
+}
+bool	benchmark_vector_erase() {
+	ft::vector<int> *v = new ft::vector<int>(100000, 42);
+	std::vector<int> *v_og = new std::vector<int>(100000, 42);
+
+	time_t start = clock();
+	for (size_t i = 0; i < 10000; i++)
+		v->erase(v->begin());
+	time_t end = clock();
+
+	time_t start_og = clock();
+	for (size_t i = 0; i < 10000; i++)
+		v_og->erase(v_og->begin());
+	time_t end_og = clock();
+
+	delete v;
+	delete v_og;
+	return v_log->benchmark(end - start, end_og - start_og);
+}
 
 void	vector() {
 	v_log = new ft_test::Logger("vector");
@@ -745,16 +839,14 @@ void	vector() {
 	ft_test::run(v_log, &test_vector_front, "Front");
 	ft_test::run(v_log, &test_vector_back, "Back");
 
-
 	v_log->section("MODIFIERS");
 	ft_test::run(v_log, &test_vector_assign, "Assign");
 	ft_test::run(v_log, &test_vector_push_back, "Push Back");
 	ft_test::run(v_log, &test_vector_pop_back, "Pop Back");
-	// ft_test::run(v_log, &test_vector_insert, "Insert");
-	// ft_test::run(v_log, &test_vector_erase, "Erase");
+	ft_test::run(v_log, &test_vector_insert, "Insert");
+	ft_test::run(v_log, &test_vector_erase, "Erase");
 	ft_test::run(v_log, &test_vector_swap, "Swap");
 	ft_test::run(v_log, &test_vector_clear, "Clear");
-
 
 	v_log->section("ALLOCATOR");
 	ft_test::run(v_log, &test_vector_allocator, "Allocator");
@@ -773,8 +865,11 @@ void	vector() {
 			"Benchmark Assign Op");
 		ft_test::run(v_log, &benchmark_vector_assign, "Benchmark Assign\t");
 		ft_test::run(v_log, &benchmark_vector_push_back, "Benchmark Push Back");
-		// ft_test::run(v_log, &benchmark_vector_insert, "Benchmark Insert");
-		// ft_test::run(v_log, &benchmark_vector_erase, "Benchmark Erase\t");
+		ft_test::run(v_log, &benchmark_vector_insert_regular,
+			"Benchmark Insert Regular");
+		ft_test::run(v_log, &benchmark_vector_insert_n, "Benchmark Insert N");
+		ft_test::run(v_log, &benchmark_vector_insert_range, "Benchmark Insert Range");
+		ft_test::run(v_log, &benchmark_vector_erase, "Benchmark Erase\t");
 	#endif
 	delete v_log;
 }

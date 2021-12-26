@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:47:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/11/26 18:00:29 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/25 13:11:45 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,16 +291,16 @@ class vector {
 		In all other cases, the function call does not cause a reallocation and the vector capacity is not affected.
 		
 	*/
+
 	void reserve(size_type n) {
 		if (n > _alloc.max_size())
 			throw std::length_error("vector::reserve::bad_alloc");
 		if (n > _capacity) {
 			pointer tmp = _alloc.allocate(n);
-
-			for (size_type i = 0; i < _size; i++)
+			for (size_type i = 0; i < _size; i++) {
 				_alloc.construct(tmp + i, _data[i]);
-			for (size_type i = 0; i < _size; i++)
 				_alloc.destroy(_data + i);
+			}
 
 			_alloc.deallocate(_data, _capacity);
 			_data = tmp;
@@ -424,23 +424,25 @@ class vector {
 	*/
 
 	iterator insert(iterator position, const value_type& val) {
-		if (_size == _capacity)
-			reserve(__new_size());
+		size_type elem_pos = position - begin();
 
-		size_type i = position - begin();
-		__translate_asc(i, 1);
-		_alloc.construct(&_data[i], val);
+		if (_size + 1 > _capacity)
+			reserve(__new_size());
+		__translate_asc(elem_pos, 1);
+		_alloc.construct(_data + elem_pos, val);
 		++_size;
-		return iterator(&_data[i]);
+		return iterator(_data);
 	}
 
 	void insert(iterator position, size_type n, const value_type &val) {
-		__n_reserve(n);
+		size_type elem_pos = position - begin();
 
-		size_type i = position - begin();
-		__translate_asc(i, n);
-		for (size_type k = 0; k < n; k++)
-			_alloc.construct(&_data[n], val);
+		if (_size + n > _capacity)
+			reserve(_capacity + n);
+		__translate_asc(elem_pos, n);
+
+		for (size_type i = 0; i < n; i++)
+			_alloc.construct(&_data[elem_pos + i], val);
 		_size += n;
 	}
 
@@ -448,16 +450,19 @@ class vector {
 	void insert(iterator position, InputIterator first, InputIterator last,
 		typename ft::enable_if<!ft::is_integral<InputIterator>::value,
 			InputIterator>::type* = NULL) {
+		size_type elem_pos = position - begin();
 		size_type n = last - first;
-		size_type i = position - begin();
-		__n_reserve(n);
-
-		__translate_asc(i, n);
-		while (first != last) {
-			_alloc.construct(&_data[i + n], _data[i]);
-			++n;
-			++first;
+		if (_size + n > _capacity) {
+			if (__new_size() < _size + n)
+				reserve(__new_size());
+			else
+				reserve(_size + n);
 		}
+
+		__translate_asc(elem_pos, n);
+		for (size_type i = 0; i < n; i++, first++)
+			_alloc.construct(&_data[elem_pos + i], *first);
+		_size += n;
 	}
 
 	/*
@@ -470,7 +475,7 @@ class vector {
 		size_type	n = position - begin();
 
 		_alloc.destroy(_data + n);
-		__translate_dsc(n, -1);
+		__translate_dsc(n, 1);
 		--_size;
 		return iterator(_data + n);
 	}
@@ -480,7 +485,7 @@ class vector {
 		size_type	i = last - begin();
 
 		__destroy_range(first, last);
-		__translate_dsc(n, -(i - n));
+		__translate_dsc(n, i - n);
 		_size -= diff;
 		return (iterator(_data + n));
 	}
@@ -544,23 +549,20 @@ class vector {
 		}
 	}
 
-	void	__translate_dsc(size_type i, size_type n) {
-		for (; i < _size; i++) {
-			_alloc.construct(&_data[i], _data[i + n]);
-			_alloc.destroy(&_data[i]);
+	void	__translate_dsc(size_type elem_pos, size_type n) {
+		for (; elem_pos < _size; elem_pos++) {
+			_alloc.construct(_data + elem_pos, _data[elem_pos + n]);
+			_alloc.destroy(_data + elem_pos + n);
 		}
 	}
 
-	void	__translate_asc(size_type i, size_type n) {
-		for (; i < _size; i++) {
-			_alloc.construct(&_data[i + n], _data[i]);
-			_alloc.destroy(&_data[i]);
+	void	__translate_asc(size_type elem_pos, size_type n) {
+		for (size_type i = _size - 1; i >= elem_pos; i--) {
+			_alloc.construct(_data + i + n, _data[i]);
+			_alloc.destroy(_data + i);
+			if (i == 0)
+				break;
 		}
-	}
-
-	void	__n_reserve(size_type n) {
-		if (_size + n > _capacity)
-			reserve(_size + n);
 	}
 };
 	//		- [ NON-MEMBER FUNCTION OVERLOADS ] -

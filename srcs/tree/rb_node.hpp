@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 07:45:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/26 18:10:44 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/26 18:13:54 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,7 @@ class rb_node {
 	static rb_node *prev() {
 		rb_node *node = this;
 		if (node->left) {
-			// max
-			node = node->left;
-			while (node->right)
-				node = node->right;
+			node = max_leaf(node);
 		} else {
 			while (node->parent && node == node->parent->left)
 				node = node->parent;
@@ -56,10 +53,7 @@ class rb_node {
 	static rb_node	*next() {
 		rb_node *node = this;
 		if (node->right) {
-			// min
-			node = node->right;
-			while (node->left)
-				node = node->left;
+			node = min_leaf(node);
 		} else {
 			while (node->parent && node == node->parent->right)
 				node = node->parent;

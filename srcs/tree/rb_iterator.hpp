@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 07:44:49 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/26 17:28:22 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/26 18:10:31 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,24 @@ class rb_tree_iterator {
 	typedef typename T::value_type const	*const_pointer;
 
  private:
+	node	_root;
 	node	_base;
 
  public:
 	rb_tree_iterator()
-		: _base(NULL) {}
-	explicit rb_tree_iterator(pointer node)
-		: _base(node) {}
+		:	_root(NULL), _base(NULL) {}
+	rb_tree_iterator(pointer root, pointer node)
+		:	_root(root), _base(node) {}
 
 	rb_tree_iterator(const rb_tree_iterator& other)
-		: _base(other._base) {}
+		:	_root(other._root),
+			_base(other._base) {}
 
 	rb_tree_iterator &operator=(const rb_tree_iterator& rhs) {
-		if (this != &rhs)
+		if (this != &rhs) {
+			_root = rhs._root;
 			_base = rhs._base;
+		}
 		return *this;
 	}
 
@@ -47,7 +51,7 @@ class rb_tree_iterator {
 
 	/* const_iterator cast support */
 	operator rb_tree_iterator<T const>() const {
-		return rb_tree_iterator<T const>(_base);
+		return rb_tree_iterator<T const>(_root, _base);
 	}
 
 	bool	operator== (const rb_tree_iterator& rhs) const {
@@ -85,6 +89,8 @@ class rb_tree_iterator {
 	rb_tree_iterator&	operator-- () {
 		if (_base)
 			_base = _base->prev();
+		else
+			_base = rb_node::max_leaf(_root);
 		return *this;
 	}
 	rb_tree_iterator	operator-- (int) {

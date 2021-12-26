@@ -14,6 +14,7 @@ template <class T, class Compare,
 class rb_tree {
  public:
 	typedef T		value_type;
+	typedef Compare	compare_type;
 	typedef Alloc 	allocator_type;
 
 	typedef rb_node<T>&			reference;
@@ -31,14 +32,100 @@ class rb_tree {
 
  private:
 	allocator_type	_alloc;
+	compare_type	_compare;
 	pointer			_root;
 	size_type		_size;
 
  public:
-	rb_tree()
-		: _root(NULL), _size(0) {}
+	explicit rb_tree(allocator alloc = allocator())
+		:	_alloc(alloc),
+			_root(NULL),
+			_size(0) {}
 
-	~rb_tree();
+	rb_tree(const rb_tree& other)
+		:	_alloc(other._alloc),
+			_root(NULL)
+			_size(other._size) {
+		__copy_tree(other._root);
+	}
+
+	rb_tree &operator=(const rb_tree &rhs) {
+		if (this != &rhs) {
+			_alloc = rhs._alloc;
+			_root = NULL;
+			_size = rhs._size;
+			__destroy_tree(_root);
+			__copy_tree(rhs._root);
+		}
+		return *this;
+	}
+
+	~rb_tree() { clear(); }
+
+	// iterator begin() {}
+	// const_iterator begin() const {}
+	// iterator end() {}
+	// const_iterator end() const {}
+	// reverse_iterator rbegin() {}
+	// const_reverse_iterator rbegin() const {}
+	// reverse_iterator rend() {}
+	// const_reverse_iterator rend() const {}
+
+	bool	empty() const {
+		return _size == 0;
+	}
+
+	size_type	size() const {
+		return _size;
+	}
+
+	size_type	max_size() const {
+		return _alloc.max_size();
+	}
+
+	// ft::pair<iterator, bool> insert(value_type const &value) {}
+	// iterator insert(iterator pos, const value_type &value) {}
+	// size_type erase(value_type const &value) {}
+	// void	erase(iterator pos) {}
+
+	void	swap(rb_tree &rhs) {
+		std::swap(_alloc, rhs._alloc);
+		std::swap(_compare, rhs._compare);
+		std::swap(_root, rhs._root);
+		std::swap(_size, rhs._size);
+	}
+
+	void	clear() {
+		__destroy_tree(_root);
+		_root = NULL;
+		_size = 0;
+	}
+
+	// iterator find(value_type const &value) {}
+	// const_iterator find(value_type const &value) const {}
+
+	// iterator lower_bound(const value_type &value) {}
+	// const_iterator lower_bound(const value_type &value) const {}
+	// iterator upper_bound(const value_type &value) {}
+	// const_iterator upper_bound(const value_type &value) const {}
+
+ private:
+	void __copy_tree(pointer node) {
+		if (node == NULL)
+			return;
+		__copy_tree(node->left);
+		insert(node->data);
+		__copy_tree(node->right);
+	}
+
+	void	__destroy_nodes(pointer node) {
+		if (node == NULL)
+			return;
+		__destroy_nodes(node->left);
+		__destroy_nodes(node->right);
+		_alloc.destroy(node);
+		_alloc.deallocate(node, 1);
+	}
 };
 
 }  // namespace ft

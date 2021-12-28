@@ -6,6 +6,7 @@
 #include <iostream>
 
 #include "stack.hpp"
+
 #include "utility/logger.hpp"
 #include "utility/run_test.hpp"
 

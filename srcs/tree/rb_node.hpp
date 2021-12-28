@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 07:45:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 07:48:30 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 13:28:09 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ enum _rb_color : bool {
 template <class T>
 class rb_node {
  public:
-	typedef typename T	value_type;
-	typedef typename T& reference;
-	typedef typename T const& const_reference;
+	typedef T	value_type;
+	typedef T& reference;
+	typedef T const& const_reference;
 
 	rb_node		*parent;
 	rb_node		*left;
@@ -39,7 +39,7 @@ class rb_node {
 
 	~rb_node() {}
 
-	static rb_node *prev() {
+	rb_node *prev() {
 		rb_node *node = this;
 		if (node->left) {
 			node = max_leaf(node);
@@ -50,7 +50,7 @@ class rb_node {
 		}
 		return node;
 	}
-	static rb_node	*next() {
+	rb_node	*next() {
 		rb_node *node = this;
 		if (node->right) {
 			node = min_leaf(node);

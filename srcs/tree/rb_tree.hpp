@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 08:01:30 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 11:34:55 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 	Links:
 	- https://en.wikipedia.org/wiki/Red%E2%80%93black_tree
 	- https://www.cs.auckland.ac.nz/software/AlgAnim/red_black.html
+	- https://iq.opengenus.org/red-black-tree-search/
 */
 
 #include <memory>
@@ -54,13 +55,14 @@ class rb_tree {
 
  private:
 	allocator_type	_alloc;
-	compare_type	_compare;
+	compare_type	_compare_type;
 	pointer			_root;
 	size_type		_size;
 
  public:
 	explicit rb_tree(allocator alloc = allocator())
 		:	_alloc(alloc),
+			_compare_type(compare_type()),
 			_root(NULL),
 			_size(0) {}
 
@@ -165,8 +167,20 @@ class rb_tree {
 		_size = 0;
 	}
 
-	// iterator find(value_type const &value) {}
-	// const_iterator find(value_type const &value) const {}
+	iterator find(value_type const &value) {
+		rb_node	*tmp = __lookup_node(value);
+
+		if (tmp)
+			return iterator(_root, tmp);
+		return end();
+	}
+	const_iterator find(value_type const &value) const {
+		rb_node	*tmp = __lookup_node(value);
+
+		if (tmp)
+			return const_iterator(_root, tmp);
+		return end();
+	}
 
 	iterator lower_bound(const value_type &value) {
 		return end();
@@ -183,23 +197,28 @@ class rb_tree {
 	}
 
  private:
-	rb_node	*__insert(value_type const &data) {
+	rb_node	*__insert(const value_type &data) {
 		rb_node	*node = _alloc.allocate(1);
 
 		node->color = RB_RED;
 		node->left = NULL;
 		node->right = NULL;
 		node->parent = NULL;
-		_alloc.construct(node, data);
+		_alloc.construct(node->data, data);
 		return node;
 	}
 
-	rb_node	*__find(value_type const &data) const {
-		rb_node *tmp = _root;
+	rb_node	*__lookup_node(const value_type &key) const {
+		rb_node *node = _root;
 
-		while (tmp) {
-			// ToDo: Implement find
-			return tmp;
+		while (node) {
+			int	cmp = _compare(key, node->data);
+			if (cmp  == 0)
+				return node;
+			else if (cmp < 0)
+				node = node->left;
+			else
+				node = node->right;
 		}
 		return NULL;
 	}

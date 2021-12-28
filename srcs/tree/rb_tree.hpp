@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 18:00:07 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 18:50:14 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,10 +105,10 @@ class rb_tree {
 		return iterator(_root, NULL);
 	}
 	reverse_iterator rbegin() {
-		return reverse_iterator(_root, NULL);
+		return reverse_iterator(end());
 	}
 	const_reverse_iterator rbegin() const {
-		return reverse_iterator(_root, NULL);
+		return reverse_iterator(end());
 	}
 	reverse_iterator rend() {
 		return reverse_iterator(_root, rb_node<T>::min_leaf(_root));

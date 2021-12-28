@@ -198,7 +198,123 @@ class rb_tree {
 	}
 
  private:
-	rb_node	*__insert(const value_type &data) {
+	void	__insert_fixup(rb_node *node) {
+		rb_node *u;
+
+		while (node->parent->color == RB_RED) {
+			if (node->parent == node->parent->parent->right) {
+				u = node->parent->parent->left;
+				if (u->color == RB_RED) {
+					u->color = RB_BLACK;
+					node->parent->color = RB_BLACK;
+					node->parent->parent->color = RB_RED;
+					node = node->parent->parent;
+				} else {
+					if (node == node->parent->left) {
+						node = node->parent;
+						__right_rotate(node);
+					}
+					node->parent->color = RB_BLACK;
+					node->parent->parent->color = RB_RED;
+					__left_rotate(node->parent->parent);
+				}
+			} else {
+				u = node->parent->parent->right;
+				if (u->color == RB_RED) {
+					u->color = RB_BLACK;
+					node->parent->color = RB_BLACK;
+					node->parent->parent->color = RB_RED;
+					node = node->parent->parent;
+				} else {
+					if (node == node->parent->right) {
+						node = node->parent;
+						__left_rotate(node);
+					}
+					node->parent->color = RB_BLACK;
+					node->parent->parent->color = RB_RED;
+					__right_rotate(node->parent->parent);
+				}
+			}
+
+			if (node == _root)
+				break;
+		}
+		_root->color = RB_BLACK;
+	}
+
+	void	__insert_node(const value_type &data) {
+		// ! What if it exists already
+		rb_node	*node = __alloc_node(data);
+
+		if (!node)
+			return;
+
+		rb_node	*y = NULL;
+		rb_node	*x = _root;
+
+		while (x) {
+			y = x;
+			if (_compare_type(node->value, x->value))
+				x = x->left;
+			else
+				x = x->right;
+		}
+
+		node->parent = y;
+		if (!y)
+			_root = node;
+		else if (_compare_type(node->value, y->value))
+			y->left = node;
+		else
+			y->right = node;
+
+		if (node->parent == NULL) {
+			node->parent->color = RB_BLACK;
+			return;
+		}
+
+		if (node->parent->parent == NULL)
+			return;
+
+		__insert_fixup(node);
+	}
+	void	__left_rotate(rb_node *node) {
+		rb_node *tmp = node->right;
+
+		node->right = tmp->left;
+		if (tmp->left)
+			tmp->left->parent = node;
+
+		tmp->parent = node->parent;
+		if (node->parent == NULL)
+			_root = tmp;
+		else if (node == node->parent->left)
+			node->parent->left = tmp;
+		else
+			node->parent->right = tmp;
+		tmp->left = node;
+		node->parent = tmp;
+	}
+
+	void	__right_rotate(rb_node *node) {
+		rb_node	*tmp = node->left;
+
+		node->left = tmp->right;
+		if (tmp->right)
+			tmp->right->parent = node;
+
+		tmp->parent = node->parent;
+		if (node->parent == NULL)
+			_root = tmp;
+		else if (node == node->parent->left)
+			node->parent->left = tmp;
+		else
+			node->parent->right = tmp;
+		tmp->right = node;
+		node->parent = tmp;
+	}
+
+	rb_node	*__alloc_node(const value_type &data) {
 		rb_node	*node = _alloc.allocate(1);
 
 		node->color = RB_RED;

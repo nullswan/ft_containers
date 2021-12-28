@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:50:22 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 13:00:59 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 13:02:08 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,7 +255,7 @@ class set {
 		typename ft::enable_if<
 		!ft::is_integral<InputIterator>::value
 		>::type * = NULL) {
-	
+		return _tree.insert(first, last);
 	}
 
 	/*

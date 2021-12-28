@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 07:45:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 17:11:27 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 17:53:39 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ class rb_node {
 
 	~rb_node() {}
 
-	rb_node *prev() {
+	rb_node<T> *prev() {
 		rb_node *node = this;
 		if (node->left) {
 			node = max_leaf(node);
@@ -50,7 +50,7 @@ class rb_node {
 		}
 		return node;
 	}
-	rb_node	*next() {
+	rb_node<T>	*next() {
 		rb_node *node = this;
 		if (node->right) {
 			node = min_leaf(node);
@@ -62,7 +62,7 @@ class rb_node {
 		return node;
 	}
 
-	static rb_node	*min_leaf(rb_node *node) {
+	static rb_node<T>	*min_leaf(rb_node *node) {
 		if (node == NULL)
 			return NULL;
 		node = node->right;  // ! unsafe
@@ -71,7 +71,7 @@ class rb_node {
 		return node;
 	}
 
-	static rb_node	*max_leaf(rb_node *node) {
+	static rb_node<T>	*max_leaf(rb_node *node) {
 		if (node == NULL)
 			return NULL;
 		node = node->left;  // ! unsafe

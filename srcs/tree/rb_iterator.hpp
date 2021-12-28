@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 07:44:49 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 17:13:21 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 17:57:02 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,11 @@ namespace ft {
 template <class T>
 class rb_tree_iterator {
  public:
-	typedef rb_node<T> &reference;
-	typedef rb_node<T> *pointer;
+	typedef T *pointer;
+	typedef T &reference;
+
+	typedef const T *const_pointer;
+	typedef const T	&const_reference;
 
  private:
 	pointer	_root;
@@ -33,9 +36,9 @@ class rb_tree_iterator {
 	rb_tree_iterator(pointer root, pointer node)
 		:	_root(root), _base(node) {}
 
-	rb_tree_iterator(const rb_tree_iterator& other)
-		:	_root(other._root),
-			_base(other._base) {}
+	rb_tree_iterator(const rb_tree_iterator& x)
+		:	_root(x._root),
+			_base(x._base) {}
 
 	rb_tree_iterator &operator=(const rb_tree_iterator& rhs) {
 		if (this != &rhs) {
@@ -59,11 +62,19 @@ class rb_tree_iterator {
 		return _base != rhs._base;
 	}
 
-	reference	operator*		() const {
+	reference	operator*		() {
 		return _base->value;
 	}
 
-	pointer		operator->	() const {
+	const_reference	operator*	() const {
+		return _base->value;
+	}
+
+	pointer		operator->		() {
+		return &_base->value;
+	}
+
+	const_pointer	operator->	() const {
 		return &_base->value;
 	}
 

@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 17:41:51 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 17:58:09 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,11 @@
 
 namespace ft {
 
-template <class T, class Compare,
-	class Alloc = std::allocator<rb_node<T> > >
+template <
+	class T, 
+	class Compare,
+	class Alloc = std::allocator<rb_node<T> >
+>
 class rb_tree {
  public:
 	typedef T		value_type;
@@ -49,10 +52,10 @@ class rb_tree {
 	typedef rb_node<T>*			pointer;
 	typedef const rb_node<T>*	const_pointer;
 
-	typedef typename ft::rb_tree_iterator<pointer> iterator;
-	typedef typename ft::rb_tree_iterator<const pointer> const_iterator;
-	typedef typename ft::reverse_iterator<iterator> reverse_iterator;
-	typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator;
+	typedef typename ft::rb_tree_iterator<pointer> 			iterator;
+	typedef typename ft::rb_tree_iterator<const_pointer>	const_iterator;
+	typedef typename ft::reverse_iterator<iterator>			reverse_iterator;
+	typedef typename ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 
 	typedef std::ptrdiff_t	difference_type;
 	typedef std::size_t		size_type;

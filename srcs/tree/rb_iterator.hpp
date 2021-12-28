@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 07:44:49 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/26 18:10:31 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 07:46:08 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,10 @@ class rb_tree_iterator {
 		rb_tree_iterator tmp(*this);
 		--(*this);
 		return tmp;
+	}
+
+	rb_node	*get_base() const {
+		return _base;
 	}
 };
 

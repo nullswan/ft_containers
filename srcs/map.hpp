@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:50:07 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/26 19:11:55 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 07:43:02 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,8 +228,9 @@ class map {
 		If k matches the key of an element in the container, the function returns a reference to its mapped value.
 		If k does not match the key of any element in the container, the function inserts a new element with that key and returns a reference to its mapped value. Notice that this always increases the container size by one, even if no mapped value is assigned to the element (the element is constructed using its default constructor).
 	*/
-	// ToDo: implement operator[]
-	// mapped_type &operator[](const key_type &key) {}
+	mapped_type &operator[](const key_type &key) {
+		return _tree[key];
+	}
 
 
 	/*

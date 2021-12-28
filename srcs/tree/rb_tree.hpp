@@ -1,5 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rb_tree.hpp                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
+/*   Updated: 2021/12/28 08:01:30 by c3b5aw           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef TREE_RB_TREE_HPP_
 #define TREE_RB_TREE_HPP_
+
+/*
+	Almost always mimic std::map references.
+	Inspired from: https://www.cplusplus.com/reference/map/map/
+
+	Links:
+	- https://en.wikipedia.org/wiki/Red%E2%80%93black_tree
+	- https://www.cs.auckland.ac.nz/software/AlgAnim/red_black.html
+*/
 
 #include <memory>
 
@@ -100,13 +121,35 @@ class rb_tree {
 		return _alloc.max_size();
 	}
 
+	mapped_type	&operator[](const key_type &key) {
+		iterator	ret = find(ft::make_pair(key, value_type));
+
+		if (ret != end()) {
+			rb_node	*tmp = ret.get_base();
+			if (tmp)
+				return tmp->value;
+				//  ! unsafe .second;
+			return NULL;
+		}
+		ft::pair<iterator, bool> tmp = insert(
+			ft::make_pair(key, value_type));
+		return tmp.first.get_base()->value;
+		//  ! unsafe .second;
+	}
+
 	// ft::pair<iterator, bool> insert(value_type const &value) {}
 	// iterator insert(iterator pos, const value_type &value) {}
 	// template <class InputIterator>
 	// 	void insert(InputIterator first, InputIterator last) {}
 
-	// void	erase(iterator pos) {}
-	// size_type erase(value_type const &value) {}
+	// void	erase(iterator pos) {
+		// check if ite node exist and attempt to delete
+	// }
+	// size_type erase(value_type const &value) {
+		// if rb_node
+			// delete ret 1
+		// ret 0
+	// }
 	// void	erase(iterator first, iterator last) {}
 
 	void	swap(rb_tree &rhs) {
@@ -125,12 +168,42 @@ class rb_tree {
 	// iterator find(value_type const &value) {}
 	// const_iterator find(value_type const &value) const {}
 
-	// iterator lower_bound(const value_type &value) {}
-	// const_iterator lower_bound(const value_type &value) const {}
-	// iterator upper_bound(const value_type &value) {}
-	// const_iterator upper_bound(const value_type &value) const {}
+	iterator lower_bound(const value_type &value) {
+		return end();
+	}
+	const_iterator lower_bound(const value_type &value) const {
+		return end();
+	}
+
+	iterator upper_bound(const value_type &value) {
+		return end();
+	}
+	const_iterator upper_bound(const value_type &value) const {
+		return end();
+	}
 
  private:
+	rb_node	*__insert(value_type const &data) {
+		rb_node	*node = _alloc.allocate(1);
+
+		node->color = RB_RED;
+		node->left = NULL;
+		node->right = NULL;
+		node->parent = NULL;
+		_alloc.construct(node, data);
+		return node;
+	}
+
+	rb_node	*__find(value_type const &data) const {
+		rb_node *tmp = _root;
+
+		while (tmp) {
+			// ToDo: Implement find
+			return tmp;
+		}
+		return NULL;
+	}
+
 	void __copy_tree(pointer node) {
 		if (node == NULL)
 			return;

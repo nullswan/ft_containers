@@ -1,29 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pair.hpp                                           :+:      :+:    :+:   */
+/*   set_test.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/12 03:40:17 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 13:32:51 by c3b5aw           ###   ########.fr       */
+/*   Created: 2021/12/28 13:21:46 by c3b5aw            #+#    #+#             */
+/*   Updated: 2021/12/28 13:45:08 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILITY_PAIR_HPP_
-#define UTILITY_PAIR_HPP_
+#ifndef SET_TEST_HPP_
+#define SET_TEST_HPP_
 
-namespace ft {
-template<
-    class T1,
-    class T2
-> struct pair;
+#include <set>
 
-template <typename A, typename B>
-pair<A, B> make_pair(const A &a, const B &b) {
-	return pair<A, B>(a, b);
+#include "set.hpp"
+
+#include "utility/logger.hpp"
+#include "utility/run_test.hpp"
+
+namespace ft_test {
+ft_test::Logger *st_log;
+
+void	set() {
+	s_log = new ft_test::Logger("set ");
 }
 
-}  // namespace ft
+}  // namespace ft_test
 
-#endif  // UTILITY_PAIR_HPP_
+#endif  // SET_TEST_HPP_

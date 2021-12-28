@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:50:22 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 13:05:25 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 13:38:36 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ class set {
        const key_compare& comp = key_compare(),
        const allocator_type& alloc = allocator_type(),
 	   typename ft::enable_if<!ft::is_integral<InputIterator>::value,
-		InputIterator>::type* = NUL)
+		InputIterator>::type* = NULL)
 	:	_alloc(alloc),
 		_key_compare(comp),
 		_value_compare(comp),
@@ -99,7 +99,7 @@ class set {
     	Constructs a container with a copy of each of the elements in x.
 	*/
 	set(const set& x)
-	:	_alloc(x._alloc)
+	:	_alloc(x._alloc),
 		_key_compare(x._key_compare),
 		_value_compare(x._value_compare),
 		_tree(x._tree) {}
@@ -343,7 +343,7 @@ class set {
 		Searches the container for an element equivalent to val and returns an iterator to it if found, otherwise it returns an iterator to set::end.
 	*/
 	iterator find(const value_type& val) const {
-		return _tree.find(ft::make_pair(k, mapped_type()));
+		return _tree.find(val);
 	}
 
 	/*
@@ -371,7 +371,7 @@ class set {
 		If the set class is instantiated with the default comparison type (less), the function returns an iterator to the first element that is not less than val.
 	*/
 	iterator lower_bound(const value_type& val) const {
-		return _tree.lower_bound(ft::make_pair(val, mapped_type()));
+		return _tree.lower_bound(val);
 	}
 
 	/*
@@ -385,7 +385,7 @@ class set {
 		If the set class is instantiated with the default comparison type (less), the function returns an iterator to the first element that is greater than val.
 	*/
 	iterator upper_bound(const value_type& val) const {
-		return _tree.upper_bound(ft::make_pair(val, mapped_type()));
+		return _tree.upper_bound(val);
 	}
 
 	/*

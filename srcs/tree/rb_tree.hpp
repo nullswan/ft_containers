@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 13:17:25 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 13:41:25 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@
 #include "rb_node.hpp"
 #include "rb_iterator.hpp"
 
-#include "iterator/reverse_iterator.hpp"
+#include "../utility/pair.hpp"
+#include "../iterator/reverse_iterator.hpp"
 
 namespace ft {
 
@@ -63,7 +64,7 @@ class rb_tree {
 	size_type		_size;
 
  public:
-	explicit rb_tree(allocator alloc = allocator())
+	explicit rb_tree(allocator_type alloc = allocator_type())
 		:	_alloc(alloc),
 			_compare_type(compare_type()),
 			_root(NULL),
@@ -71,7 +72,7 @@ class rb_tree {
 
 	rb_tree(const rb_tree& other)
 		:	_alloc(other._alloc),
-			_root(NULL)
+			_root(NULL),
 			_size(other._size) {
 		__copy_tree(other._root);
 	}
@@ -90,10 +91,10 @@ class rb_tree {
 	~rb_tree() { clear(); }
 
 	iterator begin() {
-		return iterator(_root, rb_node::min_leaf(_root));
+		return iterator(_root, rb_node<T>::min_leaf(_root));
 	}
 	const_iterator begin() const {
-		return iterator(_root, rb_node::min_leaf(_root));
+		return iterator(_root, rb_node<T>::min_leaf(_root));
 	}
 	iterator end() {
 		return iterator(_root, NULL);
@@ -108,10 +109,10 @@ class rb_tree {
 		return reverse_iterator(_root, NULL);
 	}
 	reverse_iterator rend() {
-		return reverse_iterator(_root, rb_node::min_leaf(_root));
+		return reverse_iterator(_root, rb_node<T>::min_leaf(_root));
 	}
 	const_reverse_iterator rend() const {
-		return reverse_iterator(_root, rb_node::min_leaf(_root));
+		return reverse_iterator(_root, rb_node<T>::min_leaf(_root));
 	}
 
 	bool	empty() const {
@@ -126,26 +127,28 @@ class rb_tree {
 		return _alloc.max_size();
 	}
 
-	mapped_type	&operator[](const key_type &key) {
-		iterator	ret = find(ft::make_pair(key, value_type));
+	value_type	&operator[](const value_type &key) {
+		iterator	ret = find(key);
 
 		if (ret != end()) {
-			rb_node	*tmp = ret.get_base();
+			pointer tmp = ret.get_base();
 			if (tmp)
-				return tmp->value;
-				//  ! unsafe .second;
+				return tmp->value;  // ! unsafe .second;
 			return NULL;
 		}
-		ft::pair<iterator, bool> tmp = insert(
-			ft::make_pair(key, value_type));
-		return tmp.first.get_base()->value;
-		//  ! unsafe .second;
+		ft::pair<iterator, bool> tmp = insert(key);
+
+		pointer	node = tmp.first.get_base();
+		if (node)
+			return node->value;  // ! unsafe .second;
+		return NULL;
 	}
 
 	ft::pair<iterator, bool> insert(value_type const &value) {
 		return __insert_node(value);
 	}
 	iterator insert(iterator pos, const value_type &value) {
+		(void)pos;
 		return insert(value).first;
 	}
 	template <class InputIterator>
@@ -163,7 +166,7 @@ class rb_tree {
 		__erase_node(pos.get_base());
 	}
 	size_type erase(const value_type &value) {
-		rb_node	*node = __find_node(value);
+		pointer node = __find_node(value);
 		if (node) {
 			__erase_node(node);
 			return 1;
@@ -177,7 +180,7 @@ class rb_tree {
 
 	void	swap(rb_tree &rhs) {
 		std::swap(_alloc, rhs._alloc);
-		std::swap(_compare, rhs._compare);
+		std::swap(_compare_type, rhs._compare_type);
 		std::swap(_root, rhs._root);
 		std::swap(_size, rhs._size);
 	}
@@ -189,14 +192,14 @@ class rb_tree {
 	}
 
 	iterator find(value_type const &value) {
-		rb_node	*tmp = __lookup_node(value);
+		pointer tmp = __lookup_node(value);
 
 		if (tmp)
 			return iterator(_root, tmp);
 		return end();
 	}
 	const_iterator find(value_type const &value) const {
-		rb_node	*tmp = __lookup_node(value);
+		pointer tmp = __lookup_node(value);
 
 		if (tmp)
 			return const_iterator(_root, tmp);
@@ -206,7 +209,7 @@ class rb_tree {
 	iterator lower_bound(const value_type &value) {
 		iterator it = begin();
 		for (; it != end(); ++it) {
-			rb_node	*base = it.get_base();
+			pointer base = it.get_base();
 			if (base && (_compare(value, base->data)
 				|| !_compare(value, base->data)))
 				return it;
@@ -216,7 +219,7 @@ class rb_tree {
 	const_iterator lower_bound(const value_type &value) const {
 		const_iterator it = begin();
 		for (; it != end(); ++it) {
-			rb_node	*base = it.get_base();
+			pointer base = it.get_base();
 			if (base && (_compare(value, base->data)
 				|| !_compare(value, base->data)))
 				return it;
@@ -227,7 +230,7 @@ class rb_tree {
 	iterator upper_bound(const value_type &value) {
 		iterator it = begin();
 		for (; it != end(); ++it) {
-			rb_node	*base = it.get_base();
+			pointer base = it.get_base();
 			if (base && _compare(value, base->data))
 				return it;
 		}
@@ -236,7 +239,7 @@ class rb_tree {
 	const_iterator upper_bound(const value_type &value) const {
 		const_iterator it = begin();
 		for (; it != end(); ++it) {
-			rb_node	*base = it.get_base();
+			pointer base = it.get_base();
 			if (base && _compare(value, base->data))
 				return it;
 		}
@@ -244,14 +247,14 @@ class rb_tree {
 	}
 
 	ft::pair<const_iterator, const_iterator>
-	equal_range(const key_type& k) const {
+	equal_range(const value_type& k) const {
 		const_iterator first = lower_bound(k);
 		const_iterator last = upper_bound(k);
 
 		return ft::make_pair(first, last);
 	}
 
-	ft::pair<iterator, iterator> equal_range(const key_type& k) {
+	ft::pair<iterator, iterator> equal_range(const value_type& k) {
 		iterator first = lower_bound(k);
 		iterator last = upper_bound(k);
 
@@ -259,8 +262,8 @@ class rb_tree {
 	}
 
  private:
-	void	__insert_fixup(rb_node *node) {
-		rb_node *u;
+	void	__insert_fixup(pointer node) {
+		pointer u;
 
 		while (node->parent->color == RB_RED) {
 			if (node->parent == node->parent->parent->right) {
@@ -304,12 +307,12 @@ class rb_tree {
 	}
 
 	ft::pair<iterator, bool>	__insert_node(const value_type &data) {
-		rb_node	*node = __alloc_node(data);
+		pointer node = __alloc_node(data);
 		if (!node)
 			throw std::bad_alloc();
 
-		rb_node	*y = NULL;
-		rb_node	*x = _root;
+		pointer y = NULL;
+		pointer x = _root;
 
 		while (x) {
 			int cmp = _compare(data, x->value);
@@ -342,7 +345,7 @@ class rb_tree {
 		return ft::make_pair(node, true);
 	}
 
-	void	__transplant(rb_node *u, rb_node *v) {
+	void	__transplant(pointer u, pointer v) {
 		if (u->parent == NULL)
 			_root = v;
 		else if (u == u->parent->left)
@@ -353,8 +356,8 @@ class rb_tree {
 			v->parent = u->parent;
 	}
 
-	void	__left_rotate(rb_node *node) {
-		rb_node *tmp = node->right;
+	void	__left_rotate(pointer node) {
+		pointer tmp = node->right;
 
 		node->right = tmp->left;
 		if (tmp->left)
@@ -371,8 +374,8 @@ class rb_tree {
 		node->parent = tmp;
 	}
 
-	void	__right_rotate(rb_node *node) {
-		rb_node	*tmp = node->left;
+	void	__right_rotate(pointer node) {
+		pointer tmp = node->left;
 
 		node->left = tmp->right;
 		if (tmp->right)
@@ -389,8 +392,8 @@ class rb_tree {
 		node->parent = tmp;
 	}
 
-	void	__delete_fixup(rb_node *node) {
-		rb_node	*s;
+	void	__delete_fixup(pointer node) {
+		pointer s;
 
 		while (node != _root && node->color == RB_BLACK) {
 			if (node == node->parent->left) {
@@ -446,12 +449,12 @@ class rb_tree {
 		node->color = RB_BLACK;
 	}
 
-	void	__erase_node(rb_node *node) {
+	void	__erase_node(pointer node) {
 		if (node == NULL)
 			return;
 
-		rb_node *root = _root;
-		rb_node *z = NULL;
+		pointer root = _root;
+		pointer z = NULL;
 
 		while (root) {
 			if (root->data == node->data)
@@ -466,8 +469,8 @@ class rb_tree {
 		if (z == NULL)
 			return;
 
-		rb_node *x;
-		rb_node *y = z;
+		pointer x;
+		pointer y = z;
 		_rb_color y_original_color = y->color;
 		if (z->left == NULL) {
 			x = z->right;
@@ -476,7 +479,7 @@ class rb_tree {
 			x = z->left;
 			__transplant(z, z->left);
 		} else {
-			y = rb_node::min_leaf(z->right);
+			y = rb_node<T>::min_leaf(z->right);
 			y_original_color = y->color;
 			x = y->right;
 			if (y->parent == z) {
@@ -493,18 +496,18 @@ class rb_tree {
 			y->color = z->color;
 		}
 		__destroy_node(z);
-		if (y_original_color == _rb_black)
+		if (y_original_color == RB_BLACK)
 			__delete_fixup(x);
 	}
 
-	void	__destroy_node(rb_node *node) {
+	void	__destroy_node(pointer node) {
 		_alloc.destroy(node);
 		_alloc.deallocate(node, 1);
 		--_size;
 	}
 
-	rb_node	*__alloc_node(const value_type &data) {
-		rb_node	*node = _alloc.allocate(1);
+	pointer __alloc_node(const value_type &data) {
+		pointer node = _alloc.allocate(1);
 
 		node->color = RB_RED;
 		node->left = NULL;
@@ -514,8 +517,8 @@ class rb_tree {
 		return node;
 	}
 
-	rb_node	*__lookup_node(const value_type &data) const {
-		rb_node *node = _root;
+	pointer __lookup_node(const value_type &data) const {
+		pointer node = _root;
 
 		while (node) {
 			int	cmp = _compare(data, node->data);

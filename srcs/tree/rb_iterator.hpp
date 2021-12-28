@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 07:44:49 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 07:46:08 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 13:30:38 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,15 @@
 
 namespace ft {
 
+#include "rb_node.hpp"
+
 template <class T>
 class rb_tree_iterator {
  public:
-	typedef typename T* node;
+	typedef T* node;
 
 	typedef typename T::value_type			&reference;
-	typedef typename T::value_type const	&const_reference;
 	typedef typename T::value_type			*pointer;
-	typedef typename T::value_type const	*const_pointer;
 
  private:
 	node	_root;
@@ -64,14 +64,8 @@ class rb_tree_iterator {
 	reference	operator*		() const {
 		return _base->data;
 	}
-	const_reference operator*	() const {
-		return _base->data;
-	}
 
 	pointer		operator->	() const {
-		return &_base->data;
-	}
-	const_pointer operator->() const {
 		return &_base->data;
 	}
 
@@ -90,7 +84,7 @@ class rb_tree_iterator {
 		if (_base)
 			_base = _base->prev();
 		else
-			_base = rb_node::max_leaf(_root);
+			_base = rb_node<T>::max_leaf(_root);
 		return *this;
 	}
 	rb_tree_iterator	operator-- (int) {
@@ -99,7 +93,7 @@ class rb_tree_iterator {
 		return tmp;
 	}
 
-	rb_node	*get_base() const {
+	rb_node<T>	*get_base() const {
 		return _base;
 	}
 };

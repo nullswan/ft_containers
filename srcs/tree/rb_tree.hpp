@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 13:07:00 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 13:15:34 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,21 +203,45 @@ class rb_tree {
 		return end();
 	}
 
-	// ToDo: Implement lower_bound
-	// iterator lower_bound(const value_type &value) {
-	// 	return end();
-	// }
-	// const_iterator lower_bound(const value_type &value) const {
-	// 	return end();
-	// }
+	iterator lower_bound(const value_type &value) {
+		iterator it = begin();
+		for (; it != end(); ++it) {
+			rb_node	*base = it.get_base();
+			if (base && (_compare(value, base->data)
+				|| !_compare(value, base->data)))
+				return it;
+		}
+		return end();
+	}
+	const_iterator lower_bound(const value_type &value) const {
+		const_iterator it = begin();
+		for (; it != end(); ++it) {
+			rb_node	*base = 
+			if (base && (_compare(value, base->data)
+				|| !_compare(value, base->data)))
+				return it;
+		}
+		return end();
+	}
 
-	// ToDo: Implement upper_bound
-	// iterator upper_bound(const value_type &value) {
-		// return end();
-	// }
-	// const_iterator upper_bound(const value_type &value) const {
-		// return end();
-	// }
+	iterator upper_bound(const value_type &value) {
+		iterator it = begin();
+		for (; it != end(); ++it) {
+			rb_node	*base = it.get_base();
+			if (base && _compare(value, base->data))
+				return it;
+		}
+		return end();
+	}
+	const_iterator upper_bound(const value_type &value) const {
+		const_iterator it = begin();
+		for (; it != end(); ++it) {
+			rb_node	*base = 
+			if (base && _compare(value, base->data))
+				return it;
+		}
+		return end();
+	}
 
 	ft::pair<const_iterator, const_iterator>
 	equal_range(const key_type& k) const {

@@ -858,18 +858,18 @@ void	vector() {
 		"Non-member function swap");
 
 	#ifdef FT_BENCHMARK
-		v_log->section("BENCHMARKS");
-		ft_test::run(v_log, &benchmark_vector_constructor, "Benchmark Constructor");
-		ft_test::run(v_log, &benchmark_vector_destructor, "Benchmark Destructor");
-		ft_test::run(v_log, &benchmark_vector_assignement_operator,
-			"Benchmark Assign Op");
-		ft_test::run(v_log, &benchmark_vector_assign, "Benchmark Assign\t");
-		ft_test::run(v_log, &benchmark_vector_push_back, "Benchmark Push Back");
-		ft_test::run(v_log, &benchmark_vector_insert_regular,
-			"Benchmark Insert Regular");
-		ft_test::run(v_log, &benchmark_vector_insert_n, "Benchmark Insert N");
-		ft_test::run(v_log, &benchmark_vector_insert_range, "Benchmark Insert Range");
-		ft_test::run(v_log, &benchmark_vector_erase, "Benchmark Erase\t");
+	v_log->section("BENCHMARKS");
+	ft_test::run(v_log, &benchmark_vector_constructor, "Benchmark Constructor");
+	ft_test::run(v_log, &benchmark_vector_destructor, "Benchmark Destructor");
+	ft_test::run(v_log, &benchmark_vector_assignement_operator,
+		"Benchmark Assign Op");
+	ft_test::run(v_log, &benchmark_vector_assign, "Benchmark Assign\t");
+	ft_test::run(v_log, &benchmark_vector_push_back, "Benchmark Push Back");
+	ft_test::run(v_log, &benchmark_vector_insert_regular,
+		"Benchmark Insert Regular");
+	ft_test::run(v_log, &benchmark_vector_insert_n, "Benchmark Insert N");
+	ft_test::run(v_log, &benchmark_vector_insert_range, "Benchmark Insert Range");
+	ft_test::run(v_log, &benchmark_vector_erase, "Benchmark Erase\t");
 	#endif
 	delete v_log;
 }

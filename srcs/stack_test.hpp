@@ -129,11 +129,11 @@ bool	test_stack_size() {
 bool	test_stack_top() {
 	ft::stack<int>	 first;
 
-	if (first.top() != 0)
+	first.push(5);
+	if (first.top() != 5)
 		return s_log->err("1: top failed");
 
 	first.push(1);
-
 	if (first.top() != 1)
 		return s_log->err("2: top failed");
 	return true;
@@ -237,22 +237,30 @@ bool	benchmark_stack_pop() {
 void	stack() {
 	s_log = new ft_test::Logger("stack ");
 
+	s_log->section("CONSTRUCTORS");
 	ft_test::run(s_log, &test_stack_constructor, "Constructor");
 	ft_test::run(s_log, &test_stack_copy_constructor, "Copy Constructor");
 	ft_test::run(s_log, &test_stack_assignment_operator, "Assignement Operator");
+
+	s_log->section("DESTRUCTOR");
 	ft_test::run(s_log, &test_stack_destructor, "Destructor");
+
+	s_log->section("METHODS");
 	ft_test::run(s_log, &test_stack_empty, "Empty");
 	ft_test::run(s_log, &test_stack_size, "Size");
 	ft_test::run(s_log, &test_stack_top, "Top");
 	ft_test::run(s_log, &test_stack_push, "Push");
 	ft_test::run(s_log, &test_stack_pop, "Pop");
+
+	s_log->section("RELATIONAL OPERATORS");
 	ft_test::run(s_log, &test_stack_relationnal_operators,
 		"Relationnal Operators");
 
 	#ifdef FT_BENCHMARK
-		ft_test::run(s_log, &benchmark_stack_push, "Benchmark Push");
-		ft_test::run(s_log, &benchmark_stack_pop, "Benchmark Pop");
+	ft_test::run(s_log, &benchmark_stack_push, "Benchmark Push");
+	ft_test::run(s_log, &benchmark_stack_pop, "Benchmark Pop");
 	#endif
+	delete s_log;
 }
 }  // namespace ft_test
 

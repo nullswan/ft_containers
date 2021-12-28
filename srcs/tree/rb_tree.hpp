@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 13:41:25 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 17:06:32 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,8 @@ class rb_tree {
 	rb_tree &operator=(const rb_tree &rhs) {
 		if (this != &rhs) {
 			_alloc = rhs._alloc;
-			_root = NULL;
+			clear();
 			_size = rhs._size;
-			__destroy_tree(_root);
 			__copy_tree(rhs._root);
 		}
 		return *this;
@@ -186,7 +185,7 @@ class rb_tree {
 	}
 
 	void	clear() {
-		__destroy_tree(_root);
+		__destroy_nodes(_root);
 		_root = NULL;
 		_size = 0;
 	}
@@ -315,7 +314,7 @@ class rb_tree {
 		pointer x = _root;
 
 		while (x) {
-			int cmp = _compare(data, x->value);
+			int cmp = _compare_type(data, x->value);
 			y = x;
 			if (cmp == 0)
 				return ft::make_pair(x, false);
@@ -509,11 +508,11 @@ class rb_tree {
 	pointer __alloc_node(const value_type &data) {
 		pointer node = _alloc.allocate(1);
 
+		_alloc.construct(node, data);
 		node->color = RB_RED;
 		node->left = NULL;
 		node->right = NULL;
 		node->parent = NULL;
-		_alloc.construct(node->data, data);
 		return node;
 	}
 
@@ -521,7 +520,7 @@ class rb_tree {
 		pointer node = _root;
 
 		while (node) {
-			int	cmp = _compare(data, node->data);
+			int	cmp = _compare(data, node->value);
 			if (cmp == 0)
 				return node;
 			else if (cmp < 0)
@@ -536,7 +535,7 @@ class rb_tree {
 		if (node == NULL)
 			return;
 		__copy_tree(node->left);
-		insert(node->data);
+		insert(node->value);
 		__copy_tree(node->right);
 	}
 

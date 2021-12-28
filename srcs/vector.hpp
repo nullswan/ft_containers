@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:47:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/25 13:11:45 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 17:41:39 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,8 +257,10 @@ class vector {
 			_size = n;
 		} else if (n > _size) {
 			/* We must allocate here even though it comes after in reference */
-			if (n > _capacity)
+			if (n > _capacity * 2)
 				reserve(n);
+			else
+				reserve(__new_size());
 			for (size_type i = _size; i < n; i++)
 				_alloc.construct(_data + i, val);
 			_size = n;

@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 17:06:32 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 17:41:51 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,12 +143,12 @@ class rb_tree {
 		return NULL;
 	}
 
-	ft::pair<iterator, bool> insert(value_type const &value) {
+	ft::pair<iterator, bool> insert(const value_type &value) {
 		return __insert_node(value);
 	}
 	iterator insert(iterator pos, const value_type &value) {
 		(void)pos;
-		return insert(value).first;
+		return insert(value);
 	}
 	template <class InputIterator>
 	void insert(InputIterator first, InputIterator last,
@@ -317,7 +317,7 @@ class rb_tree {
 			int cmp = _compare_type(data, x->value);
 			y = x;
 			if (cmp == 0)
-				return ft::make_pair(x, false);
+				return ft::make_pair(iterator(_root, x), false);
 			else if (cmp < 0)
 				x = x->left;
 			else
@@ -334,14 +334,14 @@ class rb_tree {
 
 		if (node->parent == NULL) {
 			node->parent->color = RB_BLACK;
-			return ft::make_pair(node, true);
+			return ft::make_pair(iterator(_root, node), true);
 		}
 
 		if (node->parent->parent == NULL)
-			return ft::make_pair(node, true);
+			return ft::make_pair(iterator(_root, node), true);
 
 		__insert_fixup(node);
-		return ft::make_pair(node, true);
+		return ft::make_pair(iterator(_root, node), true);
 	}
 
 	void	__transplant(pointer u, pointer v) {
@@ -508,7 +508,7 @@ class rb_tree {
 	pointer __alloc_node(const value_type &data) {
 		pointer node = _alloc.allocate(1);
 
-		_alloc.construct(node, data);
+		node->value = data;
 		node->color = RB_RED;
 		node->left = NULL;
 		node->right = NULL;
@@ -535,7 +535,7 @@ class rb_tree {
 		if (node == NULL)
 			return;
 		__copy_tree(node->left);
-		insert(node->value);
+		__insert_node(node->value);
 		__copy_tree(node->right);
 	}
 

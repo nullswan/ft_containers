@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:21:46 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 16:58:01 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 18:02:52 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,14 @@
 #include "utility/logger.hpp"
 #include "utility/run_test.hpp"
 
-bool fncomp (int lhs, int rhs) {return lhs<rhs;}
+bool fncomp(int lhs, int rhs) {
+	return lhs < rhs;
+}
 
 struct classcomp {
-  bool operator() (const int& lhs, const int& rhs) const
-  {return lhs<rhs;}
+	bool operator()(const int& lhs, const int& rhs) const {
+		return lhs < rhs;
+	}
 };
 
 namespace ft_test {
@@ -35,25 +38,25 @@ bool	test_set_constructor() {
 	if (first.size() != 0 || !first.empty())
 		return st_log->err("1: size failed");
 
-	int myints[]= {10,20,30,40,50};
-	ft::set<int> second (myints,myints+5);        // range
+	int myints[]= {10, 20, 30, 40, 50};
+	ft::set<int> second(myints, myints+5);        // range
 	if (second.size() != 5 || second.empty())
 		return st_log->err("2: size failed");
 
-	ft::set<int> third (second);                  // a copy of second
+	ft::set<int> third(second);                  // a copy of second
 	if (third.size() != 5 || third.empty())
 		return st_log->err("3: size failed");
 
-	ft::set<int> fourth (second.begin(), second.end());
+	ft::set<int> fourth(second.begin(), second.end());
 	if (fourth.size() != 5 || fourth.empty())
 		return st_log->err("4: size failed");
 
-	ft::set<int,classcomp> fifth;
+	ft::set<int, classcomp> fifth;
 	if (fifth.size() != 0 || !fifth.empty())
 		return st_log->err("5: size failed");
 
-	bool(*fn_pt)(int,int) = fncomp;
-	ft::set<int,bool(*)(int,int)> sixth (fn_pt);
+	bool(*fn_pt)(int, int) = fncomp;
+	ft::set<int, bool(*)(int, int)> sixth(fn_pt);
 	if (sixth.size() != 0 || !sixth.empty())
 		return st_log->err("6: size failed");
 	return true;
@@ -66,7 +69,7 @@ bool	test_set_constructor() {
 
 // 	if (first.size() != 5 || first.empty())
 // 		return st_log->err("1: size failed");
-	
+
 // 	if (second.size() != 5 || second.empty())
 // 		return st_log->err("2: size failed");
 
@@ -90,8 +93,9 @@ bool	test_set_constructor() {
 // 	first = std::set<int>();					// and first is empty
 // 	if (first.size() != 0 || !first.empty())
 // 		return st_log->err("2: size failed");
-
-// 	for (std::set<int>::iterator it = second.begin(); it != second.end(); ++it) {
+//
+//  std::set<int>::iterator it = second.begin();
+// 	for (; it != second.end(); ++it) {
 // 		if (first.find(*it) == first.end())
 // 			return st_log->err("3: find failed");
 // 	}
@@ -179,7 +183,7 @@ bool	test_set_constructor() {
 bool	test_set_max_size() {
 	std::set<int> r;
 	ft::set<int> c;
-	
+
 	if (r.max_size() != c.max_size())
 		return st_log->err("1: max_size failed");
 	return true;

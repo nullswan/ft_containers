@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 17:58:09 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 18:00:07 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@
 namespace ft {
 
 template <
-	class T, 
+	class T,
 	class Compare,
 	class Alloc = std::allocator<rb_node<T> >
 >

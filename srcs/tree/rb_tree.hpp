@@ -148,12 +148,26 @@ class rb_tree {
 	// 	typename ft::enable_if<!ft::is_integral<InputIterator>::value,
 	// 	InputIterator::type* = NULL) {
 	// }
-	// size_type erase(value_type const &value) {
-		// if rb_node
-			// delete ret 1
-		// ret 0
-	// }
-	// void	erase(iterator first, iterator last) {}
+
+	void	erase(iterator pos) {
+		if (pos == end())
+			return;
+		__erase_node(pos.get_base());
+	}
+	size_type erase(value_type const &value) {
+		rb_node	*node = __find_node(value);
+		if (node) {
+			__erase_node(node);
+			return 1;
+		}
+		return 0;
+	}
+	void	erase(iterator first, iterator last) {
+		while (first != last) {
+			erase(*first);
+			++first;
+		}
+	}
 
 	void	swap(rb_tree &rhs) {
 		std::swap(_alloc, rhs._alloc);
@@ -278,6 +292,18 @@ class rb_tree {
 
 		__insert_fixup(node);
 	}
+
+	void	__transplant(rb_node *u, rb_node *v) {
+		if (u->parent == NULL)
+			_root = v;
+		else if (u == u->parent->left)
+			u->parent->left = v;
+		else
+			u->parent->right = v;
+		if (v)
+			v->parent = u->parent;
+	}
+
 	void	__left_rotate(rb_node *node) {
 		rb_node *tmp = node->right;
 
@@ -312,6 +338,120 @@ class rb_tree {
 			node->parent->right = tmp;
 		tmp->right = node;
 		node->parent = tmp;
+	}
+
+	void	__delete_fixup(rb_node *node) {
+		rb_node	*s;
+
+		while (node != _root && node->color == RB_BLACK) {
+			if (node == node->parent->left) {
+				s = node->parent->right;
+				if (s->color == RB_RED) {
+					s->color = RB_BLACK;
+					node->parent->color = RB_RED;
+					__left_rotate(node->parent);
+					s = node->parent->right;
+				}
+				if (s->left->color == RB_BLACK && s->right->color == RB_BLACK) {
+					s->color = RB_RED;
+					node = node->parent;
+				} else {
+					if (s->right->color == RB_BLACK) {
+						s->left->color = RB_BLACK;
+						s->color = RB_RED;
+						__right_rotate(s);
+						s = node->parent->right;
+					}
+					s->color = node->parent->color;
+					node->parent->color = RB_BLACK;
+					s->right->color = RB_BLACK;
+					__left_rotate(node->parent);
+					node = _root;
+				}
+			} else {
+				s = node->parent->left;
+				if (s->color == RB_RED) {
+					s->color = RB_BLACK;
+					node->parent->color = RB_RED;
+					__right_rotate(node->parent);
+					s = node->parent->left;
+				}
+				if (s->right->color == RB_BLACK && s->left->color == RB_BLACK) {
+					s->color = RB_RED;
+					node = node->parent;
+				} else {
+					if (s->left->color == RB_BLACK) {
+						s->right->color = RB_BLACK;
+						s->color = RB_RED;
+						__left_rotate(s);
+						s = node->parent->left;
+					}
+					s->color = node->parent->color;
+					node->parent->color = RB_BLACK;
+					s->left->color = RB_BLACK;
+					__right_rotate(node->parent);
+					node = _root;
+				}
+			}
+		}
+		node->color = RB_BLACK;
+	}
+
+	void	__erase_node(rb_node *node) {
+		if (node == NULL)
+			return;
+
+		rb_node *root = _root;
+		rb_node *z = NULL;
+
+		while (root) {
+			if (root->data == node->data)
+				z = root;
+
+			if (root->data <= node->data)
+				root = root->right;
+			else
+				root = root->left;
+		}
+
+		if (z == NULL)
+			return;
+
+		rb_node *x;
+		rb_node *y = z;
+		_rb_color y_original_color = y->color;
+		if (z->left == NULL) {
+			x = z->right;
+			__transplant(z, z->right);
+		} else if (z->right == NULL) {
+			x = z->left;
+			__transplant(z, z->left);
+		} else {
+			y = rb_node::min_leaf(z->right);
+			y_original_color = y->color;
+			x = y->right;
+			if (y->parent == z) {
+				x->parent = y;
+			} else {
+				__transplant(y, y->right);
+				y->right = z->right;
+				y->right->parent = y;
+			}
+
+			__transplant(z, y);
+			y->left = z->left;
+			y->left->parent = y;
+			y->color = z->color;
+		}
+		__destroy_node(z);
+		if (y_original_color == _rb_black)
+			__delete_fixup(x);
+	}
+
+	void	__destroy_node(rb_node *node) {
+		_alloc.destroy(node);
+		_alloc.deallocate(node, 1);
+		--_size;
 	}
 
 	rb_node	*__alloc_node(const value_type &data) {

@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:50:22 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 08:12:04 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 12:09:09 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,9 @@ class set {
 	template <class InputIterator>
 	set(InputIterator first, InputIterator last,
        const key_compare& comp = key_compare(),
-       const allocator_type& alloc = allocator_type())
+       const allocator_type& alloc = allocator_type(),
+	   typename ft::enable_if<!ft::is_integral<InputIterator>::value,
+		InputIterator>::type* = NUL)
 	:	_alloc(alloc),
 		_key_compare(comp),
 		_value_compare(comp),
@@ -246,7 +248,9 @@ class set {
 		(3) range
 	*/
 	// template <class InputIterator>
-	// void insert(InputIterator first, InputIterator last);
+	// void insert(InputIterator first, InputIterator last,
+	// 	typename ft::enable_if<!ft::is_integral<InputIterator>::value,
+	// 	InputIterator::type* = NULL);
 
 
 	/*

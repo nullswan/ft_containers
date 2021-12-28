@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:50:22 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 12:09:09 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 12:53:59 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,9 +249,11 @@ class set {
 	*/
 	// template <class InputIterator>
 	// void insert(InputIterator first, InputIterator last,
-	// 	typename ft::enable_if<!ft::is_integral<InputIterator>::value,
-	// 	InputIterator::type* = NULL);
-
+		// typename ft::enable_if<
+		// !ft::is_integral<InputIterator>::value
+		// >::type * = NULL) {
+	// 
+	// }
 
 	/*
 		https://www.cplusplus.com/reference/set/set/erase/

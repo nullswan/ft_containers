@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:50:22 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/26 19:31:16 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 08:12:04 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ class set {
 
  private:
 	allocator_type	_alloc;
-	key_compare		_compare;
+	key_compare		_key_compare;
 	value_compare	_value_compare;
 	ft::rb_tree<value_type, key_compare> _tree;
 
@@ -71,7 +71,11 @@ class set {
    		Constructs an empty container, with no elements.
 	*/
 	explicit set(const key_compare& comp = key_compare(),
-		const allocator_type& alloc = allocator_type());
+		const allocator_type& alloc = allocator_type())
+	:	_alloc(alloc),
+		_key_compare(comp),
+		_value_compare(comp),
+		_tree(_alloc) {}
 
 	/*
 		(2) range constructor
@@ -80,21 +84,38 @@ class set {
 	template <class InputIterator>
 	set(InputIterator first, InputIterator last,
        const key_compare& comp = key_compare(),
-       const allocator_type& alloc = allocator_type());
+       const allocator_type& alloc = allocator_type())
+	:	_alloc(alloc),
+		_key_compare(comp),
+		_value_compare(comp),
+		_tree(_alloc) {
+		insert(first, last);
+	}
 
 	/*
 		(3) copy constructor
     	Constructs a container with a copy of each of the elements in x.
 	*/
-	set(const set& x);
+	set(const set& x)
+	:	_alloc(x._alloc)
+		_key_compare(x._key_compare),
+		_value_compare(x._value_compare),
+		_tree(x._tree) {}
 
 	/*
-		Operator =
-	
+		- [ ASSIGNEMENT OPERATOR ] -
+		https://www.cplusplus.com/reference/set/set/operator=/
+
 		Copy container content
 		Assigns new contents to the container, replacing its current content.
 	*/
-	set &operator= (const set &x);
+	set &operator= (const set &x) {
+		_alloc = x._alloc;
+		_key_compare = x._key_compare;
+		_value_compare = x._value_compare;
+		_tree = x._tree;
+		return *this;
+	}
 
 	/*
 		- [ DESTRUCTORS ] -
@@ -102,7 +123,7 @@ class set {
 		Set destructor
 		Destroys the container object.
 	*/
-	~set();
+	~set() {}
 
 	/*
 		- [ ITERATORS ] -
@@ -114,8 +135,12 @@ class set {
 
 		Because set containers keep their elements ordered at all times, begin points to the element that goes first following the container's sorting criterion.
 	*/
-	iterator begin();
-	const_iterator begin() const;
+	iterator begin() {
+		return _tree.begin();
+	}
+	const_iterator begin() const {
+		return _tree.begin();
+	}
 
 	/*
 		https://www.cplusplus.com/reference/set/set/end/
@@ -126,8 +151,12 @@ class set {
 
 		The past-the-end element is the theoretical element that would follow the last element in the set container. It does not point to any element, and thus shall not be dereferenced.
 	*/
-	iterator end();
-	const_iterator end() const;
+	iterator end() {
+		return _tree.end();
+	}
+	const_iterator end() const {
+		return _tree.end();
+	}
 
 	/*
 		https://www.cplusplus.com/reference/set/set/rbegin/
@@ -137,8 +166,12 @@ class set {
 
 		Reverse iterators iterate backwards: increasing them moves them towards the beginning of the container.
 	*/
-	reverse_iterator rbegin();
-	const_reverse_iterator rbegin() const;
+	reverse_iterator rbegin() {
+		return _tree.rbegin();
+	}
+	const_reverse_iterator rbegin() const {
+		return _tree.rbegin();
+	}
 
 	/*
 		https://www.cplusplus.com/reference/set/set/rend/
@@ -146,8 +179,12 @@ class set {
 		Return reverse iterator to reverse end
 		Returns a reverse iterator pointing to the theoretical element right before the first element in the set container (which is considered its reverse end).
 	*/
-	reverse_iterator rend();
-	const_reverse_iterator rend() const;
+	reverse_iterator rend() {
+		return _tree.rend();
+	}
+	const_reverse_iterator rend() const {
+		return _tree.rend();
+	}
 
 	/*
 		- [ CAPACITY ] -
@@ -157,7 +194,9 @@ class set {
 		Test whether container is empty
 		Returns whether the set container is empty (i.e. whether its size is 0).
 	*/
-	bool empty() const;
+	bool empty() const {
+		return _tree.empty();
+	}
 
 	/*
 		https://www.cplusplus.com/reference/set/set/size/
@@ -165,7 +204,9 @@ class set {
 		Return container size
 		Returns the number of elements in the set container.
 	*/
-	size_type size() const;
+	size_type size() const {
+		return _tree.size();
+	}
 
 	/*
 		https://www.cplusplus.com/reference/set/set/max_size/
@@ -173,7 +214,9 @@ class set {
 		Return maximum size
 		Returns the maximum number of elements that the set container can hold.
 	*/
-	size_type max_size() const;
+	size_type max_size() const {
+		return _tree.max_size();
+	}
 
 	/*
 		- [ MODIFIERS ] -
@@ -191,18 +234,19 @@ class set {
 		
 		(1) single element
 	*/
-	ft::pair<iterator, bool> insert(const value_type& val);
+	// ToDo: Implements insert
+	// ft::pair<iterator, bool> insert(const value_type& val);
 
 	/*
 		(2) with hint
 	*/
-	iterator insert(iterator position, const value_type& val);
+	// iterator insert(iterator position, const value_type& val);
 
 	/*
 		(3) range
 	*/
-	template <class InputIterator>
-	void insert(InputIterator first, InputIterator last);
+	// template <class InputIterator>
+	// void insert(InputIterator first, InputIterator last);
 
 
 	/*
@@ -214,9 +258,10 @@ class set {
 
 		This effectively reduces the container size by the number of elements removed, which are destroyed.
 	*/
-	void erase(iterator position);
-	size_type erase(const value_type& val);
-	void erase(iterator first, iterator last);
+	// ToDo: Implements erase
+	// void erase(iterator position);
+	// size_type erase(const value_type& val);
+	// void erase(iterator first, iterator last);
 
 	/*
 		https://www.cplusplus.com/reference/set/set/swap/
@@ -226,7 +271,12 @@ class set {
 
 		After the call to this member function, the elements in this container are those which were in x before the call, and the elements of x are those which were in this. All iterators, references and pointers remain valid for the swapped objects.
 	*/
-	void swap(set &x);
+	void swap(set &x) {
+		std::swap(_alloc, x._alloc);
+		std::swap(_key_compare, x._key_compare);
+		std::swap(_value_compare, x._value_compare);
+		_tree.swap(x._tree);
+	}
 
 	/*
 		https://www.cplusplus.com/reference/set/set/clear/
@@ -234,7 +284,9 @@ class set {
 		Clear content
 		Removes all elements from the set container (which are destroyed), leaving the container with a size of 0.
 	*/
-	void clear();
+	void clear() {
+		return _tree.clear();
+	}
 
 	/*
 		- [ OBSERVERS ] -
@@ -248,7 +300,9 @@ class set {
 
 		This object determines the order of the elements in the container: it is a function pointer or a function object that takes two arguments of the same type as the container elements, and returns true if the first argument is considered to go before the second in the strict weak ordering it defines, and false otherwise.
 	*/
-	key_compare key_comp() const;
+	key_compare key_comp() const {
+		return _key_compare;
+	}
 
 	/*
 		https://www.cplusplus.com/reference/set/set/value_comp/
@@ -262,7 +316,9 @@ class set {
 
 		Two elements of a set are considered equivalent if value_comp returns false reflexively (i.e., no matter the order in which the elements are passed as arguments).
 	*/
-	value_compare value_comp() const;
+	value_compare value_comp() const {
+		return _value_compare;
+	}
 
 	/*
 		- [ OPERATIONS ] -
@@ -300,7 +356,9 @@ class set {
 
 		If the set class is instantiated with the default comparison type (less), the function returns an iterator to the first element that is not less than val.
 	*/
-	iterator lower_bound(const value_type& val) const;
+	iterator lower_bound(const value_type& val) const {
+		return _tree.lower_bound(ft::make_pair(val, mapped_type()));
+	}
 
 	/*
 		https://www.cplusplus.com/reference/set/set/upper_bound/
@@ -312,7 +370,9 @@ class set {
 
 		If the set class is instantiated with the default comparison type (less), the function returns an iterator to the first element that is greater than val.
 	*/
-	iterator upper_bound(const value_type& val) const;
+	iterator upper_bound(const value_type& val) const {
+		return _tree.upper_bound(ft::make_pair(val, mapped_type()));
+	}
 
 	/*
 		https://www.cplusplus.com/reference/set/set/equal_range/
@@ -324,7 +384,8 @@ class set {
 
 		If no matches are found, the range returned has a length of zero, with both iterators pointing to the first element that is considered to go after val according to the container's internal comparison object (key_comp).
 	*/
-	ft::pair<iterator, iterator> equal_range(const value_type& val) const;
+	// ToDo: Implement equal_range
+	// ft::pair<iterator, iterator> equal_range(const value_type& val) const;
 
 	/*
 		- [ ALLOCATOR ] -

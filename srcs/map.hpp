@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:50:07 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 07:43:02 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 08:11:19 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ class map {
 		const allocator_type &alloc = allocator_type)
 	:	_alloc(alloc),
 		_key_compare(comp),
-		_value_compare(),
+		_value_compare(comp),
 		_tree(_alloc) {}
 
 	/* 
@@ -95,7 +95,7 @@ class map {
 		const allocator_type& alloc = allocator_type())
 	:	_alloc(alloc),
 		_key_compare(comp),
-		_value_compare(),
+		_value_compare(comp),
 		_tree(_alloc) {
 		insert(first, last);
 	}
@@ -124,11 +124,11 @@ class map {
 		
 		Assigns new contents to the container, replacing its current content.
 	*/
-	map &operator=(const map &other) {
-		_alloc = other._alloc;
-		_key_compare = other._key_compare;
-		_value_compare = other._value_compare;
-		_tree = other._tree;
+	map &operator=(const map &x) {
+		_alloc = x._alloc;
+		_key_compare = x._key_compare;
+		_value_compare = x._value_compare;
+		_tree = x._tree;
 		return *this;
 	}
 

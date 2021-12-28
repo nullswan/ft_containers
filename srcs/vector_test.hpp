@@ -254,6 +254,27 @@ bool	test_vector_resize() {
 	for (size_t i = 0; i < v_og.size(); i++)
 		if (v[i] != v_og[i])
 			return v_log->err("7: content() differs");
+
+	ft::vector<int> v1(12, 12);
+	std::vector<int> v_og1(12, 12);
+
+	v1.resize(17);
+	v_og1.resize(17);
+
+	if (v1.size() != v_og1.size())
+		return v_log->err("8: size() differs");
+
+	v1.resize(33);
+	v_og1.resize(33);
+
+	if (v1.size() != v_og1.size())
+		return v_log->err("9: size() differs");
+
+	v1.resize(800);
+	v_og1.resize(800);
+
+	if (v1.size() != v_og1.size())
+		return v_log->err("10: size() differs");
 	return true;
 }
 bool	test_vector_capacity() {

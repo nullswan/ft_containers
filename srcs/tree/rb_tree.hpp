@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 13:00:38 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 13:07:00 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,18 +203,35 @@ class rb_tree {
 		return end();
 	}
 
-	iterator lower_bound(const value_type &value) {
-		return end();
-	}
-	const_iterator lower_bound(const value_type &value) const {
-		return end();
+	// ToDo: Implement lower_bound
+	// iterator lower_bound(const value_type &value) {
+	// 	return end();
+	// }
+	// const_iterator lower_bound(const value_type &value) const {
+	// 	return end();
+	// }
+
+	// ToDo: Implement upper_bound
+	// iterator upper_bound(const value_type &value) {
+		// return end();
+	// }
+	// const_iterator upper_bound(const value_type &value) const {
+		// return end();
+	// }
+
+	ft::pair<const_iterator, const_iterator>
+	equal_range(const key_type& k) const {
+		const_iterator first = lower_bound(k);
+		const_iterator last = upper_bound(k);
+
+		return ft::make_pair(first, last);
 	}
 
-	iterator upper_bound(const value_type &value) {
-		return end();
-	}
-	const_iterator upper_bound(const value_type &value) const {
-		return end();
+	ft::pair<iterator, iterator> equal_range(const key_type& k) {
+		iterator first = lower_bound(k);
+		iterator last = upper_bound(k);
+
+		return ft::make_pair(first, last);
 	}
 
  private:

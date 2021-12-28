@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:50:07 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 13:01:51 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 13:04:39 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -409,10 +409,13 @@ class map {
 
 		If no matches are found, the range returned has a length of zero, with both iterators pointing to the first element that has a key considered to go after k according to the container's internal comparison object (key_comp).
 	*/
-	// ToDo: Implements
-	// ft::pair<const_iterator, const_iterator>
-	// equal_range(const key_type& k) const {}
-	// ft::pair<iterator, iterator> equal_range(const key_type& k) {}
+	ft::pair<const_iterator, const_iterator>
+	equal_range(const key_type& k) const {
+		return _tree.equal_range(k);
+	}
+	ft::pair<iterator, iterator> equal_range(const key_type& k) {
+		return _tree.equal_range(k);
+	}
 
 	/*
 		- [ ALLOCATOR ] -

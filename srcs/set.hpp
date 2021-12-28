@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:50:22 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 13:02:08 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 13:05:25 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -398,8 +398,9 @@ class set {
 
 		If no matches are found, the range returned has a length of zero, with both iterators pointing to the first element that is considered to go after val according to the container's internal comparison object (key_comp).
 	*/
-	// ToDo: Implement equal_range
-	// ft::pair<iterator, iterator> equal_range(const value_type& val) const;
+	ft::pair<iterator, iterator> equal_range(const value_type& val) const {
+		return _tree.equal_range(val);
+	}
 
 	/*
 		- [ ALLOCATOR ] -

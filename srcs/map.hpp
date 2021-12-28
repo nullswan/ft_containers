@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:50:07 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 12:53:23 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 13:00:21 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ class map {
 		const allocator_type& alloc = allocator_type(),
 		typename ft::enable_if<
 			!ft::is_integral<InputIterator>::value
-		>::type * = NULL) 
+		>::type * = NULL)
 	:	_alloc(alloc),
 		_key_compare(comp),
 		_value_compare(comp),
@@ -277,10 +277,15 @@ class map {
 
 		This effectively reduces the container size by the number of elements removed, which are destroyed.
 	*/
-	// ToDo: implement erase
-	// void erase(iterator position) {}
-	// size_type erase(const key_type& k) {}
-	// void erase(iterator first, iterator last) {}
+	void erase(iterator position) {
+		return _tree.erase(position);
+	}
+	size_type erase(const key_type& k) {
+		return _tree.erase(k);
+	}
+	void erase(iterator first, iterator last) {
+		return _tree.erase(first, last);
+	}
 
 	/*
 		https://www.cplusplus.com/reference/map/map/swap/

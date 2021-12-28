@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 12:55:17 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/28 13:00:38 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ class rb_tree {
 			return;
 		__erase_node(pos.get_base());
 	}
-	size_type erase(value_type const &value) {
+	size_type erase(const value_type &value) {
 		rb_node	*node = __find_node(value);
 		if (node) {
 			__erase_node(node);

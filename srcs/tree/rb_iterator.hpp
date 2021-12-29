@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 07:44:49 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 18:50:51 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/29 17:52:34 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ namespace ft {
 template <class T>
 class rb_tree_iterator {
  public:
-	typedef T *pointer;
-	typedef T &reference;
+	typedef rb_node<T> *pointer;
+	typedef rb_node<T> &reference;
 
 	typedef const T *const_pointer;
 	typedef const T	&const_reference;
@@ -62,9 +62,9 @@ class rb_tree_iterator {
 		return _base != rhs._base;
 	}
 
-	reference	operator*		() {
-		return _base->value;
-	}
+	// reference	operator*		() const {
+	// 	return _base->value;
+	// }
 
 	const_reference	operator*	() const {
 		return _base->value;

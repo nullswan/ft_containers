@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 18:50:14 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/29 17:55:44 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ class rb_tree {
 					!ft::is_integral<InputIterator>::value
 				>::type * = NULL) {
 		for (; first != last; ++first)
-			insert(*first);
+			__insert_node(*first);
 	}
 
 	void	erase(iterator pos) {

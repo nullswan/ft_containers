@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/29 17:55:44 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/29 22:14:54 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,19 @@ class rb_tree {
 	typedef Compare	compare_type;
 	typedef Alloc 	allocator_type;
 
-	typedef rb_node<T>&			reference;
+	typedef	rb_node<T>			node_value_type;
+	typedef const rb_node<T>	const_node_value_type;
+
+	typedef rb_node<T>&		reference;
+	typedef rb_node<T>*		pointer;
+
 	typedef const rb_node<T>&	const_reference;
-	typedef rb_node<T>*			pointer;
 	typedef const rb_node<T>*	const_pointer;
 
-	typedef typename ft::rb_tree_iterator<pointer> 			iterator;
-	typedef typename ft::rb_tree_iterator<const_pointer>	const_iterator;
-	typedef typename ft::reverse_iterator<iterator>			reverse_iterator;
-	typedef typename ft::reverse_iterator<const_iterator>	const_reverse_iterator;
+	typedef typename ft::rb_tree_iterator<node_value_type> 			iterator;
+	typedef typename ft::rb_tree_iterator<const_node_value_type>	const_iterator;
+	typedef typename ft::reverse_iterator<iterator>					reverse_iterator;
+	typedef typename ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 
 	typedef std::ptrdiff_t	difference_type;
 	typedef std::size_t		size_type;
@@ -63,7 +67,10 @@ class rb_tree {
  private:
 	allocator_type	_alloc;
 	compare_type	_compare_type;
+
 	pointer			_root;
+	pointer			RB_NULL;
+
 	size_type		_size;
 
  public:
@@ -71,21 +78,27 @@ class rb_tree {
 		:	_alloc(alloc),
 			_compare_type(compare_type()),
 			_root(NULL),
-			_size(0) {}
+			RB_NULL(NULL),
+			_size(0) {
+		__alloc_null_node();
+	}
 
-	rb_tree(const rb_tree& other)
-		:	_alloc(other._alloc),
-			_root(NULL),
-			_size(other._size) {
-		__copy_tree(other._root);
+	rb_tree(const rb_tree& x)
+	:	_alloc(x._alloc),
+		_root(NULL),
+		RB_NULL(NULL),
+		_size(0) {
+		__alloc_null_node();
+		__copy_tree(x._root, x.RB_NULL);
 	}
 
 	rb_tree &operator=(const rb_tree &rhs) {
 		if (this != &rhs) {
-			_alloc = rhs._alloc;
 			clear();
+			_alloc = rhs._alloc;
 			_size = rhs._size;
-			__copy_tree(rhs._root);
+			__alloc_null_node();
+			__copy_tree(rhs._root, rhs.RB_NULL);
 		}
 		return *this;
 	}
@@ -93,16 +106,16 @@ class rb_tree {
 	~rb_tree() { clear(); }
 
 	iterator begin() {
-		return iterator(_root, rb_node<T>::min_leaf(_root));
+		return iterator(_root, __min_node(_root));
 	}
 	const_iterator begin() const {
-		return iterator(_root, rb_node<T>::min_leaf(_root));
+		return iterator(_root, __min_node(_root));
 	}
 	iterator end() {
-		return iterator(_root, NULL);
+		return iterator(_root, RB_NULL);
 	}
 	const_iterator end() const {
-		return iterator(_root, NULL);
+		return iterator(_root, RB_NULL);
 	}
 	reverse_iterator rbegin() {
 		return reverse_iterator(end());
@@ -111,10 +124,10 @@ class rb_tree {
 		return reverse_iterator(end());
 	}
 	reverse_iterator rend() {
-		return reverse_iterator(_root, rb_node<T>::min_leaf(_root));
+		return reverse_iterator(_root, __min_node(_root));
 	}
 	const_reverse_iterator rend() const {
-		return reverse_iterator(_root, rb_node<T>::min_leaf(_root));
+		return reverse_iterator(_root, __min_node(_root));
 	}
 
 	bool	empty() const {
@@ -168,7 +181,7 @@ class rb_tree {
 		__erase_node(pos.get_base());
 	}
 	size_type erase(const value_type &value) {
-		pointer node = __find_node(value);
+		pointer node = __lookup_node(value);
 		if (node) {
 			__erase_node(node);
 			return 1;
@@ -183,12 +196,16 @@ class rb_tree {
 	void	swap(rb_tree &rhs) {
 		std::swap(_alloc, rhs._alloc);
 		std::swap(_compare_type, rhs._compare_type);
+
 		std::swap(_root, rhs._root);
+		std::swap(RB_NULL, rhs.RB_NULL);
+
 		std::swap(_size, rhs._size);
 	}
 
 	void	clear() {
 		__destroy_nodes(_root);
+		__destroy_null_node();
 		_root = NULL;
 		_size = 0;
 	}
@@ -264,6 +281,38 @@ class rb_tree {
 	}
 
  private:
+	pointer	__min_node(pointer node) {
+		while (node->left)
+			node = node->left;
+		return node;
+	}
+
+	// pointer	__max_node(pointer node) {
+		// while (node->right)
+			// node = node->right;
+		// return node;
+	// }
+
+	void	__alloc_null_node() {
+		RB_NULL = _alloc.allocate(1);
+
+		RB_NULL->color = RB_BLACK;
+		RB_NULL->parent = NULL;
+		RB_NULL->left = NULL;
+		RB_NULL->right = NULL;
+		RB_NULL->RB_NULL = RB_NULL;
+	
+		_root = RB_NULL;
+	}
+
+	void	__destroy_null_node() {
+		if (RB_NULL == NULL)
+			return;
+		_alloc.destroy(RB_NULL);
+		_alloc.deallocate(RB_NULL, 1);
+		RB_NULL = NULL;
+	}
+
 	void	__insert_fixup(pointer node) {
 		pointer u;
 
@@ -316,12 +365,16 @@ class rb_tree {
 		pointer y = NULL;
 		pointer x = _root;
 
-		while (x) {
+		while (x != RB_NULL) {
 			int cmp = _compare_type(data, x->value);
 			y = x;
-			if (cmp == 0)
-				return ft::make_pair(iterator(_root, x), false);
-			else if (cmp < 0)
+			// if (cmp == 0) {
+			// 	std::cout << "comp ret" << std::endl;
+			// 	__destroy_node(node);
+			// 	return ft::make_pair(iterator(_root, x), false);
+			// }
+			// else 
+			if (cmp < 0)
 				x = x->left;
 			else
 				x = x->right;
@@ -336,7 +389,7 @@ class rb_tree {
 			y->right = node;
 
 		if (node->parent == NULL) {
-			node->parent->color = RB_BLACK;
+			node->color = RB_BLACK;
 			return ft::make_pair(iterator(_root, node), true);
 		}
 
@@ -362,7 +415,7 @@ class rb_tree {
 		pointer tmp = node->right;
 
 		node->right = tmp->left;
-		if (tmp->left)
+		if (tmp->left != RB_NULL)
 			tmp->left->parent = node;
 
 		tmp->parent = node->parent;
@@ -380,7 +433,7 @@ class rb_tree {
 		pointer tmp = node->left;
 
 		node->left = tmp->right;
-		if (tmp->right)
+		if (tmp->right != RB_NULL)
 			tmp->right->parent = node;
 
 		tmp->parent = node->parent;
@@ -456,9 +509,9 @@ class rb_tree {
 			return;
 
 		pointer root = _root;
-		pointer z = NULL;
+		pointer z = RB_NULL;
 
-		while (root) {
+		while (root != RB_NULL) {
 			if (root->data == node->data)
 				z = root;
 
@@ -468,20 +521,20 @@ class rb_tree {
 				root = root->left;
 		}
 
-		if (z == NULL)
+		if (z == RB_NULL)
 			return;
 
 		pointer x;
 		pointer y = z;
 		_rb_color y_original_color = y->color;
-		if (z->left == NULL) {
+		if (z->left == RB_NULL) {
 			x = z->right;
 			__transplant(z, z->right);
-		} else if (z->right == NULL) {
+		} else if (z->right == RB_NULL) {
 			x = z->left;
 			__transplant(z, z->left);
 		} else {
-			y = rb_node<T>::min_leaf(z->right);
+			y = __min_node(z->right);
 			y_original_color = y->color;
 			x = y->right;
 			if (y->parent == z) {
@@ -513,16 +566,18 @@ class rb_tree {
 
 		node->value = data;
 		node->color = RB_RED;
-		node->left = NULL;
-		node->right = NULL;
+		node->left = RB_NULL;
+		node->right = RB_NULL;
 		node->parent = NULL;
+		node->RB_NULL = RB_NULL;
+		++_size;
 		return node;
 	}
 
 	pointer __lookup_node(const value_type &data) const {
 		pointer node = _root;
 
-		while (node) {
+		while (node != RB_NULL) {
 			int	cmp = _compare(data, node->value);
 			if (cmp == 0)
 				return node;
@@ -534,21 +589,20 @@ class rb_tree {
 		return NULL;
 	}
 
-	void __copy_tree(pointer node) {
-		if (node == NULL)
+	void __copy_tree(pointer node, pointer null_ref) {
+		if (node == NULL || node == null_ref)
 			return;
-		__copy_tree(node->left);
+		__copy_tree(node->left, null_ref);
 		__insert_node(node->value);
-		__copy_tree(node->right);
+		__copy_tree(node->right, null_ref);
 	}
 
 	void	__destroy_nodes(pointer node) {
-		if (node == NULL)
+		if (node == NULL || node == RB_NULL)
 			return;
 		__destroy_nodes(node->left);
 		__destroy_nodes(node->right);
-		_alloc.destroy(node);
-		_alloc.deallocate(node, 1);
+		__destroy_node(node);
 	}
 };
 

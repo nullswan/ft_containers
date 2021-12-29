@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:21:46 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 18:02:52 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/29 22:05:08 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,12 @@ bool	test_set_constructor() {
 	if (third.size() != 5 || third.empty())
 		return st_log->err("3: size failed");
 
+	std::cout << "test 4" << std::endl;
 	ft::set<int> fourth(second.begin(), second.end());
-	if (fourth.size() != 5 || fourth.empty())
+	if (fourth.size() != 5 || fourth.empty()) {
+		std::cout << fourth.size() << std::endl;
 		return st_log->err("4: size failed");
+	}
 
 	ft::set<int, classcomp> fifth;
 	if (fifth.size() != 0 || !fifth.empty())

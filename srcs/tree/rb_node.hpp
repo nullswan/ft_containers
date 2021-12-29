@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 07:45:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 17:53:39 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/29 22:00:17 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,15 @@ class rb_node {
 	rb_node		*parent;
 	rb_node		*left;
 	rb_node		*right;
+	rb_node		*RB_NULL;
 
 	T			value;
 	_rb_color	color;
 
  public:
-	explicit rb_node(const_reference val)
-		: value(val) {}
+	rb_node(const_reference val, rb_node *null)
+	:	RB_NULL(null),
+		value(val) {}
 
 	~rb_node() {}
 
@@ -62,20 +64,20 @@ class rb_node {
 		return node;
 	}
 
-	static rb_node<T>	*min_leaf(rb_node *node) {
+	rb_node<T>	*min_leaf(rb_node *node) {
 		if (node == NULL)
 			return NULL;
-		node = node->right;  // ! unsafe
-		while (node->left)
+		// node = node->right;  // ! unsafe
+		while (node->left != RB_NULL)
 			node = node->left;
 		return node;
 	}
 
-	static rb_node<T>	*max_leaf(rb_node *node) {
+	rb_node<T>	*max_leaf(rb_node *node) {
 		if (node == NULL)
 			return NULL;
-		node = node->left;  // ! unsafe
-		while (node->right != NULL)
+		// node = node->left;  // ! unsafe
+		while (node->right != RB_NULL)
 			node = node->right;
 		return node;
 	}

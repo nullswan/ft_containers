@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 07:44:49 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/29 17:52:34 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/29 22:07:17 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,28 @@ namespace ft {
 template <class T>
 class rb_tree_iterator {
  public:
-	typedef rb_node<T> *pointer;
-	typedef rb_node<T> &reference;
+	typedef T*			node_pointer;
 
-	typedef const T *const_pointer;
-	typedef const T	&const_reference;
+	//	this is some serious magic (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
+	//  use the value_type of T which is the node,
+	//  instead of rb_node<T> we only get the T of the node.
+	typedef typename T::value_type const value_type;
+
+	typedef value_type &reference;
+	typedef value_type const &const_reference;
+	typedef value_type *pointer;
+	typedef value_type const *const_pointer;
 
  private:
-	pointer	_root;
-	pointer	_base;
+	node_pointer	_root;
+	node_pointer	_base;
 
  public:
 	rb_tree_iterator()
 		:	_root(NULL), _base(NULL) {}
-	rb_tree_iterator(pointer root, pointer node)
-		:	_root(root), _base(node) {}
+
+	rb_tree_iterator(node_pointer root, node_pointer base)
+		:	_root(root), _base(base) {}
 
 	rb_tree_iterator(const rb_tree_iterator& x)
 		:	_root(x._root),
@@ -62,9 +69,9 @@ class rb_tree_iterator {
 		return _base != rhs._base;
 	}
 
-	// reference	operator*		() const {
-	// 	return _base->value;
-	// }
+	reference	operator*		() {
+		return _base->value;
+	}
 
 	const_reference	operator*	() const {
 		return _base->value;
@@ -79,7 +86,7 @@ class rb_tree_iterator {
 	}
 
 	rb_tree_iterator&	operator++ () {
-		if (_base)
+		if (_base != NULL)
 			_base = _base->next();
 		return *this;
 	}
@@ -93,7 +100,7 @@ class rb_tree_iterator {
 		if (_base)
 			_base = _base->prev();
 		else
-			_base = rb_node<T>::max_leaf(_root);
+			_base = _base->max_leaf(_root);
 		return *this;
 	}
 	rb_tree_iterator	operator-- (int) {
@@ -105,6 +112,10 @@ class rb_tree_iterator {
 	pointer get_base() const {
 		return _base;
 	}
+
+ private:
+	// __next()
+	// __prev()
 };
 
 }  // namespace ft

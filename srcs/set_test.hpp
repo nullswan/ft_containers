@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:21:46 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 16:34:05 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 20:10:17 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,6 +247,13 @@ bool	test_set_size() {
 	return true;
 }
 bool	test_max_size() {
+	// ft::set<int> myset;
+	// std::set<int> theirset;
+
+	// std::cout << myset.max_size() << std::endl;
+	// std::cout << theirset.max_size() << std::endl;
+	// if (myset.max_size() != theirset.max_size())
+	// 	return st_log->err("1: max_size failed");
 	// https://discord.com/channels/774300457157918772/785407584608714802/913052503736737832
 
 	return true;

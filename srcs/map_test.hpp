@@ -59,10 +59,40 @@ bool	test_map_range_constructor() {
 	return true;
 }
 bool	test_map_copy_constructor() {
+	ft::map<char, int> first;
+
+	first['a'] = 10;
+	first['b'] = 30;
+	first['c'] = 50;
+	first['d'] = 70;
+
+	ft::map<char, int> second(first);
+
+	if (second.size() != 4 || second.empty())
+		return m_log->err("1: copy constructor failed");
+
+	if (second.find('a')->second != 10)
+		return m_log->err("2: copy constructor failed");
+
+	if (second.find('b')->second != 30)
+		return m_log->err("3: copy constructor failed");
+
+	if (second.find('c')->second != 50)
+		return m_log->err("4: copy constructor failed");
+
+	if (second.find('d')->second != 70)
+		return m_log->err("5: copy constructor failed");
 	return true;
 }
 
 bool	test_map_destructor() {
+	ft::map<char, int> *mymap = new ft::map<char, int>;
+
+	for (int i = 0; i < 10; ++i)
+		mymap->insert(
+			ft::make_pair<char, int>('a' + i, i * 10));
+
+	delete mymap;
 	return true;
 }
 
@@ -90,13 +120,16 @@ bool	test_map_size() {
 	return true;
 }
 bool	test_map_max_size() {
+	// https://discord.com/channels/774300457157918772/785407584608714802/913052503736737832
+	ft::map<int, int> mymap;
+	std::map<int, int> theirmap;
+
+	if (mymap.max_size() != theirmap.max_size())
+		return m_log->err("1: max_size failed");
 	return true;
 }
 
 bool	test_map_operator_access() {
-	return true;
-}
-bool	test_map_at() {
 	return true;
 }
 
@@ -167,7 +200,6 @@ void	map() {
 
 	m_log->section("ELEMENTS ACCESS");
 	ft_test::run(m_log, test_map_operator_access, "operator[]");
-	ft_test::run(m_log, test_map_at, "at");
 
 	m_log->section("MODIFIERS");
 	ft_test::run(m_log, test_map_insert, "insert");

@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:50:07 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 17:06:13 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 19:56:18 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ class value_compare {
 	key_compare		_key_compare;
 	value_compare	_value_compare;
 
-	rb_tree<value_type, key_compare>	_tree;
+	rb_tree<value_type, value_compare>	_tree;
 
  public:
 	/*
@@ -247,8 +247,9 @@ class value_compare {
 
 		if (ret != end())
 			return ret.base->value.second;
+
 		ft::pair<iterator, bool> tmp = insert(ft::make_pair(key, mapped_type()));
-		return ret.base->value.second;
+		return tmp.first.base->value.second;
 	}
 
 	/*

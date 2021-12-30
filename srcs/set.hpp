@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:50:22 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 16:48:17 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 20:10:05 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,13 @@ class set {
 	typedef typename allocator_type::pointer pointer;
 	typedef typename allocator_type::const_pointer const_pointer;
 
-	typedef typename ft::rb_tree<value_type, key_compare>::iterator iterator;
+	typedef typename ft::rb_tree<value_type, value_compare>::iterator iterator;
 	typedef typename ft::rb_tree
-		<value_type, key_compare>::const_iterator const_iterator;
+		<value_type, value_compare>::const_iterator const_iterator;
 	typedef typename ft::rb_tree
-		<value_type, key_compare>::reverse_iterator reverse_iterator;
+		<value_type, value_compare>::reverse_iterator reverse_iterator;
 	typedef typename ft::rb_tree
-		<value_type, key_compare>::const_reverse_iterator const_reverse_iterator;
+		<value_type, value_compare>::const_reverse_iterator const_reverse_iterator;
 
 	typedef std::ptrdiff_t	difference_type;
 	typedef std::size_t		size_type;
@@ -59,7 +59,7 @@ class set {
 	key_compare		_key_compare;
 	value_compare	_value_compare;
 
-	ft::rb_tree<value_type, key_compare> _tree;
+	ft::rb_tree<value_type, value_compare> _tree;
 
  public:
 	/*

@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 07:45:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 07:41:20 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 19:49:43 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,26 +20,20 @@ enum _rb_color : bool {
 };
 
 template <class T>
-class rb_node {
- public:
-	typedef T		value_type;
-	typedef T		&reference;
-	typedef T const	&const_reference;
+struct rb_node {
+	typedef T value_type;
 
-	rb_node		*parent;
-	rb_node		*left;
-	rb_node		*right;
+	rb_node	*parent;
+	rb_node	*left;
+	rb_node	*right;
 
-	T			value;
 	_rb_color	color;
 
- public:
-	explicit rb_node(const_reference val)
+	T	value;
+
+	explicit rb_node(T const &val)
 	:	value(val) {}
-
-	~rb_node() {}
 };
-
 }  // namespace ft
 
 #endif  // TREE_RB_NODE_HPP_

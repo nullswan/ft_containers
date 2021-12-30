@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:21:46 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 12:03:14 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 12:51:24 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -377,9 +377,40 @@ bool	test_set_lower_bound() {
 		if (*it != myints[i])
 			return st_log->err("4: lower_bound failed");
 	}
+
+	itlow = myset.lower_bound(300);
+	if (itlow != myset.end())
+		return st_log->err("5: lower_bound failed");
 	return true;
 }
 bool	test_set_upper_bound() {
+	ft::set<int> myset;
+	ft::set<int>::iterator it;
+
+	for (int i = 0; i < 10; ++i)
+		myset.insert(i * 10);
+
+	it = myset.upper_bound(40);
+	if (*it != 50)
+		return st_log->err("1: upper_bound failed");
+
+	it = myset.upper_bound(60);
+	if (*it != 70)
+		return st_log->err("2: upper_bound failed");
+
+	myset.erase(it);
+
+	it = myset.upper_bound(60);
+	if (*it != 80)
+		return st_log->err("3: upper_bound failed");
+
+	it = myset.upper_bound(70);
+	if (*it != 80)
+		return st_log->err("4: upper_bound failed");
+
+	it = myset.upper_bound(800);
+	if (it != myset.end())
+		return st_log->err("5: upper_bound failed");
 	return true;
 }
 bool	test_set_equal_range() {

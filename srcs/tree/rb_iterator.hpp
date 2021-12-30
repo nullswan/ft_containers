@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 07:44:49 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 07:40:58 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 08:01:16 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,14 +129,12 @@ class rb_tree_iterator {
 	}
 
 	node_pointer	__prev(node_pointer node) {
-		if (node->left != RB_NULL) {
-			node = __max_leaf(node);
-		} else {
-			while (node->parent && node == node->parent->left)
-				node = node->parent;
+		if (node->left != RB_NULL)
+			return __max_leaf(node->left);
+
+		while (node->parent != RB_NULL && node == node->parent->left)
 			node = node->parent;
-		}
-		return node;
+		return node->parent;
 	}
 
 	node_pointer	__min_leaf(node_pointer node) {
@@ -148,14 +146,12 @@ class rb_tree_iterator {
 	}
 
 	node_pointer	__next(node_pointer node) {
-		if (node->right != RB_NULL) {
-			node = __min_leaf(node);
-		} else {
-			while (node->parent && node->parent->right)
-				node = node->parent;
+		if (node->right != RB_NULL)
+			return __min_leaf(node->right);
+
+		while (node->parent != RB_NULL && node == node->parent->right)
 			node = node->parent;
-		}
-		return node;
+		return node->parent;
 	}
 };
 

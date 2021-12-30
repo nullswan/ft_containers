@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 07:42:08 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 07:57:12 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,8 +171,11 @@ class rb_tree {
 				typename ft::enable_if<
 					!ft::is_integral<InputIterator>::value
 				>::type * = NULL) {
-		for (; first != last; ++first)
+		for (; first != last; ++first) {
+			std::cout << "insert:" << *first << std::endl;
 			__insert_node(*first);
+			std::cout << "inserted" << std::endl;
+		}
 	}
 
 	void	erase(iterator pos) {
@@ -282,7 +285,7 @@ class rb_tree {
 
  private:
 	pointer	__min_node(pointer node) {
-		while (node->left)
+		while (node->left != RB_NULL)
 			node = node->left;
 		return node;
 	}
@@ -290,9 +293,9 @@ class rb_tree {
 		RB_NULL = _alloc.allocate(1);
 
 		RB_NULL->color = RB_BLACK;
-		RB_NULL->parent = NULL;
-		RB_NULL->left = NULL;
-		RB_NULL->right = NULL;
+		RB_NULL->parent = RB_NULL;
+		RB_NULL->left = RB_NULL;
+		RB_NULL->right = RB_NULL;
 
 		_root = RB_NULL;
 	}

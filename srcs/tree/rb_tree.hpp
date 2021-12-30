@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 13:23:49 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 13:40:18 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ class rb_tree {
 			clear();
 			__destroy_null_node();
 			_alloc = rhs._alloc;
-			_size = rhs._size;
 			__alloc_null_node();
 			__copy_tree(rhs._root, rhs.RB_NULL);
 		}

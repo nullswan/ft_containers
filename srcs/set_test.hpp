@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:21:46 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 13:38:49 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 13:41:28 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,10 @@ bool	test_set_assignement_operator() {
 	if (first.size() != 0 || !first.empty())
 		return st_log->err("2: size failed");
 
+	first = second; 							// now first contains the 5 ints
 	ft::set<int>::iterator it = second.begin();
 	for (; it != second.end(); ++it) {
+		std::cout << *it << std::endl;
 		if (first.find(*it) == first.end())
 			return st_log->err("3: find failed");
 	}
@@ -581,7 +583,7 @@ void	set() {
 	st_log->section("CONSTRUCTORS");
 	ft_test::run(st_log, test_set_constructor, "constructor");
 	ft_test::run(st_log, test_set_copy_constructor, "copy constructor");
-	// ft_test::run(st_log, test_set_assignement_operator, "assignment operator");
+	ft_test::run(st_log, test_set_assignement_operator, "assignment operator");
 
 	st_log->section("DESTRUCTOR");
 	ft_test::run(st_log, test_set_destructor, "destructor");

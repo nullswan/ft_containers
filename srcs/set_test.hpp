@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:21:46 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 13:22:00 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 13:30:48 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,7 +267,7 @@ bool	test_set_insert() {
 
 	for (int i = 0; i < 5; i++)
 		myset.insert(i * 10);
-	
+
 	ret = myset.insert(20);  // no new element inserted
 	if (ret.second != false)
 		return st_log->err("1: insert failed");
@@ -309,10 +309,10 @@ bool	test_set_clear() {
 	myset.clear();
 	if (myset.size() != 0 || !myset.empty())
 		return st_log->err("2: clear failed");
-	
+
 	myset.insert(1101);
 	myset.insert(2202);
-	
+
 	if (myset.size() != 2 || myset.empty())
 		return st_log->err("3: clear failed");
 
@@ -479,7 +479,7 @@ bool	test_set_equal_range() {
 
 	for (int i = 0; i < 10; ++i)
 		myset.insert(i * 10);
-		
+
 	ret = myset.equal_range(40);
 	if (*ret.first != 40)
 		return st_log->err("1: equal_range failed");

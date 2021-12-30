@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:21:46 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 11:22:27 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 12:03:14 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -361,17 +361,21 @@ bool	test_set_lower_bound() {
 		myset.insert(i * 10);
 
 	itlow = myset.lower_bound(30);
+	if (*itlow != 30)
+		return st_log->err("1: lower_bound failed");
 	itup = myset.upper_bound(60);
+	if (*itup != 70)
+		return st_log->err("2: lower_bound failed");
 
 	myset.erase(itlow, itup);
 
 	if (myset.size() != 6)
-		return st_log->err("1: lower_bound failed");
+		return st_log->err("3: lower_bound failed");
 	ft::set<int>::iterator it = myset.begin();
 	int myints[] = { 0, 10, 20, 70, 80, 90};
 	for (int i = 0; it != myset.end(); ++it, i++) {
 		if (*it != myints[i])
-			return st_log->err("1: lower_bound failed");
+			return st_log->err("4: lower_bound failed");
 	}
 	return true;
 }

@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 11:36:12 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 12:06:04 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,8 +189,8 @@ class rb_tree {
 		return 0;
 	}
 	void	erase(iterator first, iterator last) {
-		for (; first != last; ++first)
-			erase(first);
+		while (first != last)
+			erase(first++);
 	}
 
 	void	swap(rb_tree &rhs) {
@@ -226,35 +226,31 @@ class rb_tree {
 	}
 
 	iterator lower_bound(const value_type &value) {
-		iterator it = begin();
-		for (; it != end(); ++it) {
+		for (iterator it = begin(); it != end(); ++it) {
 			if (it.base && (_compare_type(value, it.base->value)
-				|| !_compare_type(value, it.base->value)))
+				|| !_compare_type(it.base->value, value)))
 				return it;
 		}
 		return end();
 	}
 	const_iterator lower_bound(const value_type &value) const {
-		const_iterator it = begin();
-		for (; it != end(); ++it) {
+		for (const_iterator it = begin(); it != end(); ++it) {
 			if (it.base && (_compare_type(value, it.base->value)
-				|| !_compare_type(value, it.base->value)))
+				|| !_compare_type(it.base->value, value)))
 				return it;
 		}
 		return end();
 	}
 
 	iterator upper_bound(const value_type &value) {
-		iterator it = begin();
-		for (; it != end(); ++it) {
+		for (iterator it = begin(); it != end(); ++it) {
 			if (it.base && _compare_type(value, it.base->value))
 				return it;
 		}
 		return end();
 	}
 	const_iterator upper_bound(const value_type &value) const {
-		const_iterator it = begin();
-		for (; it != end(); ++it) {
+		for (const_iterator it = begin(); it != end(); ++it) {
 			if (it.base && _compare_type(value, it.base->value))
 				return it;
 		}

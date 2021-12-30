@@ -2,6 +2,7 @@
 	"cpplint.filters": [
 		"-legal/copyright",
 		"-whitespace/tab",
+		"-build/explicit_make_pair",
 		"-build/include_what_you_use",
 		"-build/storage_class",
 		"-runtime/int"

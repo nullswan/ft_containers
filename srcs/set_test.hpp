@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:21:46 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 12:51:24 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 13:04:00 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -414,6 +414,26 @@ bool	test_set_upper_bound() {
 	return true;
 }
 bool	test_set_equal_range() {
+	ft::set<int> myset;
+	ft::pair<ft::set<int>::iterator, ft::set<int>::iterator> ret;
+
+	for (int i = 0; i < 10; ++i)
+		myset.insert(i * 10);
+		
+	ret = myset.equal_range(40);
+	if (*ret.first != 40)
+		return st_log->err("1: equal_range failed");
+	if (*ret.second != 50)
+		return st_log->err("2: equal_range failed");
+
+	ret = myset.equal_range(600);
+	if (ret.first != myset.end())
+		return st_log->err("3: equal_range failed");
+	if (ret.second != myset.end())
+		return st_log->err("4: equal_range failed");
+
+	if (ret.first != ret.second)
+		return st_log->err("5: equal_range failed");
 	return true;
 }
 

@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 12:06:04 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 13:02:58 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,16 +227,16 @@ class rb_tree {
 
 	iterator lower_bound(const value_type &value) {
 		for (iterator it = begin(); it != end(); ++it) {
-			if (it.base && (_compare_type(value, it.base->value)
-				|| !_compare_type(it.base->value, value)))
+			if (_compare_type(value, it.base->value)
+				|| !_compare_type(it.base->value, value))
 				return it;
 		}
 		return end();
 	}
 	const_iterator lower_bound(const value_type &value) const {
 		for (const_iterator it = begin(); it != end(); ++it) {
-			if (it.base && (_compare_type(value, it.base->value)
-				|| !_compare_type(it.base->value, value)))
+			if (_compare_type(value, it.base->value)
+				|| !_compare_type(it.base->value, value))
 				return it;
 		}
 		return end();
@@ -244,14 +244,14 @@ class rb_tree {
 
 	iterator upper_bound(const value_type &value) {
 		for (iterator it = begin(); it != end(); ++it) {
-			if (it.base && _compare_type(value, it.base->value))
+			if (_compare_type(value, it.base->value))
 				return it;
 		}
 		return end();
 	}
 	const_iterator upper_bound(const value_type &value) const {
 		for (const_iterator it = begin(); it != end(); ++it) {
-			if (it.base && _compare_type(value, it.base->value))
+			if (_compare_type(value, it.base->value))
 				return it;
 		}
 		return end();

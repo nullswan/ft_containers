@@ -97,21 +97,111 @@ bool	test_map_destructor() {
 }
 
 bool	test_map_assignement_operator() {
+	ft::map<char, int> first;
+	ft::map<char, int> second;
+
+	first['x'] = 8;
+	first['y'] = 16;
+	first['z'] = 32;
+
+	second = first;
+	if (second.size() != 3)
+		return m_log->err("1: assignement operator failed");
+
+	first = ft::map<char, int>();
+	if (first.size() != 0 || !first.empty())
+		return m_log->err("2: assignement operator failed");
+
+	first = second;
+	if (first.size() != 3 || first.size() != second.size() || first.empty())
+		return m_log->err("3: assignement operator failed");
+
+	if (first['x'] != 8)
+		return m_log->err("4: assignement operator failed");
+
+	if (first['z'] != second['z'])
+		return m_log->err("5: assignement operator failed");
 	return true;
 }
 
 bool	test_map_begin() {
+	int myints[] = { 75, 23, 65, 42, 13 };
+	ft::map<int, int> mymap;
+	std::map<int, int> stdmap;
+
+	for (int i = 0; i < 5; i++) {
+		mymap.insert(ft::make_pair<int, int>(i, myints[i]));
+		stdmap.insert(std::make_pair<int, int>(i, myints[i]));
+	}
+
+	ft::map<int, int>::iterator it = mymap.begin();
+	std::map<int, int>::iterator it2 = stdmap.begin();
+	for (; it != mymap.end(); ++it, ++it2) {
+		if (it->second != it2->second)
+			return m_log->err("1: begin failed");
+	}
 	return true;
 }
 bool	test_map_end() {
+	int myints[] = { 75, 23, 65, 42, 13 };
+	ft::map<int, int> mymap;
+	std::map<int, int> stdmap;
+
+	for (int i = 0; i < 5; i++) {
+		mymap.insert(ft::make_pair<int, int>(i, myints[i]));
+		stdmap.insert(std::make_pair<int, int>(i, myints[i]));
+	}
+
+	ft::map<int, int>::iterator it = mymap.end();
+	std::map<int, int>::iterator it2 = stdmap.end();
+
+	--it;
+	--it2;
+	for (; it != mymap.begin(); --it, --it2) {
+		if (it->second != it2->second)
+			return m_log->err("1: begin failed");
+	}
 	return true;
 }
-bool	test_map_rbegin() {
-	return true;
-}
-bool	test_map_rend() {
-	return true;
-}
+// bool	test_map_rbegin() {
+// 	int myints[] = { 75, 23, 65, 42, 13 };
+// 	ft::map<int, int> mymap;
+// 	std::map<int, int> stdmap;
+
+// 	for (int i = 0; i < 5; i++) {
+// 		mymap.insert(ft::make_pair<int, int>(i, myints[i]));
+// 		stdmap.insert(std::make_pair<int, int>(i, myints[i]));
+// 	}
+
+// 	ft::map<int, int>::reverse_iterator it = mymap.rbegin();
+// 	std::map<int, int>::reverse_iterator it2 = stdmap.rbegin();
+// 	for (; it != mymap.rend(); ++it, ++it2) {
+// 		if (it->second != it2->second)
+// 			return m_log->err("1: begin failed");
+// 	}
+// 	return true;
+// }
+// bool	test_map_rend() {
+// 	int myints[] = { 75, 23, 65, 42, 13 };
+// 	ft::map<int, int> mymap;
+// 	std::map<int, int> stdmap;
+
+// 	for (int i = 0; i < 5; i++) {
+// 		mymap.insert(ft::make_pair<int, int>(i, myints[i]));
+// 		stdmap.insert(std::make_pair<int, int>(i, myints[i]));
+// 	}
+
+// 	ft::map<int, int>::reverse_iterator it = mymap.rend();
+// 	std::map<int, int>::reverse_iterator it2 = stdmap.rend();
+
+// 	--it;
+// 	--it2;
+// 	for (; it != mymap.rbegin(); --it, --it2) {
+// 		if (it->second != it2->second)
+// 			return m_log->err("1: begin failed");
+// 	}
+// 	return true;
+// }
 
 bool	test_map_empty() {
 	return true;
@@ -190,8 +280,8 @@ void	map() {
 	m_log->section("ITERATORS");
 	ft_test::run(m_log, test_map_begin, "begin");
 	ft_test::run(m_log, test_map_end, "end");
-	ft_test::run(m_log, test_map_rbegin, "rbegin");
-	ft_test::run(m_log, test_map_rend, "rend");
+	// ft_test::run(m_log, test_map_rbegin, "rbegin");
+	// ft_test::run(m_log, test_map_rend, "rend");
 
 	m_log->section("CAPACITY");
 	ft_test::run(m_log, test_map_empty, "empty");

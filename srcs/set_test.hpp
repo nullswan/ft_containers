@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:21:46 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 13:38:23 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 13:38:49 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,10 +297,10 @@ bool	test_set_erase() {
 	for (int i = 0; i < 10; i++)
 		myset.insert(i * 10);
 
-	it = myset.begin(); // point to 10
+	it = myset.begin();  // point to 10
 	++it;
 
-	myset.erase(it); 
+	myset.erase(it);
 
 	myset.erase(40);
 

@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:21:46 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 08:26:44 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 09:54:30 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,124 +62,140 @@ bool	test_set_constructor() {
 	return true;
 }
 
-// bool	test_set_copy_constructor() {
-// 	int myints[]= {10,20,30,40,50};
-// 	ft::set<int> first (myints,myints+5);	// range
-// 	ft::set<int> second (first);			// a copy of first
+bool	test_set_copy_constructor() {
+	// int myints[] = {10, 20, 30, 40, 50};
+	// ft::set<int> first(myints,myints+5);	// range
+	// ft::set<int> second(first);			// a copy of first
 
-// 	if (first.size() != 5 || first.empty())
-// 		return st_log->err("1: size failed");
+	// if (first.size() != 5 || first.empty())
+	// 	return st_log->err("1: size failed");
 
-// 	if (second.size() != 5 || second.empty())
-// 		return st_log->err("2: size failed");
+	// if (second.size() != 5 || second.empty())
+	// 	return st_log->err("2: size failed");
 
-// 	ft::set<int>::iterator it = first.begin();
-// 	for (; it != first.end(); ++it) {
-// 		if (second.find(*it) == second.end())
-// 			return st_log->err("3: find failed");
-// 	}
-// 	return true;
-// }
+	// ft::set<int>::iterator it = first.begin();
+	// for (; it != first.end(); ++it) {
+	// 	if (second.find(*it) == second.end())
+	// 		return st_log->err("3: find failed");
+	// }
 
-// bool	test_set_assignement_operator() {
-// 	int myints[]={ 12,82,37,64,15 };
-// 	ft::set<int> first (myints,myints+5);		// set with 5 ints
-// 	ft::set<int> second;						// empty set
+	int myints2[]= {65, 12, 1, 42, 120, 10, 20, 30, 40, 50};
+	ft::set<int> third(myints2, myints2+10);	// range
+	ft::set<int> fourth(third);				// a copy of third
+	
+	if (third.size() != 10 || third.empty())
+		return st_log->err("4: size failed");
 
-// 	second = first;								// now second contains the 5 ints
-// 	if (second.size() != 5 || second.empty())
-// 		return st_log->err("1: size failed");
+	if (fourth.size() != 10 || fourth.empty())
+		return st_log->err("5: size failed");
 
-// 	first = std::set<int>();					// and first is empty
-// 	if (first.size() != 0 || !first.empty())
-// 		return st_log->err("2: size failed");
-//
-//  std::set<int>::iterator it = second.begin();
-// 	for (; it != second.end(); ++it) {
-// 		if (first.find(*it) == first.end())
-// 			return st_log->err("3: find failed");
-// 	}
-// 	return true;
-// }
+	ft::set<int>::iterator it2 = third.begin();
+	for (; it2 != third.end(); ++it2) {
+		if (fourth.find(*it2) == fourth.end())
+			return st_log->err("6: find failed");
+	}
+	return true;
+}
 
-// bool	test_set_destructor() {
-// 	ft::set<int>	*first = new std::set<int>();
+bool	test_set_assignement_operator() {
+	int myints[]= {12, 82, 37, 64, 15};
+	ft::set<int> first(myints, myints+5);		// set with 5 ints
+	ft::set<int> second;						// empty set
 
-// 	first->insert(10);
-// 	first->insert(20);
-// 	first->insert(30);
-// 	delete first;
+	second = first;								// now second contains the 5 ints
+	if (second.size() != 5 || second.empty())
+		return st_log->err("1: size failed");
 
-// 	ft::set<int>	second;
-// 	second.insert(10);
-// 	second.insert(20);
-// 	second.insert(30);
+	first = ft::set<int>();					// and first is empty
+	if (first.size() != 0 || !first.empty())
+		return st_log->err("2: size failed");
 
-// 	return true;
-// }
+	ft::set<int>::iterator it = second.begin();
+	for (; it != second.end(); ++it) {
+		if (first.find(*it) == first.end())
+			return st_log->err("3: find failed");
+	}
+	return true;
+}
 
-// bool	test_set_empty() {
-// 	ft::set<int> first;
+bool	test_set_destructor() {
+	ft::set<int>	*first = new ft::set<int>();
 
-// 	if (!first.empty())
-// 		return st_log->err("1: empty failed");
+	first->insert(10);
+	first->insert(20);
+	first->insert(30);
+	delete first;
 
-// 	first.insert(10);
+	ft::set<int>	second;
+	second.insert(10);
+	second.insert(20);
+	second.insert(30);
 
-// 	if (first.empty())
-// 		return st_log->err("2: empty failed");
+	return true;
+}
 
-// 	first.erase(10);
+bool	test_set_empty() {
+	ft::set<int> first;
 
-// 	if (!first.empty())
-// 		return st_log->err("3: empty failed");
+	if (!first.empty())
+		return st_log->err("1: empty failed");
 
-// 	first.insert(20);
-// 	first.insert(30);
-// 	first.insert(40);
+	first.insert(10);
 
-// 	if (first.empty())
-// 		return st_log->err("4: empty failed");
+	if (first.empty())
+		return st_log->err("2: empty failed");
 
-// 	while (!first.empty())
-// 		first.erase(first.begin());
+	first.erase(10);
 
-// 	if (!first.empty())
-// 		return st_log->err("5: empty failed");
+	if (!first.empty())
+		return st_log->err("3: empty failed");
 
-// 	return true;
-// }
-// bool	test_set_size() {
-// 	ft::set<int> first;
+	first.insert(20);
+	first.insert(30);
+	first.insert(40);
 
-// 	if (first.size() != 0)
-// 		return st_log->err("1: size failed");
+	if (first.empty())
+		return st_log->err("4: empty failed");
 
-// 	first.insert(10);
-// 	if (first.size() != 1)
-// 		return st_log->err("2: size failed");
+	while (!first.empty())
+		first.erase(first.begin());
 
-// 	first.insert(20);
-// 	if (first.size() != 2)
-// 		return st_log->err("3: size failed");
+	if (!first.empty())
+		return st_log->err("5: empty failed");
 
-// 	for (int i = 0; i < 10; ++i)
-// 		first.insert(i);
+	return true;
+}
+bool	test_set_size() {
+	ft::set<int> first;
 
-// 	if (first.size() != 12)
-// 		return st_log->err("4: size failed");
+	if (first.size() != 0)
+		return st_log->err("1: size failed");
 
-// 	first.erase(first.begin());
-// 	if (first.size() != 11)
-// 		return st_log->err("5: size failed");
+	first.insert(10);
+	if (first.size() != 1)
+		return st_log->err("2: size failed");
 
-// 	while (!first.empty())
-// 		first.erase(first.begin());
+	first.insert(20);
+	if (first.size() != 2)
+		return st_log->err("3: size failed");
 
-// 	if (first.size() != 0)
-// 		return st_log->err("6: size failed");
-// 	return true;
-// }
+	for (int i = 0; i < 10; ++i)
+		first.insert(i);
+
+	if (first.size() != 12)
+		return st_log->err("4: size failed");
+
+	first.erase(first.begin());
+	if (first.size() != 11)
+		return st_log->err("5: size failed");
+
+	while (!first.empty())
+		first.erase(first.begin());
+
+	if (first.size() != 0)
+		return st_log->err("6: size failed");
+	return true;
+}
 bool	test_set_max_size() {
 	std::set<int> r;
 	ft::set<int> c;
@@ -193,11 +209,11 @@ void	set() {
 	st_log = new ft_test::Logger("set ");
 
 	st_log->section("CONSTRUCTORS");
-	ft_test::run(st_log, test_set_constructor, "constructor");
-	// ft_test::run(st_log, test_set_copy_constructor, "copy constructor");
+	// ft_test::run(st_log, test_set_constructor, "constructor");
+	ft_test::run(st_log, test_set_copy_constructor, "copy constructor");
 	// ft_test::run(st_log, test_set_assignement_operator, "assignment operator");
 
-	// st_log->section("DESTRUCTOR");
+	st_log->section("DESTRUCTOR");
 	// ft_test::run(st_log, test_set_destructor, "destructor");
 
 	st_log->section("ITERATORS");

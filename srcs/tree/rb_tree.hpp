@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 08:26:28 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 10:14:26 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 	- https://www.programiz.com/dsa/insertion-in-a-red-black-tree
 	- https://www.programiz.com/dsa/deletion-from-a-red-black-tree
 	- https://iq.opengenus.org/red-black-tree-search/
+
+	- Visualizer: https://www.cs.usfca.edu/~galles/visualization/RedBlack.html
 */
 
 #include <memory>
@@ -146,16 +148,14 @@ class rb_tree {
 		iterator	ret = find(key);
 
 		if (ret != end()) {
-			pointer tmp = ret.get_base();
-			if (tmp)
-				return tmp->value;  // ! unsafe .second;
+			if (ret.base)
+				return ret.base->value;
 			return NULL;
 		}
 		ft::pair<iterator, bool> tmp = insert(key);
 
-		pointer	node = tmp.first.get_base();
-		if (node)
-			return node->value;  // ! unsafe .second;
+		if (ret.base)
+			return ret.base->value;
 		return NULL;
 	}
 
@@ -178,7 +178,7 @@ class rb_tree {
 	void	erase(iterator pos) {
 		if (pos == end())
 			return;
-		__erase_node(pos.get_base());
+		__erase_node(pos.base);
 	}
 	size_type erase(const value_type &value) {
 		pointer node = __lookup_node(value);
@@ -210,14 +210,14 @@ class rb_tree {
 		_size = 0;
 	}
 
-	iterator find(value_type const &value) {
+	iterator find(const value_type &value) {
 		pointer tmp = __lookup_node(value);
 
 		if (tmp)
 			return iterator(_root, tmp, RB_NULL);
 		return end();
 	}
-	const_iterator find(value_type const &value) const {
+	const_iterator find(const value_type &value) const {
 		pointer tmp = __lookup_node(value);
 
 		if (tmp)
@@ -228,9 +228,8 @@ class rb_tree {
 	iterator lower_bound(const value_type &value) {
 		iterator it = begin();
 		for (; it != end(); ++it) {
-			pointer base = it.get_base();
-			if (base && (_compare(value, base->data)
-				|| !_compare(value, base->data)))
+			if (it.base && (_compare(value, it.base->data)
+				|| !_compare(value, it.base->data)))
 				return it;
 		}
 		return end();
@@ -238,9 +237,8 @@ class rb_tree {
 	const_iterator lower_bound(const value_type &value) const {
 		const_iterator it = begin();
 		for (; it != end(); ++it) {
-			pointer base = it.get_base();
-			if (base && (_compare(value, base->data)
-				|| !_compare(value, base->data)))
+			if (it.base && (_compare(value, it.base->data)
+				|| !_compare(value, it.base->data)))
 				return it;
 		}
 		return end();
@@ -249,8 +247,7 @@ class rb_tree {
 	iterator upper_bound(const value_type &value) {
 		iterator it = begin();
 		for (; it != end(); ++it) {
-			pointer base = it.get_base();
-			if (base && _compare(value, base->data))
+			if (it.base && _compare(value, it.base->data))
 				return it;
 		}
 		return end();
@@ -258,8 +255,7 @@ class rb_tree {
 	const_iterator upper_bound(const value_type &value) const {
 		const_iterator it = begin();
 		for (; it != end(); ++it) {
-			pointer base = it.get_base();
-			if (base && _compare(value, base->data))
+			if (it.base && _compare(value, it.base->data))
 				return it;
 		}
 		return end();
@@ -319,11 +315,11 @@ class rb_tree {
 				} else {
 					if (node == node->parent->left) {
 						node = node->parent;
-						__right_rotate(node);
+						__rotate_right(node);
 					}
 					node->parent->color = RB_BLACK;
 					node->parent->parent->color = RB_RED;
-					__left_rotate(node->parent->parent);
+					__rotate_left(node->parent->parent);
 				}
 			} else {
 				u = node->parent->parent->right;
@@ -335,11 +331,11 @@ class rb_tree {
 				} else {
 					if (node == node->parent->right) {
 						node = node->parent;
-						__left_rotate(node);
+						__rotate_left(node);
 					}
 					node->parent->color = RB_BLACK;
 					node->parent->parent->color = RB_RED;
-					__right_rotate(node->parent->parent);
+					__rotate_right(node->parent->parent);
 				}
 			}
 
@@ -359,7 +355,7 @@ class rb_tree {
 
 		while (x != RB_NULL) {
 			y = x;
-			if ( _compare_type(data, x->value) < 0)
+			if (_compare_type(data, x->value) > 0)
 				x = x->left;
 			else
 				x = x->right;
@@ -396,7 +392,7 @@ class rb_tree {
 			v->parent = u->parent;
 	}
 
-	void	__left_rotate(pointer node) {
+	void	__rotate_left(pointer node) {
 		pointer tmp = node->right;
 
 		node->right = tmp->left;
@@ -414,7 +410,7 @@ class rb_tree {
 		node->parent = tmp;
 	}
 
-	void	__right_rotate(pointer node) {
+	void	__rotate_right(pointer node) {
 		pointer tmp = node->left;
 
 		node->left = tmp->right;
@@ -424,10 +420,10 @@ class rb_tree {
 		tmp->parent = node->parent;
 		if (node->parent == RB_NULL)
 			_root = tmp;
-		else if (node == node->parent->left)
-			node->parent->left = tmp;
-		else
+		else if (node == node->parent->right)
 			node->parent->right = tmp;
+		else
+			node->parent->left = tmp;
 		tmp->right = node;
 		node->parent = tmp;
 	}
@@ -441,7 +437,7 @@ class rb_tree {
 				if (s->color == RB_RED) {
 					s->color = RB_BLACK;
 					node->parent->color = RB_RED;
-					__left_rotate(node->parent);
+					__rotate_left(node->parent);
 					s = node->parent->right;
 				}
 				if (s->left->color == RB_BLACK && s->right->color == RB_BLACK) {
@@ -451,13 +447,13 @@ class rb_tree {
 					if (s->right->color == RB_BLACK) {
 						s->left->color = RB_BLACK;
 						s->color = RB_RED;
-						__right_rotate(s);
+						__rotate_right(s);
 						s = node->parent->right;
 					}
 					s->color = node->parent->color;
 					node->parent->color = RB_BLACK;
 					s->right->color = RB_BLACK;
-					__left_rotate(node->parent);
+					__rotate_left(node->parent);
 					node = _root;
 				}
 			} else {
@@ -465,7 +461,7 @@ class rb_tree {
 				if (s->color == RB_RED) {
 					s->color = RB_BLACK;
 					node->parent->color = RB_RED;
-					__right_rotate(node->parent);
+					__rotate_right(node->parent);
 					s = node->parent->left;
 				}
 				if (s->right->color == RB_BLACK && s->left->color == RB_BLACK) {
@@ -475,13 +471,13 @@ class rb_tree {
 					if (s->left->color == RB_BLACK) {
 						s->right->color = RB_BLACK;
 						s->color = RB_RED;
-						__left_rotate(s);
+						__rotate_left(s);
 						s = node->parent->left;
 					}
 					s->color = node->parent->color;
 					node->parent->color = RB_BLACK;
 					s->left->color = RB_BLACK;
-					__right_rotate(node->parent);
+					__rotate_right(node->parent);
 					node = _root;
 				}
 			}
@@ -497,10 +493,10 @@ class rb_tree {
 		pointer z = RB_NULL;
 
 		while (root != RB_NULL) {
-			if (root->data == node->data)
+			if (root->value == node->value)
 				z = root;
 
-			if (root->data <= node->data)
+			if (root->value <= node->value)
 				root = root->right;
 			else
 				root = root->left;
@@ -562,13 +558,13 @@ class rb_tree {
 		pointer node = _root;
 
 		while (node != RB_NULL) {
-			int	cmp = _compare(data, node->value);
-			if (cmp == 0)
-				return node;
-			else if (cmp < 0)
+			int	cmp = _compare_type(data, node->value);
+			if (cmp > 0)
 				node = node->left;
-			else
+			else if (cmp < 0)
 				node = node->right;
+			else
+				return node;
 		}
 		return NULL;
 	}

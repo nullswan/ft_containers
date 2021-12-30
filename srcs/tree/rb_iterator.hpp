@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 07:44:49 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 08:27:01 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 09:40:48 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,32 +32,33 @@ class rb_tree_iterator {
 	typedef value_type *pointer;
 	typedef value_type const *const_pointer;
 
+	node_pointer base;
+	node_pointer RB_NULL;
+
  private:
 	node_pointer	_root;
-	node_pointer	_base;
-	node_pointer	RB_NULL;
 
  public:
 	rb_tree_iterator()
-	:	_root(NULL),
-		_base(NULL),
-		RB_NULL(NULL) {}
+	:	base(NULL),
+		RB_NULL(NULL),
+		_root(NULL) {}
 
 	rb_tree_iterator(node_pointer root, node_pointer base, node_pointer null)
-	:	_root(root),
-		_base(base),
-		RB_NULL(null) {}
+	:	base(base),
+		RB_NULL(null),
+		_root(root) {}
 
 	rb_tree_iterator(const rb_tree_iterator& x)
-	:	_root(x._root),
-		_base(x._base),
-		RB_NULL(x.RB_NULL) {}
+	:	base(x.base),
+		RB_NULL(x.RB_NULL),
+		_root(x._root) {}
 
 	rb_tree_iterator &operator=(const rb_tree_iterator& rhs) {
 		if (this != &rhs) {
-			_root = rhs._root;
-			_base = rhs._base;
+			base = rhs.base;
 			RB_NULL = rhs.RB_NULL;
+			_root = rhs._root;
 		}
 		return *this;
 	}
@@ -66,35 +67,38 @@ class rb_tree_iterator {
 
 	/* const_iterator cast support */
 	operator rb_tree_iterator<T const>() const {
-		return rb_tree_iterator<T const>(_root, _base);
+		return rb_tree_iterator<T const>(_root, base, RB_NULL);
 	}
 
+	/*
+		Operators used to compare iterators
+	*/
 	bool	operator== (const rb_tree_iterator& rhs) const {
-		return _base == rhs._base;
+		return base == rhs.base;
 	}
 	bool	operator!= (const rb_tree_iterator& rhs) const {
-		return _base != rhs._base;
+		return base != rhs.base;
 	}
 
 	reference	operator*		() {
-		return _base->value;
+		return base->value;
 	}
 
 	const_reference	operator*	() const {
-		return _base->value;
+		return base->value;
 	}
 
 	pointer		operator->		() {
-		return &_base->value;
+		return &base->value;
 	}
 
 	const_pointer	operator->	() const {
-		return &_base->value;
+		return &base->value;
 	}
 
 	rb_tree_iterator&	operator++ () {
-		if (_base != RB_NULL)
-			_base = __next(_base);
+		if (base != RB_NULL)
+			base = __next(base);
 		return *this;
 	}
 	rb_tree_iterator	operator++ (int) {
@@ -104,20 +108,16 @@ class rb_tree_iterator {
 	}
 
 	rb_tree_iterator&	operator-- () {
-		if (_base != RB_NULL)
-			_base = __prev(_base);
+		if (base != RB_NULL)
+			base = __prev(base);
 		else
-			_base = __max_leaf(_root);
+			base = __max_leaf(_root);
 		return *this;
 	}
 	rb_tree_iterator	operator-- (int) {
 		rb_tree_iterator tmp(*this);
 		--(*this);
 		return tmp;
-	}
-
-	pointer get_base() const {
-		return _base;
 	}
 
  private:

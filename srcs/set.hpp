@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:50:22 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/29 19:48:35 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 09:27:07 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -342,7 +342,10 @@ class set {
 		Get iterator to element
 		Searches the container for an element equivalent to val and returns an iterator to it if found, otherwise it returns an iterator to set::end.
 	*/
-	iterator find(const value_type& val) const {
+	iterator find(const value_type &val) {
+		return _tree.find(val);
+	}
+	const_iterator find(const value_type &val) const {
 		return _tree.find(val);
 	}
 

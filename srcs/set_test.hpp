@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:21:46 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 09:54:30 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 10:41:29 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,26 +63,26 @@ bool	test_set_constructor() {
 }
 
 bool	test_set_copy_constructor() {
-	// int myints[] = {10, 20, 30, 40, 50};
-	// ft::set<int> first(myints,myints+5);	// range
-	// ft::set<int> second(first);			// a copy of first
+	int myints[] = {10, 20, 30, 40, 50};
+	ft::set<int> first(myints, myints+5);
+	ft::set<int> second(first);
 
-	// if (first.size() != 5 || first.empty())
-	// 	return st_log->err("1: size failed");
+	if (first.size() != 5 || first.empty())
+		return st_log->err("1: size failed");
 
-	// if (second.size() != 5 || second.empty())
-	// 	return st_log->err("2: size failed");
+	if (second.size() != 5 || second.empty())
+		return st_log->err("2: size failed");
 
-	// ft::set<int>::iterator it = first.begin();
-	// for (; it != first.end(); ++it) {
-	// 	if (second.find(*it) == second.end())
-	// 		return st_log->err("3: find failed");
-	// }
+	ft::set<int>::iterator it = first.begin();
+	for (; it != first.end(); ++it) {
+		if (second.find(*it) == second.end())
+			return st_log->err("3: find failed");
+	}
 
 	int myints2[]= {65, 12, 1, 42, 120, 10, 20, 30, 40, 50};
-	ft::set<int> third(myints2, myints2+10);	// range
-	ft::set<int> fourth(third);				// a copy of third
-	
+	ft::set<int> third(myints2, myints2+10);
+	ft::set<int> fourth(third);
+
 	if (third.size() != 10 || third.empty())
 		return st_log->err("4: size failed");
 
@@ -131,6 +131,64 @@ bool	test_set_destructor() {
 	second.insert(20);
 	second.insert(30);
 
+	return true;
+}
+
+bool	test_set_begin() {
+	int myints[] = {75, 23, 65, 42, 13};
+	ft::set<int> myset(myints, myints+5);
+	std::set<int> stdset(myints, myints+5);
+
+	ft::set<int>::iterator it = myset.begin();
+	std::set<int>::iterator it2 = stdset.begin();
+	for (; it != myset.end(); ++it, ++it2) {
+		if (*it != *it2)
+			return st_log->err("1: begin failed");
+	}
+	return true;
+}
+bool	test_set_end() {
+	int myints[] = {75, 23, 65, 42, 13};
+	ft::set<int> myset(myints, myints+5);
+	std::set<int> stdset(myints, myints+5);
+
+	ft::set<int>::iterator it = myset.end();
+	std::set<int>::iterator it2 = stdset.end();
+
+	--it;
+	--it2;
+	for (; it != myset.begin(); --it, --it2) {
+		if (*it != *it2)
+			return st_log->err("1: end failed");
+	}
+	return true;
+}
+bool	test_set_rbegin() {
+	int myints[] = {75, 23, 65, 42, 13};
+	ft::set<int> myset(myints, myints+5);
+	std::set<int> stdset(myints, myints+5);
+
+	ft::set<int>::reverse_iterator it = myset.rbegin();
+	std::set<int>::reverse_iterator it2 = stdset.rbegin();
+	for (; it != myset.rend(); ++it, ++it2) {
+		if (*it != *it2)
+			return st_log->err("1: rbegin failed");
+	}
+	return true;
+}
+bool	test_set_rend() {
+	int myints[] = {75, 23, 65, 42, 13};
+	ft::set<int> myset(myints, myints+5);
+	std::set<int> stdset(myints, myints+5);
+
+	ft::set<int>::reverse_iterator it = myset.rend();
+	std::set<int>::reverse_iterator it2 = stdset.rend();
+	--it;
+	--it2;
+	for (; it != myset.rbegin(); --it, --it2) {
+		if (*it != *it2)
+			return st_log->err("1: rend failed");
+	}
 	return true;
 }
 
@@ -196,12 +254,29 @@ bool	test_set_size() {
 		return st_log->err("6: size failed");
 	return true;
 }
-bool	test_set_max_size() {
-	std::set<int> r;
-	ft::set<int> c;
+bool	test_max_size() {
+	// https://discord.com/channels/774300457157918772/785407584608714802/913052503736737832
 
-	if (r.max_size() != c.max_size())
-		return st_log->err("1: max_size failed");
+	return true;
+}
+
+bool	test_set_allocator() {
+	ft::set<int> myset;
+	int * p;
+	int i;
+
+	// allocate an array of 5 elements using myset's allocator:
+	p = myset.get_allocator().allocate(5);
+
+	// assign some values to array
+	for (i = 0; i < 5; i++)
+		p[i] = (i + 1) * 10;
+
+	for (i = 0; i < 5; i++)
+		if (p[i] != (i + 1) * 10)
+			return st_log->err("1: allocator failed");
+
+	myset.get_allocator().deallocate(p, 5);
 	return true;
 }
 
@@ -209,44 +284,43 @@ void	set() {
 	st_log = new ft_test::Logger("set ");
 
 	st_log->section("CONSTRUCTORS");
-	// ft_test::run(st_log, test_set_constructor, "constructor");
+	ft_test::run(st_log, test_set_constructor, "constructor");
 	ft_test::run(st_log, test_set_copy_constructor, "copy constructor");
 	// ft_test::run(st_log, test_set_assignement_operator, "assignment operator");
 
 	st_log->section("DESTRUCTOR");
-	// ft_test::run(st_log, test_set_destructor, "destructor");
+	ft_test::run(st_log, test_set_destructor, "destructor");
 
 	st_log->section("ITERATORS");
-	// ft_test::run(st_log, "begin", test_set_begin);
-	// ft_test::run(st_log, "end", test_set_end);
-	// ft_test::run(st_log, "rbegin", test_set_rbegin);
-	// ft_test::run(st_log, "rend", test_set_rend);
-	// ft_test::run(st_log, "empty", test_set_empty);
+	ft_test::run(st_log, test_set_begin, "begin");
+	ft_test::run(st_log, test_set_end, "end");
+	ft_test::run(st_log, test_set_rbegin, "rbegin");
+	ft_test::run(st_log, test_set_rend, "rend");
 
 	st_log->section("CAPACITY");
-	// ft_test::run(st_log, test_set_empty, "empty");
-	// ft_test::run(st_log, test_set_size, "size");
-	// ft_test::run(st_log, test_set_max_size, "max_size");
+	ft_test::run(st_log, test_set_empty, "empty");
+	ft_test::run(st_log, test_set_size, "size");
+	ft_test::run(st_log, test_max_size, "max_size");
 
 	st_log->section("MODIFIERS");
-	// ft_test::run(st_log, "insert", test_set_insert);
-	// ft_test::run(st_log, "erase", test_set_erase);
-	// ft_test::run(st_log, "swap", test_set_swap);
-	// ft_test::run(st_log, "clear", test_set_clear);
+	// ft_test::run(st_log, test_set_insert, "insert");
+	// ft_test::run(st_log, test_set_erase, "erase");
+	// ft_test::run(st_log, test_set_swap, "swap");
+	// ft_test::run(st_log, test_set_clear, "clear");
 
 	st_log->section("OBSERVERS");
-	// ft_test::run(st_log, "key_comp", test_set_key_comp);
-	// ft_test::run(st_log, "value_comp", test_set_value_comp);
+	// ft_test::run(st_log, test_set_key_comp, "key_comp");
+	// ft_test::run(st_log, test_set_value_comp, "value_comp");
 
 	st_log->section("OPERATIONS");
-	// ft_test::run(st_log, "find", test_set_find);
-	// ft_test::run(st_log, "count", test_set_count);
-	// ft_test::run(st_log, "lower_bound", test_set_lower_bound);
-	// ft_test::run(st_log, "upper_bound", test_set_upper_bound);
-	// ft_test::run(st_log, "equal_range", test_set_equal_range);
+	// ft_test::run(st_log, test_set_find, "find");
+	// ft_test::run(st_log, test_set_count, "count");
+	// ft_test::run(st_log, test_set_lower_bound, "lower_bound");
+	// ft_test::run(st_log, test_set_upper_bound, "upper_bound");
+	// ft_test::run(st_log, test_set_equal_range, "equal_range");
 
 	st_log->section("ALLOCATORS");
-	// ft_test::run(st_log, "allocator", test_set_allocator);
+	ft_test::run(st_log, test_set_allocator, "allocator");
 
 	#ifndef FT_BENCHMARK
 	st_log->section("BENCHMARK");

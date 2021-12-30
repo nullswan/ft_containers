@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 07:44:49 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 09:40:48 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 10:41:58 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 namespace ft {
 
+#include <cstddef>  // Implement ptrdiff_t
+
 #include "rb_node.hpp"
 
 template <class T>
@@ -22,10 +24,16 @@ class rb_tree_iterator {
  public:
 	typedef T*			node_pointer;
 
-	//  this is some serious magic (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
-	//  use the value_type of T which is the node,
-	//  instead of rb_node<T> we only get the T of the node.
+	/*
+		this is some serious magic (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
+		use the value_type of T which is the node,
+		instead of rb_node<T> we only get the T of the node.
+	*/
 	typedef typename T::value_type const value_type;
+
+	/* reserved for reverse iterator && iterators traits */
+	typedef typename std::ptrdiff_t difference_type;
+	typedef typename std::bidirectional_iterator_tag iterator_category;
 
 	typedef value_type &reference;
 	typedef value_type const &const_reference;

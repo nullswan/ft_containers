@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:21:46 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 13:30:48 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 13:33:42 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,6 +294,34 @@ bool	test_set_erase() {
 	return true;
 }
 bool	test_set_swap() {
+	int myints[] = { 12, 75, 10, 32, 20, 25 };
+
+	ft::set<int> first(myints, myints + 3);       // { 10, 12, 75 }
+	ft::set<int> second(myints + 3, myints + 6);  // { 20, 25, 32 }
+
+	first.swap(second);
+
+	if (first.size() != 3)
+		return st_log->err("1: swap failed");
+
+	if (second.size() != 3)
+		return st_log->err("2: swap failed");
+
+	ft::set<int>::iterator it = first.begin();
+	if (*it++ != 20)
+		return st_log->err("3: swap failed");
+	if (*it++ != 25)
+		return st_log->err("4: swap failed");
+	if (*it++ != 32)
+		return st_log->err("5: swap failed");
+
+	it = second.begin();
+	if (*it++ != 10)
+		return st_log->err("6: swap failed");
+	if (*it++ != 12)
+		return st_log->err("7: swap failed");
+	if (*it++ != 75)
+		return st_log->err("8: swap failed");
 	return true;
 }
 bool	test_set_clear() {

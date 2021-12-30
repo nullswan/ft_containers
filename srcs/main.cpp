@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:21:50 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 18:44:48 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 11:04:13 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "set_test.hpp"
 
 int	main() {
-	ft_test::vector();
-	ft_test::stack();
+	// ft_test::vector();
+	// ft_test::stack();
 	ft_test::set();
 }

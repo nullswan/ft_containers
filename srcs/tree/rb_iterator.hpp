@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 07:44:49 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 10:41:58 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 11:28:04 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,13 +129,13 @@ class rb_tree_iterator {
 	}
 
  private:
-	node_pointer __max_leaf(node_pointer node) {
+	node_pointer __max_leaf(node_pointer node) const {
 		while (node->right != RB_NULL)
 			node = node->right;
 		return node;
 	}
 
-	node_pointer	__prev(node_pointer node) {
+	node_pointer	__prev(node_pointer node) const {
 		if (node->left != RB_NULL)
 			return __max_leaf(node->left);
 
@@ -144,13 +144,13 @@ class rb_tree_iterator {
 		return node->parent;
 	}
 
-	node_pointer	__min_leaf(node_pointer node) {
+	node_pointer	__min_leaf(node_pointer node) const {
 		while (node->left != RB_NULL)
 			node = node->left;
 		return node;
 	}
 
-	node_pointer	__next(node_pointer node) {
+	node_pointer	__next(node_pointer node) const {
 		if (node->right != RB_NULL)
 			return __min_leaf(node->right);
 

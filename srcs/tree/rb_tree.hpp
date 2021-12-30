@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 10:14:26 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 11:36:12 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,10 @@ class rb_tree {
 	typedef const rb_node<T>&	const_reference;
 	typedef const rb_node<T>*	const_pointer;
 
-	typedef typename ft::rb_tree_iterator<node_value_type> 			iterator;
-	typedef typename ft::rb_tree_iterator<const_node_value_type>	const_iterator;
-	typedef typename ft::reverse_iterator<iterator>					reverse_iterator;
-	typedef typename ft::reverse_iterator<const_iterator>			const_reverse_iterator;
+	typedef typename ft::rb_tree_iterator<node_value_type> 	iterator;
+	typedef typename ft::rb_tree_iterator<node_value_type>	const_iterator;
+	typedef typename ft::reverse_iterator<iterator>			reverse_iterator;
+	typedef typename ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 
 	typedef std::ptrdiff_t	difference_type;
 	typedef std::size_t		size_type;
@@ -111,25 +111,25 @@ class rb_tree {
 		return iterator(_root, __min_node(_root), RB_NULL);
 	}
 	const_iterator begin() const {
-		return iterator(_root, __min_node(_root), RB_NULL);
+		return const_iterator(_root, __min_node(_root), RB_NULL);
 	}
 	iterator end() {
 		return iterator(_root, RB_NULL, RB_NULL);
 	}
 	const_iterator end() const {
-		return iterator(_root, RB_NULL, RB_NULL);
+		return const_iterator(_root, RB_NULL, RB_NULL);
 	}
 	reverse_iterator rbegin() {
 		return reverse_iterator(end());
 	}
 	const_reverse_iterator rbegin() const {
-		return reverse_iterator(end());
+		return const_reverse_iterator(end());
 	}
 	reverse_iterator rend() {
 		return reverse_iterator(begin());
 	}
 	const_reverse_iterator rend() const {
-		return reverse_iterator(begin());
+		return const_reverse_iterator(begin());
 	}
 
 	bool	empty() const {
@@ -228,8 +228,8 @@ class rb_tree {
 	iterator lower_bound(const value_type &value) {
 		iterator it = begin();
 		for (; it != end(); ++it) {
-			if (it.base && (_compare(value, it.base->data)
-				|| !_compare(value, it.base->data)))
+			if (it.base && (_compare_type(value, it.base->value)
+				|| !_compare_type(value, it.base->value)))
 				return it;
 		}
 		return end();
@@ -237,8 +237,8 @@ class rb_tree {
 	const_iterator lower_bound(const value_type &value) const {
 		const_iterator it = begin();
 		for (; it != end(); ++it) {
-			if (it.base && (_compare(value, it.base->data)
-				|| !_compare(value, it.base->data)))
+			if (it.base && (_compare_type(value, it.base->value)
+				|| !_compare_type(value, it.base->value)))
 				return it;
 		}
 		return end();
@@ -247,7 +247,7 @@ class rb_tree {
 	iterator upper_bound(const value_type &value) {
 		iterator it = begin();
 		for (; it != end(); ++it) {
-			if (it.base && _compare(value, it.base->data))
+			if (it.base && _compare_type(value, it.base->value))
 				return it;
 		}
 		return end();
@@ -255,7 +255,7 @@ class rb_tree {
 	const_iterator upper_bound(const value_type &value) const {
 		const_iterator it = begin();
 		for (; it != end(); ++it) {
-			if (it.base && _compare(value, it.base->data))
+			if (it.base && _compare_type(value, it.base->value))
 				return it;
 		}
 		return end();
@@ -277,7 +277,7 @@ class rb_tree {
 	}
 
  private:
-	pointer	__min_node(pointer node) {
+	pointer	__min_node(pointer node) const {
 		while (node->left != RB_NULL)
 			node = node->left;
 		return node;
@@ -525,7 +525,6 @@ class rb_tree {
 				y->right = z->right;
 				y->right->parent = y;
 			}
-
 			__transplant(z, y);
 			y->left = z->left;
 			y->left->parent = y;
@@ -558,10 +557,9 @@ class rb_tree {
 		pointer node = _root;
 
 		while (node != RB_NULL) {
-			int	cmp = _compare_type(data, node->value);
-			if (cmp > 0)
+			if (_compare_type(data, node->value))
 				node = node->left;
-			else if (cmp < 0)
+			else if (_compare_type(node->value, data))
 				node = node->right;
 			else
 				return node;

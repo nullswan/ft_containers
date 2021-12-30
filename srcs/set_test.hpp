@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:21:46 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 13:41:28 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 16:29:29 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,6 @@ bool	test_set_assignement_operator() {
 	first = second; 							// now first contains the 5 ints
 	ft::set<int>::iterator it = second.begin();
 	for (; it != second.end(); ++it) {
-		std::cout << *it << std::endl;
 		if (first.find(*it) == first.end())
 			return st_log->err("3: find failed");
 	}
@@ -619,7 +618,7 @@ void	set() {
 	st_log->section("ALLOCATORS");
 	ft_test::run(st_log, test_set_allocator, "allocator");
 
-	#ifndef FT_BENCHMARK
+	#ifdef FT_BENCHMARK
 	st_log->section("BENCHMARK");
 	#endif
 	delete st_log;

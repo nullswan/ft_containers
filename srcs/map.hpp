@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:50:07 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 17:30:28 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 16:17:46 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ class map {
 	typedef ft::pair<const key_type, mapped_type>	value_type;
 	typedef Compare	key_compare;
 
-	class value_compare {}
+	typedef Compare	value_compare;
+	// class value_compare {};
 
 	typedef Alloc				allocator_type;
 	typedef	value_type& 		reference;
@@ -78,7 +79,7 @@ class map {
     	Constructs an empty container, with no elements.
 	*/
 	explicit map(const key_compare &comp = key_compare(),
-		const allocator_type &alloc = allocator_type)
+		const allocator_type &alloc = allocator_type())
 	:	_alloc(alloc),
 		_key_compare(comp),
 		_value_compare(comp),
@@ -143,7 +144,7 @@ class map {
 		Return iterator to beginning
 		Returns an iterator referring to the first element in the map container.
 	*/
-	iterator begin() const {
+	iterator begin() {
 		return _tree.begin();
 	}
 	const_iterator begin() const {
@@ -158,10 +159,10 @@ class map {
 
 		The past-the-end element is the theoretical element that would follow the last element in the map container. It does not point to any element, and thus shall not be dereferenced.
 	*/
-	iterator end() const {
+	iterator end() {
 		return _tree.end();
 	}
-	const_iterator() end() const {
+	const_iterator end() const {
 		return _tree.end();
 	}
 
@@ -171,7 +172,7 @@ class map {
 		Return reverse iterator to reverse beginning
 		Returns a reverse iterator pointing to the last element in the container (i.e., its reverse beginning).
 	*/
-	iterator rbegin() const {
+	iterator rbegin() {
 		return _tree.rbegin();
 	}
 	const_iterator rbegin() const {
@@ -184,7 +185,7 @@ class map {
 		Return reverse iterator to reverse end
 		Returns a reverse iterator pointing to the theoretical element right before the first element in the map container (which is considered its reverse end).
 	*/
-	iterator rend() const {
+	iterator rend() {
 		return _tree.rend();
 	}
 	const_iterator rend() const {

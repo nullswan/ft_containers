@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:21:46 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 13:04:00 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 13:22:00 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,6 +260,66 @@ bool	test_max_size() {
 	return true;
 }
 
+bool	test_set_insert() {
+	ft::set<int> myset;
+	ft::set<int>::iterator it;
+	ft::pair<ft::set<int>::iterator, bool> ret;
+
+	for (int i = 0; i < 5; i++)
+		myset.insert(i * 10);
+	
+	ret = myset.insert(20);  // no new element inserted
+	if (ret.second != false)
+		return st_log->err("1: insert failed");
+
+	if (ret.second == false)
+		it = ret.first;
+
+	myset.insert(it, 25);
+	myset.insert(it, 24);
+	myset.insert(it, 26);
+
+	int myints[] = { 75, 23, 65, 42, 13 };
+	myset.insert(myints, myints + 5);
+
+	int intsrefs[] = { 0, 10, 13, 20, 23, 24, 25, 26, 30, 40, 42, 65, 75 };
+	it = myset.begin();
+	for (int i = 0; it != myset.end(); ++it, i++) {
+		if (*it != intsrefs[i])
+			return st_log->err("2: insert failed");
+	}
+	return true;
+}
+bool	test_set_erase() {
+	return true;
+}
+bool	test_set_swap() {
+	return true;
+}
+bool	test_set_clear() {
+	ft::set<int> myset;
+
+	myset.insert(100);
+	myset.insert(200);
+	myset.insert(300);
+
+	if (myset.size() != 3)
+		return st_log->err("1: clear failed");
+
+	myset.clear();
+	if (myset.size() != 0 || !myset.empty())
+		return st_log->err("2: clear failed");
+	
+	myset.insert(1101);
+	myset.insert(2202);
+	
+	if (myset.size() != 2 || myset.empty())
+		return st_log->err("3: clear failed");
+
+	myset.clear();
+	return true;
+}
+
 bool	test_set_key_comp() {
 	ft::set<int> myset;
 
@@ -480,10 +540,10 @@ void	set() {
 	ft_test::run(st_log, test_max_size, "max_size");
 
 	st_log->section("MODIFIERS");
-	// ft_test::run(st_log, test_set_insert, "insert");
-	// ft_test::run(st_log, test_set_erase, "erase");
-	// ft_test::run(st_log, test_set_swap, "swap");
-	// ft_test::run(st_log, test_set_clear, "clear");
+	ft_test::run(st_log, test_set_insert, "insert");
+	ft_test::run(st_log, test_set_erase, "erase");
+	ft_test::run(st_log, test_set_swap, "swap");
+	ft_test::run(st_log, test_set_clear, "clear");
 
 	st_log->section("OBSERVERS");
 	ft_test::run(st_log, test_set_key_comp, "key_comp");

@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 13:02:58 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 13:23:49 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ class rb_tree {
 	rb_tree &operator=(const rb_tree &rhs) {
 		if (this != &rhs) {
 			clear();
+			__destroy_null_node();
 			_alloc = rhs._alloc;
 			_size = rhs._size;
 			__alloc_null_node();
@@ -105,7 +106,10 @@ class rb_tree {
 		return *this;
 	}
 
-	~rb_tree() { clear(); }
+	~rb_tree() {
+		clear();
+		__destroy_null_node();
+	}
 
 	iterator begin() {
 		return iterator(_root, __min_node(_root), RB_NULL);
@@ -164,7 +168,7 @@ class rb_tree {
 	}
 	iterator insert(iterator pos, const value_type &value) {
 		(void)pos;
-		return insert(value);
+		return insert(value).first;
 	}
 	template <class InputIterator>
 	void insert(InputIterator first, InputIterator last,
@@ -205,8 +209,7 @@ class rb_tree {
 
 	void	clear() {
 		__destroy_nodes(_root);
-		__destroy_null_node();
-		_root = NULL;
+		_root = RB_NULL;
 		_size = 0;
 	}
 
@@ -342,6 +345,10 @@ class rb_tree {
 	}
 
 	ft::pair<iterator, bool>	__insert_node(const value_type &data) {
+		pointer look = __lookup_node(data);
+		if (look)
+			return ft::make_pair(iterator(_root, look, RB_NULL), false);
+
 		pointer node = __alloc_node(data);
 		if (!node)
 			throw std::bad_alloc();

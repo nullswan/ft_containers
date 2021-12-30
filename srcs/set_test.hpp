@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:21:46 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 13:33:42 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 13:38:23 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,6 +291,36 @@ bool	test_set_insert() {
 	return true;
 }
 bool	test_set_erase() {
+	ft::set<int> myset;
+	ft::set<int>::iterator it;
+
+	for (int i = 0; i < 10; i++)
+		myset.insert(i * 10);
+
+	it = myset.begin(); // point to 10
+	++it;
+
+	myset.erase(it); 
+
+	myset.erase(40);
+
+	it = myset.find(60);
+	myset.erase(it, myset.end());
+
+	if (myset.size() != 4)
+		return st_log->err("1: erase failed");
+
+	it = myset.begin();
+	if (*it++ != 0)
+		return st_log->err("2: erase failed");
+	if (*it++ != 20)
+		return st_log->err("3: erase failed");
+	if (*it++ != 30)
+		return st_log->err("4: erase failed");
+	if (*it++ != 50)
+		return st_log->err("5: erase failed");
+	if (it++ != myset.end())
+		return st_log->err("6: erase failed");
 	return true;
 }
 bool	test_set_swap() {

@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:21:46 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 16:29:29 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 16:34:05 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,7 @@
 
 #include "utility/logger.hpp"
 #include "utility/run_test.hpp"
-
-bool fncomp(int lhs, int rhs) {
-	return lhs < rhs;
-}
-
-struct classcomp {
-	bool operator()(const int& lhs, const int& rhs) const {
-		return lhs < rhs;
-	}
-};
+#include "utility/compare_test.hpp"
 
 namespace ft_test {
 ft_test::Logger *st_log;

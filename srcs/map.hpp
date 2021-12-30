@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:50:07 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 16:17:46 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 17:06:13 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,35 +30,43 @@
 
 namespace ft {
 template <
-	class Key,												// map::key_type
-	class T,												// map::mapped_type
-	class Compare = std::less<Key>,							// map::key_compare
-	class Alloc = std::allocator<ft::pair<const Key, T> >   // map::allocator_type
+	class Key,  // map::key_type
+	class T,    // map::mapped_type
+	class Compare = std::less<Key>,  // map::key_compare
+	class Alloc = std::allocator<ft::pair<Key, T> >  // map::allocator_type
 >
 class map {
  public:
 	typedef Key		key_type;
 	typedef T		mapped_type;
-	typedef ft::pair<const key_type, mapped_type>	value_type;
+
 	typedef Compare	key_compare;
+	typedef Alloc	allocator_type;
+	typedef ft::pair<key_type, mapped_type>	value_type;
 
-	typedef Compare	value_compare;
-	// class value_compare {};
+	typedef typename allocator_type::reference reference;
+	typedef typename allocator_type::const_reference const_reference;
+	typedef typename allocator_type::pointer pointer;
+	typedef typename allocator_type::const_pointer const_pointer;
 
-	typedef Alloc				allocator_type;
-	typedef	value_type& 		reference;
-	typedef const value_type&	const_reference;
-	typedef value_type*			pointer;
-	typedef const value_type*	const_pointer;
+class value_compare {
+	public:
+	bool operator()(const value_type &a, const value_type &b) const {
+		return (key_compare()(a.first, b.first));
+	}
 
+	value_compare &operator=(const value_compare &) {
+		return *this;
+	}
+};
 
-	typedef typename ft::rb_tree<value_type, key_compare>::iterator iterator;
+	typedef typename ft::rb_tree<value_type, value_compare>::iterator iterator;
 	typedef typename ft::rb_tree
-		<value_type, key_compare>::const_iterator const_iterator;
+		<value_type, value_compare>::const_iterator const_iterator;
 	typedef typename ft::rb_tree
-		<value_type, key_compare>::reverse_iterator reverse_iterator;
+		<value_type, value_compare>::reverse_iterator reverse_iterator;
 	typedef typename ft::rb_tree
-		<value_type, key_compare>::const_reverse_iterator const_reverse_iterator;
+		<value_type, value_compare>::const_reverse_iterator const_reverse_iterator;
 
 	typedef std::ptrdiff_t	difference_type;
 	typedef std::size_t		size_type;
@@ -68,7 +76,7 @@ class map {
 	key_compare		_key_compare;
 	value_compare	_value_compare;
 
-	rb_tree<value_type, value_compare>	_tree;
+	rb_tree<value_type, key_compare>	_tree;
 
  public:
 	/*
@@ -82,7 +90,7 @@ class map {
 		const allocator_type &alloc = allocator_type())
 	:	_alloc(alloc),
 		_key_compare(comp),
-		_value_compare(comp),
+		_value_compare(value_compare()),
 		_tree(_alloc) {}
 
 	/* 
@@ -99,7 +107,7 @@ class map {
 		>::type * = NULL)
 	:	_alloc(alloc),
 		_key_compare(comp),
-		_value_compare(comp),
+		_value_compare(value_compare()),
 		_tree(_alloc) {
 		insert(first, last);
 	}
@@ -129,10 +137,12 @@ class map {
 		Assigns new contents to the container, replacing its current content.
 	*/
 	map &operator=(const map &x) {
-		_alloc = x._alloc;
-		_key_compare = x._key_compare;
-		_value_compare = x._value_compare;
-		_tree = x._tree;
+		if (this != &x) {
+			_alloc = x._alloc;
+			_key_compare = x._key_compare;
+			_value_compare = x._value_compare;
+			_tree = x._tree;
+		}
 		return *this;
 	}
 
@@ -233,9 +243,13 @@ class map {
 		If k does not match the key of any element in the container, the function inserts a new element with that key and returns a reference to its mapped value. Notice that this always increases the container size by one, even if no mapped value is assigned to the element (the element is constructed using its default constructor).
 	*/
 	mapped_type &operator[](const key_type &key) {
-		return _tree[key];
-	}
+		iterator	ret = _tree.find(ft::make_pair(key, mapped_type()));
 
+		if (ret != end())
+			return ret.base->value.second;
+		ft::pair<iterator, bool> tmp = insert(ft::make_pair(key, mapped_type()));
+		return ret.base->value.second;
+	}
 
 	/*
 		- [ MODIFIERS ] -
@@ -349,10 +363,10 @@ class map {
 
 		Two keys are considered equivalent if the container's comparison object returns false reflexively (i.e., no matter the order in which the elements are passed as arguments).
 	*/
-	iterator find(const key_type& k) {
+	iterator find(const key_type &k) {
 		return _tree.find(ft::make_pair(k, mapped_type()));
 	}
-	const_iterator find(const key_type& k) const {
+	const_iterator find(const key_type &k) const {
 		return _tree.find(ft::make_pair(k, mapped_type()));
 	}
 

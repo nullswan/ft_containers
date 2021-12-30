@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:50:22 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 11:20:05 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 16:48:17 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ class set {
 	allocator_type	_alloc;
 	key_compare		_key_compare;
 	value_compare	_value_compare;
+
 	ft::rb_tree<value_type, key_compare> _tree;
 
  public:
@@ -112,10 +113,12 @@ class set {
 		Assigns new contents to the container, replacing its current content.
 	*/
 	set &operator= (const set &x) {
-		_alloc = x._alloc;
-		_key_compare = x._key_compare;
-		_value_compare = x._value_compare;
-		_tree = x._tree;
+		if (this != &x) {
+			_alloc = x._alloc;
+			_key_compare = x._key_compare;
+			_value_compare = x._value_compare;
+			_tree = x._tree;
+		}
 		return *this;
 	}
 

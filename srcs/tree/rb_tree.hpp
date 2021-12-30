@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 13:40:18 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 16:54:46 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,21 +145,6 @@ class rb_tree {
 
 	size_type	max_size() const {
 		return _alloc.max_size();
-	}
-
-	value_type	&operator[](const value_type &key) {
-		iterator	ret = find(key);
-
-		if (ret != end()) {
-			if (ret.base)
-				return ret.base->value;
-			return NULL;
-		}
-		ft::pair<iterator, bool> tmp = insert(key);
-
-		if (ret.base)
-			return ret.base->value;
-		return NULL;
 	}
 
 	ft::pair<iterator, bool> insert(const value_type &value) {

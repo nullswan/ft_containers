@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 08:06:40 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 08:26:28 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,11 +171,8 @@ class rb_tree {
 				typename ft::enable_if<
 					!ft::is_integral<InputIterator>::value
 				>::type * = NULL) {
-		for (; first != last; ++first) {
-			std::cout << "insert:" << *first << std::endl;
+		for (; first != last; ++first)
 			__insert_node(*first);
-			std::cout << "inserted" << std::endl;
-		}
 	}
 
 	void	erase(iterator pos) {
@@ -357,7 +354,7 @@ class rb_tree {
 		if (!node)
 			throw std::bad_alloc();
 
-		pointer y = NULL;
+		pointer y = RB_NULL;
 		pointer x = _root;
 
 		while (x != RB_NULL) {
@@ -369,19 +366,19 @@ class rb_tree {
 		}
 
 		node->parent = y;
-		if (!y)
+		if (y == RB_NULL)
 			_root = node;
 		else if (_compare_type(node->value, y->value))
 			y->left = node;
 		else
 			y->right = node;
 
-		if (node->parent == NULL) {
+		if (node->parent == RB_NULL) {
 			node->color = RB_BLACK;
 			return ft::make_pair(iterator(_root, node, RB_NULL), true);
 		}
 
-		if (node->parent->parent == NULL)
+		if (node->parent->parent == RB_NULL)
 			return ft::make_pair(iterator(_root, node, RB_NULL), true);
 
 		__insert_fixup(node);
@@ -389,7 +386,7 @@ class rb_tree {
 	}
 
 	void	__transplant(pointer u, pointer v) {
-		if (u->parent == NULL)
+		if (u->parent == RB_NULL)
 			_root = v;
 		else if (u == u->parent->left)
 			u->parent->left = v;
@@ -407,7 +404,7 @@ class rb_tree {
 			tmp->left->parent = node;
 
 		tmp->parent = node->parent;
-		if (node->parent == NULL)
+		if (node->parent == RB_NULL)
 			_root = tmp;
 		else if (node == node->parent->left)
 			node->parent->left = tmp;
@@ -425,7 +422,7 @@ class rb_tree {
 			tmp->right->parent = node;
 
 		tmp->parent = node->parent;
-		if (node->parent == NULL)
+		if (node->parent == RB_NULL)
 			_root = tmp;
 		else if (node == node->parent->left)
 			node->parent->left = tmp;

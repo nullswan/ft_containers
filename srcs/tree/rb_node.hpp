@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 07:45:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/28 13:28:09 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 07:41:20 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ enum _rb_color : bool {
 template <class T>
 class rb_node {
  public:
-	typedef T	value_type;
-	typedef T& reference;
-	typedef T const& const_reference;
+	typedef T		value_type;
+	typedef T		&reference;
+	typedef T const	&const_reference;
 
 	rb_node		*parent;
 	rb_node		*left;
@@ -35,50 +35,9 @@ class rb_node {
 
  public:
 	explicit rb_node(const_reference val)
-		: value(val) {}
+	:	value(val) {}
 
 	~rb_node() {}
-
-	rb_node *prev() {
-		rb_node *node = this;
-		if (node->left) {
-			node = max_leaf(node);
-		} else {
-			while (node->parent && node == node->parent->left)
-				node = node->parent;
-			node = node->parent;
-		}
-		return node;
-	}
-	rb_node	*next() {
-		rb_node *node = this;
-		if (node->right) {
-			node = min_leaf(node);
-		} else {
-			while (node->parent && node == node->parent->right)
-				node = node->parent;
-			node = node->parent;
-		}
-		return node;
-	}
-
-	static rb_node	*min_leaf(rb_node *node) {
-		if (node == NULL)
-			return NULL;
-		node = node->right;  // ! unsafe
-		while (node->left)
-			node = node->left;
-		return node;
-	}
-
-	static rb_node	*max_leaf(rb_node *node) {
-		if (node == NULL)
-			return NULL;
-		node = node->left;  // ! unsafe
-		while (node->right != NULL)
-			node = node->right;
-		return node;
-	}
 };
 
 }  // namespace ft

@@ -254,6 +254,27 @@ bool	test_vector_resize() {
 	for (size_t i = 0; i < v_og.size(); i++)
 		if (v[i] != v_og[i])
 			return v_log->err("7: content() differs");
+
+	ft::vector<int> v1(12, 12);
+	std::vector<int> v_og1(12, 12);
+
+	v1.resize(17);
+	v_og1.resize(17);
+
+	if (v1.size() != v_og1.size())
+		return v_log->err("8: size() differs");
+
+	v1.resize(33);
+	v_og1.resize(33);
+
+	if (v1.size() != v_og1.size())
+		return v_log->err("9: size() differs");
+
+	v1.resize(800);
+	v_og1.resize(800);
+
+	if (v1.size() != v_og1.size())
+		return v_log->err("10: size() differs");
 	return true;
 }
 bool	test_vector_capacity() {
@@ -858,18 +879,18 @@ void	vector() {
 		"Non-member function swap");
 
 	#ifdef FT_BENCHMARK
-		v_log->section("BENCHMARKS");
-		ft_test::run(v_log, &benchmark_vector_constructor, "Benchmark Constructor");
-		ft_test::run(v_log, &benchmark_vector_destructor, "Benchmark Destructor");
-		ft_test::run(v_log, &benchmark_vector_assignement_operator,
-			"Benchmark Assign Op");
-		ft_test::run(v_log, &benchmark_vector_assign, "Benchmark Assign\t");
-		ft_test::run(v_log, &benchmark_vector_push_back, "Benchmark Push Back");
-		ft_test::run(v_log, &benchmark_vector_insert_regular,
-			"Benchmark Insert Regular");
-		ft_test::run(v_log, &benchmark_vector_insert_n, "Benchmark Insert N");
-		ft_test::run(v_log, &benchmark_vector_insert_range, "Benchmark Insert Range");
-		ft_test::run(v_log, &benchmark_vector_erase, "Benchmark Erase\t");
+	v_log->section("BENCHMARKS");
+	ft_test::run(v_log, &benchmark_vector_constructor, "Benchmark Constructor");
+	ft_test::run(v_log, &benchmark_vector_destructor, "Benchmark Destructor");
+	ft_test::run(v_log, &benchmark_vector_assignement_operator,
+		"Benchmark Assign Op");
+	ft_test::run(v_log, &benchmark_vector_assign, "Benchmark Assign\t");
+	ft_test::run(v_log, &benchmark_vector_push_back, "Benchmark Push Back");
+	ft_test::run(v_log, &benchmark_vector_insert_regular,
+		"Benchmark Insert Regular");
+	ft_test::run(v_log, &benchmark_vector_insert_n, "Benchmark Insert N");
+	ft_test::run(v_log, &benchmark_vector_insert_range, "Benchmark Insert Range");
+	ft_test::run(v_log, &benchmark_vector_erase, "Benchmark Erase\t");
 	#endif
 	delete v_log;
 }

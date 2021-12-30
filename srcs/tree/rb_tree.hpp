@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 07:57:12 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 08:06:40 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -556,7 +556,7 @@ class rb_tree {
 		node->color = RB_RED;
 		node->left = RB_NULL;
 		node->right = RB_NULL;
-		node->parent = NULL;
+		node->parent = RB_NULL;
 		++_size;
 		return node;
 	}

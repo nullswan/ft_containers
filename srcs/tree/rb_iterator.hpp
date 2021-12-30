@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 07:44:49 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 08:01:16 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 08:08:18 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ class rb_tree_iterator {
 		if (this != &rhs) {
 			_root = rhs._root;
 			_base = rhs._base;
+			RB_NULL = rhs.RB_NULL;
 		}
 		return *this;
 	}
@@ -92,7 +93,7 @@ class rb_tree_iterator {
 	}
 
 	rb_tree_iterator&	operator++ () {
-		if (_base != NULL)
+		if (_base != RB_NULL)
 			_base = __next(_base);
 		return *this;
 	}
@@ -103,7 +104,7 @@ class rb_tree_iterator {
 	}
 
 	rb_tree_iterator&	operator-- () {
-		if (_base)
+		if (_base != RB_NULL)
 			_base = __prev(_base);
 		else
 			_base = __max_leaf(_root);
@@ -121,8 +122,6 @@ class rb_tree_iterator {
 
  private:
 	node_pointer __max_leaf(node_pointer node) {
-		if (node == NULL)
-			return NULL;
 		while (node->right != RB_NULL)
 			node = node->right;
 		return node;
@@ -138,8 +137,6 @@ class rb_tree_iterator {
 	}
 
 	node_pointer	__min_leaf(node_pointer node) {
-		if (node == NULL)
-			return NULL;
 		while (node->left != RB_NULL)
 			node = node->left;
 		return node;

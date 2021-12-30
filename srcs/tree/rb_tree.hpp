@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/29 23:45:38 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 07:42:08 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,16 +106,16 @@ class rb_tree {
 	~rb_tree() { clear(); }
 
 	iterator begin() {
-		return iterator(_root, __min_node(_root));
+		return iterator(_root, __min_node(_root), RB_NULL);
 	}
 	const_iterator begin() const {
-		return iterator(_root, __min_node(_root));
+		return iterator(_root, __min_node(_root), RB_NULL);
 	}
 	iterator end() {
-		return iterator(_root, RB_NULL);
+		return iterator(_root, RB_NULL, RB_NULL);
 	}
 	const_iterator end() const {
-		return iterator(_root, RB_NULL);
+		return iterator(_root, RB_NULL, RB_NULL);
 	}
 	reverse_iterator rbegin() {
 		return reverse_iterator(end());
@@ -124,10 +124,10 @@ class rb_tree {
 		return reverse_iterator(end());
 	}
 	reverse_iterator rend() {
-		return reverse_iterator(_root, __min_node(_root));
+		return reverse_iterator(begin());
 	}
 	const_reverse_iterator rend() const {
-		return reverse_iterator(_root, __min_node(_root));
+		return reverse_iterator(begin());
 	}
 
 	bool	empty() const {
@@ -214,14 +214,14 @@ class rb_tree {
 		pointer tmp = __lookup_node(value);
 
 		if (tmp)
-			return iterator(_root, tmp);
+			return iterator(_root, tmp, RB_NULL);
 		return end();
 	}
 	const_iterator find(value_type const &value) const {
 		pointer tmp = __lookup_node(value);
 
 		if (tmp)
-			return const_iterator(_root, tmp);
+			return const_iterator(_root, tmp, RB_NULL);
 		return end();
 	}
 
@@ -286,13 +286,6 @@ class rb_tree {
 			node = node->left;
 		return node;
 	}
-
-	// pointer	__max_node(pointer node) {
-		// while (node->right)
-			// node = node->right;
-		// return node;
-	// }
-
 	void	__alloc_null_node() {
 		RB_NULL = _alloc.allocate(1);
 
@@ -300,8 +293,7 @@ class rb_tree {
 		RB_NULL->parent = NULL;
 		RB_NULL->left = NULL;
 		RB_NULL->right = NULL;
-		RB_NULL->RB_NULL = RB_NULL;
-	
+
 		_root = RB_NULL;
 	}
 
@@ -366,15 +358,8 @@ class rb_tree {
 		pointer x = _root;
 
 		while (x != RB_NULL) {
-			int cmp = _compare_type(data, x->value);
 			y = x;
-			// if (cmp == 0) {
-			// 	std::cout << "comp ret" << std::endl;
-			// 	__destroy_node(node);
-			// 	return ft::make_pair(iterator(_root, x), false);
-			// }
-			// else 
-			if (cmp < 0)
+			if ( _compare_type(data, x->value) < 0)
 				x = x->left;
 			else
 				x = x->right;
@@ -390,14 +375,14 @@ class rb_tree {
 
 		if (node->parent == NULL) {
 			node->color = RB_BLACK;
-			return ft::make_pair(iterator(_root, node), true);
+			return ft::make_pair(iterator(_root, node, RB_NULL), true);
 		}
 
 		if (node->parent->parent == NULL)
-			return ft::make_pair(iterator(_root, node), true);
+			return ft::make_pair(iterator(_root, node, RB_NULL), true);
 
 		__insert_fixup(node);
-		return ft::make_pair(iterator(_root, node), true);
+		return ft::make_pair(iterator(_root, node, RB_NULL), true);
 	}
 
 	void	__transplant(pointer u, pointer v) {
@@ -569,7 +554,6 @@ class rb_tree {
 		node->left = RB_NULL;
 		node->right = RB_NULL;
 		node->parent = NULL;
-		node->RB_NULL = RB_NULL; // ToDo: implement in iterator
 		++_size;
 		return node;
 	}

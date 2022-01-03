@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:21:46 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 20:10:17 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2022/01/03 23:13:56 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -618,6 +618,17 @@ void	set() {
 
 	#ifdef FT_BENCHMARK
 	st_log->section("BENCHMARK");
+	// ft_test::run(st_log, &benchmark_set_constructor, "Benchmark Constructor");
+	// ft_test::run(st_log, &benchmark_set_destructor, "Benchmark Destructor");
+	// ft_test::run(st_log, &benchmark_set_assignement_operator,
+	// 	"Benchmark Assignement Operator");
+	// ft_test::run(st_log, &benchmark_set_insert, "Benchmark Insert");
+	// ft_test::run(st_log, &benchmark_set_erase, "Benchmark Erase");
+	// ft_test::run(st_log, &benchmark_set_find, "Benchmark Find");
+	// ft_test::run(st_log, &benchmark_set_count, "Benchmark Count");
+	// ft_test::run(st_log, &benchmark_set_lower_bound, "Benchmark Lower Bound");
+	// ft_test::run(st_log, &benchmark_set_upper_bound, "Benchmark Upper Bound");
+	// ft_test::run(st_log, &benchmark_set_equal_range, "Benchmark Equal Range");
 	#endif
 	delete st_log;
 }

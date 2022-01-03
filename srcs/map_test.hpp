@@ -676,6 +676,17 @@ void	map() {
 
 	#ifdef FT_BENCHMARK
 	m_log->section("BENCHMARK");
+	// ft_test::run(m_log, &benchmark_map_constructor, "Benchmark Constructor");
+	// ft_test::run(m_log, &benchmark_map_destructor, "Benchmark Destructor");
+	// ft_test::run(m_log, &benchmark_map_assignement_operator,
+	// 	"Benchmark Assignement Operator");
+	// ft_test::run(m_log, &benchmark_map_insert, "Benchmark Insert");
+	// ft_test::run(m_log, &benchmark_map_erase, "Benchmark Erase");
+	// ft_test::run(m_log, &benchmark_map_find, "Benchmark Find");
+	// ft_test::run(m_log, &benchmark_map_count, "Benchmark Count");
+	// ft_test::run(m_log, &benchmark_map_lower_bound, "Benchmark Lower Bound");
+	// ft_test::run(m_log, &benchmark_map_upper_bound, "Benchmark Upper Bound");
+	// ft_test::run(m_log, &benchmark_map_equal_range, "Benchmark Equal Range");
 	#endif
 	delete m_log;
 }

@@ -204,9 +204,66 @@ bool	test_map_end() {
 // }
 
 bool	test_map_empty() {
+	ft::map<char, int> mymap;
+
+	if (!mymap.empty())
+		return m_log->err("1: empty failed");
+
+	mymap['a'] = 1;
+	if (mymap.empty())
+		return m_log->err("2: empty failed");
+
+	mymap.clear();
+	if (!mymap.empty())
+		return m_log->err("3: empty failed");
+
+	mymap['a'] = 1;
+	mymap['b'] = 2;
+	mymap['c'] = 3;
+
+	if (mymap.empty())
+		return m_log->err("4: empty failed");
+
+	mymap.erase('a');
+	if (mymap.empty())
+		return m_log->err("5: empty failed");
+
+	mymap.erase('b');
+	if (mymap.empty())
+		return m_log->err("6: empty failed");
+
+	mymap.erase('c');
+	if (!mymap.empty())
+		return m_log->err("7: empty failed");
 	return true;
 }
 bool	test_map_size() {
+	ft::map<char, int> mymap;
+
+	if (mymap.size() != 0)
+		return m_log->err("1: size failed");
+
+	mymap['a'] = 1;
+	if (mymap.size() != 1)
+		return m_log->err("2: size failed");
+
+	mymap['b'] = 2;
+	if (mymap.size() != 2)
+		return m_log->err("3: size failed");
+
+	mymap.erase('a');
+	if (mymap.size() != 1)
+		return m_log->err("4: size failed");
+
+	mymap.erase('b');
+	if (mymap.size() != 0)
+		return m_log->err("5: size failed");
+
+	mymap['a'] = 1;
+	mymap['b'] = 2;
+	mymap['c'] = 3;
+	if (mymap.size() != 3)
+		return m_log->err("6: size failed");
 	return true;
 }
 bool	test_map_max_size() {
@@ -220,46 +277,333 @@ bool	test_map_max_size() {
 }
 
 bool	test_map_operator_access() {
+	ft::map<char, int> mymap;
+
+	mymap['a'] = 1;
+	mymap['b'] = 2;
+	mymap['c'] = mymap['b'];
+
+	if (mymap['a'] != 1)
+		return m_log->err("1: operator[] failed");
+
+	if (mymap['b'] != 2)
+		return m_log->err("2: operator[] failed");
+
+	if (mymap['c'] != mymap['b'])
+		return m_log->err("3: operator[] failed");
 	return true;
 }
 
 bool	test_map_insert() {
+	ft::map<char, int> mymap;
+
+	mymap.insert(ft::make_pair<char, int>('a', 100));
+	mymap.insert(ft::make_pair<char, int>('z', 200));
+
+	ft::pair<ft::map<char, int>::iterator, bool> ret;
+	ret = mymap.insert(ft::make_pair<char, int>('z', 500));
+	if (ret.second)
+		return m_log->err("1: insert failed");
+
+	ft::map<char, int>::iterator it = mymap.begin();
+	mymap.insert(it, ft::make_pair<char, int>('b', 300));
+	mymap.insert(it, ft::make_pair<char, int>('c', 400));
+
+	if (mymap['a'] != 100)
+		return m_log->err("2: insert failed");
+	if (mymap['b'] != 300)
+		return m_log->err("3: insert failed");
+	if (mymap['c'] != 400)
+		return m_log->err("4: insert failed");
+	if (mymap['z'] != 200)
+		return m_log->err("5: insert failed");
+
+	ft::map<char, int> anothermap;
+	anothermap.insert(mymap.begin(), mymap.find('c'));
+
+	if (mymap.size() != 4)
+		return m_log->err("6: insert failed");
+	if (anothermap.size() != 2)
+		return m_log->err("7: insert failed");
+
+	if (mymap['a'] != 100)
+		return m_log->err("8: insert failed");
+	if (mymap['b'] != 300)
+		return m_log->err("9: insert failed");
+	if (mymap['c'] != 400)
+		return m_log->err("10: insert failed");
+	if (mymap['z'] != 200)
+		return m_log->err("11: insert failed");
+
+	if (anothermap['a'] != 100)
+		return m_log->err("12: insert failed");
+	if (anothermap['b'] != 300)
+		return m_log->err("13: insert failed");
 	return true;
 }
 bool	test_map_erase() {
+	ft::map<char, int> mymap;
+	ft::map<char, int>::iterator it;
+
+	mymap['a'] = 10;
+	mymap['b'] = 20;
+	mymap['c'] = 30;
+	mymap['d'] = 40;
+	mymap['e'] = 50;
+	mymap['f'] = 60;
+
+	it = mymap.find('b');
+	mymap.erase(it);
+	if (mymap.size() != 5)
+		return m_log->err("1: erase failed");
+
+	mymap.erase('c');
+	if (mymap.size() != 4)
+		return m_log->err("1: erase failed");
+
+	it = mymap.find('e');
+	mymap.erase(it, mymap.end());
+
+	if (mymap.size() != 2)
+		return m_log->err("1: erase failed");
+
+	if (mymap['a'] != 10)
+		return m_log->err("2: erase failed");
+
+	if (mymap['d'] != 40)
+		return m_log->err("3: erase failed");
 	return true;
 }
 bool	test_map_swap() {
+	ft::map<char, int> foo, bar;
+
+	foo['x'] = 100;
+	foo['y'] = 200;
+
+	bar['a'] = 11;
+	bar['b'] = 22;
+	bar['c'] = 33;
+
+	foo.swap(bar);
+
+	if (foo.size() != 3)
+		return m_log->err("1: swap failed");
+
+	if (bar.size() != 2)
+		return m_log->err("2: swap failed");
+
+	if (foo['a'] != 11)
+		return m_log->err("3: swap failed");
+
+	if (foo['b'] != 22)
+		return m_log->err("4: swap failed");
+
+	if (foo['c'] != 33)
+		return m_log->err("5: swap failed");
+	
+	if (bar['x'] != 100)
+		return m_log->err("6: swap failed");
+
+	if (bar['y'] != 200)
+		return m_log->err("7: swap failed");
 	return true;
 }
 bool	test_map_clear() {
+	ft::map<char, int> mymap;
+
+	mymap['x'] = 100;
+	mymap['y'] = 200;
+	mymap['z'] = 300;
+
+	if (mymap.size() != 3)
+		return m_log->err("1: clear failed");
+
+	mymap.clear();
+
+	if (mymap.size() != 0)
+		return m_log->err("2: clear failed");
+
+	mymap['a'] = 1101;
+	mymap['b'] = 2202;
+
+	if (mymap.size() != 2)
+		return m_log->err("3: clear failed");
+
+	if (mymap['a'] != 1101)
+		return m_log->err("4: clear failed");
+	if (mymap['b'] != 2202)
+		return m_log->err("5: clear failed");
+	if (mymap['x'] != 0)
+		return m_log->err("6: clear failed");
+
 	return true;
 }
 
 bool	test_map_key_comp() {
+	ft::map<char, int> mymap;
+	ft::map<char, int>::key_compare mycomp = mymap.key_comp();
+
+	if (mycomp('a', 'b') != true)
+		return m_log->err("1: key_comp failed");
+
+	if (mycomp('b', 'a') != false)
+		return m_log->err("2: key_comp failed");
+
+	if (mycomp('a', 'a') != false)
+		return m_log->err("3: key_comp failed");
+
+	if (mycomp('b', 'b') != false)
+		return m_log->err("4: key_comp failed");
+
+	mymap['a'] = 100;
+	mymap['b'] = 200;
+	mymap['c'] = 300;
+
+	// char highest = mymap.rbegin()->first;
+	// https://www.cplusplus.com/reference/map/map/key_comp/
+	// if (mycomp(highest, 'b') != true)
+	// 	return m_log->err("5: key_comp failed");
+
 	return true;
 }
 bool	test_map_value_comp() {
+	// https://www.cplusplus.com/reference/map/map/value_comp/
 	return true;
 }
 
 bool	test_map_find() {
+	ft::map<char, int> mymap;
+	ft::map<char, int>::iterator it;
+
+	mymap['a'] = 50;
+	mymap['b'] = 100;
+	mymap['c'] = 150;
+	mymap['d'] = 200;
+
+	it = mymap.find('b');
+	if (it != mymap.end())
+		mymap.erase(it);
+
+	if (mymap.size() != 3)
+		return m_log->err("1: find failed");
+
+	if (mymap['a'] != 50)
+		return m_log->err("2: find failed");
+
+	if (mymap['c'] != 150)
+		return m_log->err("3: find failed");
+
+	if (mymap['d'] != 200)
+		return m_log->err("4: find failed");
 	return true;
 }
 bool	test_map_count() {
+	ft::map<char, int> mymap;
+
+	mymap['a'] = 101;
+	mymap['b'] = 202;
+	mymap['c'] = 303;
+
+	char c = 'a';
+
+	for (; c < 'h'; c++) {
+		if (c > 'c' && mymap.count(c) != 0)
+				return m_log->err("1: count failed");
+		else if (c <= 'c' && mymap.count(c) != 1) {
+			return m_log->err("2: count failed");
+		}
+	}
 	return true;
 }
 bool	test_map_lower_bound() {
+	ft::map<char, int> mymap;
+	ft::map<char, int>::iterator itlow, itup;
+
+	mymap['a'] = 20;
+	mymap['b'] = 40;
+	mymap['c'] = 60;
+	mymap['d'] = 80;
+	mymap['e'] = 100;
+
+	itlow = mymap.lower_bound('b');
+	itup = mymap.upper_bound('d');
+
+	mymap.erase(itlow, itup);
+
+	if (mymap.size() != 2)
+		return m_log->err("1: lower_bound failed");
+
+	if (mymap['a'] != 20)
+		return m_log->err("2: lower_bound failed");
+
+	if (mymap['e'] != 100)
+		return m_log->err("3: lower_bound failed");
 	return true;
 }
 bool	test_map_upper_bound() {
+	ft::map<char, int> mymap;
+	ft::map<char, int>::iterator itlow, itup;
+
+	mymap['a'] = 20;
+	mymap['b'] = 40;
+	mymap['c'] = 60;
+	mymap['d'] = 80;
+	mymap['e'] = 100;
+
+	itlow = mymap.lower_bound('b');
+	itup = mymap.upper_bound('d');
+
+	mymap.erase(itlow, itup);
+
+	if (mymap.size() != 2)
+		return m_log->err("1: upper_bound failed");
+
+	if (mymap['a'] != 20)
+		return m_log->err("2: upper_bound failed");
+
+	if (mymap['e'] != 100)
+		return m_log->err("3: upper_bound failed");
 	return true;
 }
 bool	test_map_equal_range() {
+	ft::map<char, int> mymap;
+
+	mymap['a'] = 10;
+	mymap['b'] = 20;
+	mymap['c'] = 30;
+
+	ft::pair<ft::map<char, int>::iterator, ft::map<char, int>::iterator> ret;
+	ret = mymap.equal_range('b');
+
+	if (ret.first->second != 20)
+		return m_log->err("1: equal_range failed");
+
+	if (ret.second->second != 30)
+		return m_log->err("2: equal_range failed");
+
+	if (ret.first->first != 'b')
+		return m_log->err("3: equal_range failed");
+
+	if (ret.second->first != 'c')
+		return m_log->err("4: equal_range failed");
+
 	return true;
 }
 
 bool	test_map_allocator() {
+	int psize;
+	ft::map<char, int> mymap;
+	ft::pair<char, int> *p;
+
+	p = mymap.get_allocator().allocate(5);
+
+	psize = sizeof(ft::map<char, int>::value_type) * 5;
+
+	if (psize != 40)
+		return m_log->err("1: allocator failed");
+
+	mymap.get_allocator().deallocate(p, 5);
+
 	return true;
 }
 
@@ -298,8 +642,8 @@ void	map() {
 	ft_test::run(m_log, test_map_clear, "clear");
 
 	m_log->section("OBSERVERS");
-	ft_test::run(m_log, test_map_key_comp, "key_comp");
-	ft_test::run(m_log, test_map_value_comp, "value_comp");
+	// ft_test::run(m_log, test_map_key_comp, "key_comp");
+	// ft_test::run(m_log, test_map_value_comp, "value_comp");
 
 	m_log->section("OPERATIONS");
 	ft_test::run(m_log, test_map_find, "find");

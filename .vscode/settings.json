@@ -57,6 +57,8 @@
 		"ranges": "cpp",
 		"compare": "cpp",
 		"concepts": "cpp",
-		"cinttypes": "cpp"
+		"cinttypes": "cpp",
+		"map": "cpp",
+		"set": "cpp"
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 16:54:46 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2022/01/03 18:49:56 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -480,13 +480,13 @@ class rb_tree {
 		pointer z = RB_NULL;
 
 		while (root != RB_NULL) {
-			if (root->value == node->value)
+			if (_compare_type(node->value, root->value) == 0)
 				z = root;
 
-			if (root->value <= node->value)
-				root = root->right;
-			else
+			if (_compare_type(node->value, root->value) > 0)
 				root = root->left;
+			else
+				root = root->right;
 		}
 
 		if (z == RB_NULL)

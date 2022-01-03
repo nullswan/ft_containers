@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:50:07 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 19:56:18 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2022/01/03 19:15:19 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,7 +297,7 @@ class value_compare {
 		return _tree.erase(position);
 	}
 	size_type erase(const key_type& k) {
-		return _tree.erase(k);
+		return _tree.erase(ft::make_pair(k, mapped_type()));
 	}
 	void erase(iterator first, iterator last) {
 		return _tree.erase(first, last);
@@ -427,10 +427,10 @@ class value_compare {
 	*/
 	ft::pair<const_iterator, const_iterator>
 	equal_range(const key_type& k) const {
-		return _tree.equal_range(k);
+		return _tree.equal_range(ft::make_pair(k, mapped_type()));
 	}
 	ft::pair<iterator, iterator> equal_range(const key_type& k) {
-		return _tree.equal_range(k);
+		return _tree.equal_range(ft::make_pair(k, mapped_type()));
 	}
 
 	/*

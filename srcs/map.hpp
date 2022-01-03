@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:50:07 by c3b5aw            #+#    #+#             */
-/*   Updated: 2022/01/03 19:15:19 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2022/01/03 19:20:26 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,10 +182,10 @@ class value_compare {
 		Return reverse iterator to reverse beginning
 		Returns a reverse iterator pointing to the last element in the container (i.e., its reverse beginning).
 	*/
-	iterator rbegin() {
+	reverse_iterator rbegin() {
 		return _tree.rbegin();
 	}
-	const_iterator rbegin() const {
+	const_reverse_iterator rbegin() const {
 		return _tree.rbegin();
 	}
 
@@ -195,10 +195,10 @@ class value_compare {
 		Return reverse iterator to reverse end
 		Returns a reverse iterator pointing to the theoretical element right before the first element in the map container (which is considered its reverse end).
 	*/
-	iterator rend() {
+	reverse_iterator rend() {
 		return _tree.rend();
 	}
-	const_iterator rend() const {
+	const_reverse_iterator rend() const {
 		return _tree.rend();
 	}
 

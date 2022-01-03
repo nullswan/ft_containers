@@ -163,45 +163,45 @@ bool	test_map_end() {
 	}
 	return true;
 }
-// bool	test_map_rbegin() {
-// 	int myints[] = { 75, 23, 65, 42, 13 };
-// 	ft::map<int, int> mymap;
-// 	std::map<int, int> stdmap;
+bool	test_map_rbegin() {
+	int myints[] = { 75, 23, 65, 42, 13 };
+	ft::map<int, int> mymap;
+	std::map<int, int> stdmap;
 
-// 	for (int i = 0; i < 5; i++) {
-// 		mymap.insert(ft::make_pair<int, int>(i, myints[i]));
-// 		stdmap.insert(std::make_pair<int, int>(i, myints[i]));
-// 	}
+	for (int i = 0; i < 5; i++) {
+		mymap.insert(ft::make_pair<int, int>(i, myints[i]));
+		stdmap.insert(std::make_pair<int, int>(i, myints[i]));
+	}
 
-// 	ft::map<int, int>::reverse_iterator it = mymap.rbegin();
-// 	std::map<int, int>::reverse_iterator it2 = stdmap.rbegin();
-// 	for (; it != mymap.rend(); ++it, ++it2) {
-// 		if (it->second != it2->second)
-// 			return m_log->err("1: begin failed");
-// 	}
-// 	return true;
-// }
-// bool	test_map_rend() {
-// 	int myints[] = { 75, 23, 65, 42, 13 };
-// 	ft::map<int, int> mymap;
-// 	std::map<int, int> stdmap;
+	ft::map<int, int>::reverse_iterator it = mymap.rbegin();
+	std::map<int, int>::reverse_iterator it2 = stdmap.rbegin();
+	for (; it != mymap.rend(); ++it, ++it2) {
+		if (it->second != it2->second)
+			return m_log->err("1: begin failed");
+	}
+	return true;
+}
+bool	test_map_rend() {
+	int myints[] = { 75, 23, 65, 42, 13 };
+	ft::map<int, int> mymap;
+	std::map<int, int> stdmap;
 
-// 	for (int i = 0; i < 5; i++) {
-// 		mymap.insert(ft::make_pair<int, int>(i, myints[i]));
-// 		stdmap.insert(std::make_pair<int, int>(i, myints[i]));
-// 	}
+	for (int i = 0; i < 5; i++) {
+		mymap.insert(ft::make_pair<int, int>(i, myints[i]));
+		stdmap.insert(std::make_pair<int, int>(i, myints[i]));
+	}
 
-// 	ft::map<int, int>::reverse_iterator it = mymap.rend();
-// 	std::map<int, int>::reverse_iterator it2 = stdmap.rend();
+	ft::map<int, int>::reverse_iterator it = mymap.rend();
+	std::map<int, int>::reverse_iterator it2 = stdmap.rend();
 
-// 	--it;
-// 	--it2;
-// 	for (; it != mymap.rbegin(); --it, --it2) {
-// 		if (it->second != it2->second)
-// 			return m_log->err("1: begin failed");
-// 	}
-// 	return true;
-// }
+	--it;
+	--it2;
+	for (; it != mymap.rbegin(); --it, --it2) {
+		if (it->second != it2->second)
+			return m_log->err("1: begin failed");
+	}
+	return true;
+}
 
 bool	test_map_empty() {
 	ft::map<char, int> mymap;
@@ -459,15 +459,34 @@ bool	test_map_key_comp() {
 	mymap['b'] = 200;
 	mymap['c'] = 300;
 
-	// char highest = mymap.rbegin()->first;
-	// https://www.cplusplus.com/reference/map/map/key_comp/
-	// if (mycomp(highest, 'b') != true)
-	// 	return m_log->err("5: key_comp failed");
+	char highest = mymap.rbegin()->first;
+
+	if (mycomp(highest, 'c') != 0)
+		return m_log->err("5: key_comp failed");
+
+	if (mycomp('c', highest) != 0)
+		return m_log->err("6: key_comp failed");
+
+	if (mycomp('c', 'b') > 0)
+		return m_log->err("7: key_comp failed");
 
 	return true;
 }
 bool	test_map_value_comp() {
-	// https://www.cplusplus.com/reference/map/map/value_comp/
+	ft::map<char, int> mymap;
+
+	mymap['x'] = 1001;
+	mymap['y'] = 2002;
+	mymap['z'] = 3003;
+
+	ft::pair<char, int> highest = *mymap.rbegin();
+	ft::map<char, int>::iterator it = mymap.begin();
+	for (int i = 1; mymap.value_comp()(*it, highest); i++) {
+		if (it->second != i * 1001)
+			return m_log->err("1: value_comp failed");
+		++it;
+	}
+
 	return true;
 }
 
@@ -624,8 +643,8 @@ void	map() {
 	m_log->section("ITERATORS");
 	ft_test::run(m_log, test_map_begin, "begin");
 	ft_test::run(m_log, test_map_end, "end");
-	// ft_test::run(m_log, test_map_rbegin, "rbegin");
-	// ft_test::run(m_log, test_map_rend, "rend");
+	ft_test::run(m_log, test_map_rbegin, "rbegin");
+	ft_test::run(m_log, test_map_rend, "rend");
 
 	m_log->section("CAPACITY");
 	ft_test::run(m_log, test_map_empty, "empty");
@@ -642,8 +661,8 @@ void	map() {
 	ft_test::run(m_log, test_map_clear, "clear");
 
 	m_log->section("OBSERVERS");
-	// ft_test::run(m_log, test_map_key_comp, "key_comp");
-	// ft_test::run(m_log, test_map_value_comp, "value_comp");
+	ft_test::run(m_log, test_map_key_comp, "key_comp");
+	ft_test::run(m_log, test_map_value_comp, "value_comp");
 
 	m_log->section("OPERATIONS");
 	ft_test::run(m_log, test_map_find, "find");

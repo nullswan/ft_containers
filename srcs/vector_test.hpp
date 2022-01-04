@@ -707,12 +707,12 @@ bool	benchmark_vector_push_back() {
 	std::vector<int> *v_og = new std::vector<int>(10, 42);
 
 	time_t start = clock();
-	for (size_t i = 0; i < 10000000; i++)
+	for (size_t i = 0; i < 1000000; i++)
 		v->push_back(42);
 	time_t end = clock();
 
 	time_t start_og = clock();
-	for (size_t i = 0; i < 10000000; i++)
+	for (size_t i = 0; i < 1000000; i++)
 		v_og->push_back(42);
 	time_t end_og = clock();
 
@@ -721,8 +721,8 @@ bool	benchmark_vector_push_back() {
 	return v_log->benchmark(end - start, end_og - start_og);
 }
 bool	benchmark_vector_insert_regular() {
-	ft::vector<int> *v = new ft::vector<int>(1000000, 42);
-	std::vector<int> *v_og = new std::vector<int>(1000000, 42);
+	ft::vector<int> *v = new ft::vector<int>(10000, 42);
+	std::vector<int> *v_og = new std::vector<int>(10000, 42);
 
 	time_t start = clock();
 	for (size_t i = 0; i < 1000; i++)
@@ -778,8 +778,8 @@ bool	benchmark_vector_insert_n() {
 	return v_log->benchmark(end - start, end_og - start_og);
 }
 bool	benchmark_vector_insert_range() {
-	ft::vector<int> *v = new ft::vector<int>(1000000, 42);
-	std::vector<int> *v_og = new std::vector<int>(1000000, 42);
+	ft::vector<int> *v = new ft::vector<int>(10000, 42);
+	std::vector<int> *v_og = new std::vector<int>(10000, 42);
 
 	int	myArr[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 	int	arrSize = 10;
@@ -805,16 +805,16 @@ bool	benchmark_vector_insert_range() {
 	return v_log->benchmark(end - start, end_og - start_og);
 }
 bool	benchmark_vector_erase() {
-	ft::vector<int> *v = new ft::vector<int>(100000, 42);
-	std::vector<int> *v_og = new std::vector<int>(100000, 42);
+	ft::vector<int> *v = new ft::vector<int>(10000, 42);
+	std::vector<int> *v_og = new std::vector<int>(10000, 42);
 
 	time_t start = clock();
-	for (size_t i = 0; i < 10000; i++)
+	for (size_t i = 0; i < 1000; i++)
 		v->erase(v->begin());
 	time_t end = clock();
 
 	time_t start_og = clock();
-	for (size_t i = 0; i < 10000; i++)
+	for (size_t i = 0; i < 1000; i++)
 		v_og->erase(v_og->begin());
 	time_t end_og = clock();
 

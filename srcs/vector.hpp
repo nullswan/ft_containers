@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:47:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 11:03:58 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2022/01/04 17:41:27 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ class vector {
 		This destroys all container elements, and deallocates all the storage capacity allocated by the vector using its allocator.
 	*/
 	~vector() {
-		clear();  // Apparently not cleared in original stl container
+		// clear();  // Apparently not cleared in original stl container
 		_alloc.deallocate(_data, _capacity);
 	}
 
@@ -552,7 +552,7 @@ class vector {
 	}
 
 	void	__translate_dsc(size_type elem_pos, size_type n) {
-		for (; elem_pos < _size; elem_pos++) {
+		for (; elem_pos < _size && elem_pos + n < _capacity; elem_pos++) {
 			_alloc.construct(_data + elem_pos, _data[elem_pos + n]);
 			_alloc.destroy(_data + elem_pos + n);
 		}

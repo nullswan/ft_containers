@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:21:46 by c3b5aw            #+#    #+#             */
-/*   Updated: 2022/01/03 23:13:56 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2022/01/04 17:14:43 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -574,6 +574,192 @@ bool	test_set_allocator() {
 	return true;
 }
 
+bool	benchmark_set_constructor() {
+	ft::set<int> ftrf;
+	std::set<int> stdrf;
+
+	for (int i = 0; i < 10000; ++i) {
+		ftrf.insert(i);
+		stdrf.insert(i);
+	}
+
+	time_t start = clock();
+	ft::set<int> *ftset = new ft::set<int>(ftrf.begin(), ftrf.end());
+	time_t end = clock();
+
+	time_t start2 = clock();
+	std::set<int> *stdsets = new std::set<int>(stdrf.begin(), stdrf.end());
+	time_t end2 = clock();
+
+	delete ftset;
+	delete stdsets;
+
+	return st_log->benchmark(end-start, end2-start2);
+}
+bool	benchmark_set_destructor() {
+	ft::set<int> *ftrf = new ft::set<int>();
+	std::set<int> *stdrf = new std::set<int>();
+
+	for (int i = 0; i < 50000; ++i) {
+		ftrf->insert(i);
+		stdrf->insert(i);
+	}
+
+	time_t start = clock();
+	delete ftrf;
+	time_t end = clock();
+
+	time_t start2 = clock();
+	delete stdrf;
+	time_t end2 = clock();
+
+	return st_log->benchmark(end-start, end2-start2);
+}
+bool	benchmark_set_assignement_operator() {
+	ft::set<int> ftrf;
+	std::set<int> stdrf;
+
+	for (int i = 0; i < 10000; ++i) {
+		ftrf.insert(i);
+		stdrf.insert(i);
+	}
+
+	time_t start = clock();
+	ft::set<int> ftset = ftrf;
+	time_t end = clock();
+
+	time_t start2 = clock();
+	std::set<int> stdsets = stdrf;
+	time_t end2 = clock();
+
+	return st_log->benchmark(end-start, end2-start2);
+}
+bool	benchmark_set_insert() {
+	ft::set<int> ftrf;
+	std::set<int> stdrf;
+
+	time_t start = clock();
+	for (int i = 0; i < 10000; ++i)
+		ftrf.insert(i);
+	time_t end = clock();
+
+	time_t start2 = clock();
+	for (int i = 0; i < 10000; ++i)
+		stdrf.insert(i);
+	time_t end2 = clock();
+
+	return st_log->benchmark(end-start, end2-start2);
+}
+bool	benchmark_set_insert_iterator() {
+	ft::set<int> ftrf;
+	std::set<int> stdrf;
+
+	ft::set<int> ftnums;
+	std::set<int> stdnums;
+
+	for (int i = 0; i < 10000; ++i) {
+		ftnums.insert(i);
+		stdnums.insert(i);
+	}
+
+	time_t start = clock();
+	ftrf.insert(ftnums.begin(), ftnums.end());
+	time_t end = clock();
+
+	time_t start2 = clock();
+	stdrf.insert(stdnums.begin(), stdnums.end());
+	time_t end2 = clock();
+
+	return st_log->benchmark(end-start, end2-start2);
+}
+bool	benchmark_set_erase() {
+	ft::set<int> ftrf;
+	std::set<int> stdrf;
+
+	for (int i = 0; i < 10000; ++i) {
+		ftrf.insert(i);
+		stdrf.insert(i);
+	}
+
+	time_t start = clock();
+	for (int i = 0; i < 10000; ++i)
+		ftrf.erase(i);
+	time_t end = clock();
+
+	time_t start2 = clock();
+	for (int i = 0; i < 10000; ++i)
+		stdrf.erase(i);
+	time_t end2 = clock();
+
+	return st_log->benchmark(end-start, end2-start2);
+}
+bool	benchmark_set_erase_iterator() {
+	ft::set<int> ftrf;
+	std::set<int> stdrf;
+
+	for (int i = 0; i < 10000; ++i) {
+		ftrf.insert(i);
+		stdrf.insert(i);
+	}
+
+	time_t start = clock();
+	ftrf.erase(ftrf.begin(), ftrf.end());
+	time_t end = clock();
+
+	time_t start2 = clock();
+	stdrf.erase(stdrf.begin(), stdrf.end());
+	time_t end2 = clock();
+
+	return st_log->benchmark(end-start, end2-start2);
+}
+bool	benchmark_set_find() {
+	ft::set<int> ftrf;
+	std::set<int> stdrf;
+
+	for (int i = 0; i < 100000; ++i) {
+		ftrf.insert(i);
+		stdrf.insert(i);
+	}
+
+	time_t start = clock();
+	for (int i = 0; i < 100000; ++i) {
+		if (*ftrf.find(i) != i)
+			return st_log->err("1: find failed");
+	}
+	time_t end = clock();
+
+	time_t start2 = clock();
+	for (int i = 0; i < 100000; ++i)
+		if (*stdrf.find(i) != i)
+			return st_log->err("2: find failed");
+	time_t end2 = clock();
+
+	return st_log->benchmark(end-start, end2-start2);
+}
+bool	benchmark_set_count() {
+	ft::set<int> ftrf;
+	std::set<int> stdrf;
+
+	for (int i = 0; i < 100000; ++i) {
+		ftrf.insert(i);
+		stdrf.insert(i);
+	}
+
+	time_t start = clock();
+	for (int i = 0; i < 100000; ++i)
+		if (ftrf.count(i) != 1)
+			return st_log->err("1: count failed");;
+	time_t end = clock();
+
+	time_t start2 = clock();
+	for (int i = 0; i < 100000; ++i)
+		if (stdrf.count(i) != 1)
+			return st_log->err("2: count failed");;
+	time_t end2 = clock();
+
+	return st_log->benchmark(end-start, end2-start2);
+}
+
 void	set() {
 	st_log = new ft_test::Logger("set ");
 
@@ -618,21 +804,19 @@ void	set() {
 
 	#ifdef FT_BENCHMARK
 	st_log->section("BENCHMARK");
-	// ft_test::run(st_log, &benchmark_set_constructor, "Benchmark Constructor");
-	// ft_test::run(st_log, &benchmark_set_destructor, "Benchmark Destructor");
-	// ft_test::run(st_log, &benchmark_set_assignement_operator,
-	// 	"Benchmark Assignement Operator");
-	// ft_test::run(st_log, &benchmark_set_insert, "Benchmark Insert");
-	// ft_test::run(st_log, &benchmark_set_erase, "Benchmark Erase");
-	// ft_test::run(st_log, &benchmark_set_find, "Benchmark Find");
-	// ft_test::run(st_log, &benchmark_set_count, "Benchmark Count");
-	// ft_test::run(st_log, &benchmark_set_lower_bound, "Benchmark Lower Bound");
-	// ft_test::run(st_log, &benchmark_set_upper_bound, "Benchmark Upper Bound");
-	// ft_test::run(st_log, &benchmark_set_equal_range, "Benchmark Equal Range");
+	ft_test::run(st_log, &benchmark_set_constructor, "Benchmark Constructor\t");
+	ft_test::run(st_log, &benchmark_set_destructor, "Benchmark Destructor\t");
+	ft_test::run(st_log, &benchmark_set_assignement_operator,
+		"Benchmark Assignement Operator");
+	ft_test::run(st_log, &benchmark_set_insert, "Benchmark Insert\t\t");
+	ft_test::run(st_log, &benchmark_set_insert_iterator, "Benchmark Insert Iterator");
+	ft_test::run(st_log, &benchmark_set_erase, "Benchmark Erase\t\t");
+	ft_test::run(st_log, &benchmark_set_erase_iterator, "Benchmark Erase Iterator\t");
+	ft_test::run(st_log, &benchmark_set_find, "Benchmark Find\t\t");
+	ft_test::run(st_log, &benchmark_set_count, "Benchmark Count\t\t");
 	#endif
 	delete st_log;
 }
-
 }  // namespace ft_test
 
 #endif  // SET_TEST_HPP_

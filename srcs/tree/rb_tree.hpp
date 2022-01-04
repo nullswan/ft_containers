@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2022/01/03 18:49:56 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2022/01/04 17:15:08 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,16 +214,14 @@ class rb_tree {
 
 	iterator lower_bound(const value_type &value) {
 		for (iterator it = begin(); it != end(); ++it) {
-			if (_compare_type(value, it.base->value)
-				|| !_compare_type(it.base->value, value))
+			if (_compare_type(it.base->value, value) == false)
 				return it;
 		}
 		return end();
 	}
 	const_iterator lower_bound(const value_type &value) const {
 		for (const_iterator it = begin(); it != end(); ++it) {
-			if (_compare_type(value, it.base->value)
-				|| !_compare_type(it.base->value, value))
+			if (_compare_type(it.base->value, value) == false)
 				return it;
 		}
 		return end();

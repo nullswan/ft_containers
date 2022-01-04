@@ -639,7 +639,8 @@ bool	benchmark_map_constructor() {
 	time_t end = clock();
 
 	time_t start2 = clock();
-	std::map<int, int> *stdsets = new std::map<int, int>(stdrf.begin(), stdrf.end());
+	std::map<int, int> *stdsets =
+		new std::map<int, int>(stdrf.begin(), stdrf.end());
 	time_t end2 = clock();
 
 	delete ftset;
@@ -797,15 +798,17 @@ bool	benchmark_map_count() {
 	}
 
 	time_t start = clock();
-	for (int i = 0; i < 100000; ++i)
+	for (int i = 0; i < 100000; ++i) {
 		if (ftrf.count(i) != 1)
-			return m_log->err("1: count failed");;
+			return m_log->err("1: count failed");
+	}
 	time_t end = clock();
 
 	time_t start2 = clock();
-	for (int i = 0; i < 100000; ++i)
+	for (int i = 0; i < 100000; ++i) {
 		if (stdrf.count(i) != 1)
-			return m_log->err("2: count failed");;
+			return m_log->err("2: count failed");
+	}
 	time_t end2 = clock();
 
 	return m_log->benchmark(end-start, end2-start2);
@@ -866,9 +869,11 @@ void	map() {
 	ft_test::run(m_log, &benchmark_map_assignement_operator,
 		"Benchmark Assignement Operator");
 	ft_test::run(m_log, &benchmark_map_insert, "Benchmark Insert\t\t");
-	ft_test::run(m_log, &benchmark_map_insert_iterator, "Benchmark Insert Iterator");
+	ft_test::run(m_log, &benchmark_map_insert_iterator,
+		"Benchmark Insert Iterator");
 	ft_test::run(m_log, &benchmark_map_erase, "Benchmark Erase\t\t");
-	ft_test::run(m_log, &benchmark_map_erase_iterator, "Benchmark Erase Iterator\t");
+	ft_test::run(m_log, &benchmark_map_erase_iterator,
+		"Benchmark Erase Iterator\t");
 	ft_test::run(m_log, &benchmark_map_find, "Benchmark Find\t\t");
 	ft_test::run(m_log, &benchmark_map_count, "Benchmark Count\t\t");
 	#endif

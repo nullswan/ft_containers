@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:50:07 by c3b5aw            #+#    #+#             */
-/*   Updated: 2022/01/03 19:20:26 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2022/01/04 17:53:33 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,13 @@
 	https://www.cplusplus.com/reference/map/map/
 */
 
+#include <iostream>		// prevent size_t error in iterator
 #include <memory>		// provides std::allocator
 #include <functional>   // provides std::less
 
 #include "utility/pair.hpp"
+
+#include "types/type_trait.hpp"
 
 #include "algorithm/equal.hpp"
 #include "algorithm/lexicographical_compare.hpp"

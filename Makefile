@@ -6,7 +6,7 @@
 #    By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/10 17:01:52 by c3b5aw            #+#    #+#              #
-#    Updated: 2021/12/30 20:02:59 by c3b5aw           ###   ########.fr        #
+#    Updated: 2022/01/04 17:43:58 by c3b5aw           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ $(NAME)	: $(OBJS)
 ifeq ($(MODE), benchmark)
 	@	$(CC) $(CFLAGS) $^ -o $@ -O3 -D FT_BENCHMARK=1
 else
-	@	$(CC) $(CFLAGS) $^ -o $@ -g3
+	@	$(CC) $(CFLAGS) $^ -o $@
 endif
 
 $(OBJS_DIR)%.o : $(SRCS_DIR)%.cpp
@@ -43,7 +43,7 @@ $(OBJS_DIR)%.o : $(SRCS_DIR)%.cpp
 ifeq ($(MODE), benchmark)
 	@	$(CC) $(CFLAGS) -c $< -o $@ $(DFLAGS) -O3 -D FT_BENCHMARK=1
 else
-	@	$(CC) $(CFLAGS) -c $< -o $@ $(DFLAGS) -g3
+	@	$(CC) $(CFLAGS) -c $< -o $@ $(DFLAGS)
 endif
 	@	printf " -> OK\n"
 

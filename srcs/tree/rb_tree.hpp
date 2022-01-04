@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 08:00:43 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 13:40:18 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2022/01/04 17:15:08 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,21 +147,6 @@ class rb_tree {
 		return _alloc.max_size();
 	}
 
-	value_type	&operator[](const value_type &key) {
-		iterator	ret = find(key);
-
-		if (ret != end()) {
-			if (ret.base)
-				return ret.base->value;
-			return NULL;
-		}
-		ft::pair<iterator, bool> tmp = insert(key);
-
-		if (ret.base)
-			return ret.base->value;
-		return NULL;
-	}
-
 	ft::pair<iterator, bool> insert(const value_type &value) {
 		return __insert_node(value);
 	}
@@ -229,16 +214,14 @@ class rb_tree {
 
 	iterator lower_bound(const value_type &value) {
 		for (iterator it = begin(); it != end(); ++it) {
-			if (_compare_type(value, it.base->value)
-				|| !_compare_type(it.base->value, value))
+			if (_compare_type(it.base->value, value) == false)
 				return it;
 		}
 		return end();
 	}
 	const_iterator lower_bound(const value_type &value) const {
 		for (const_iterator it = begin(); it != end(); ++it) {
-			if (_compare_type(value, it.base->value)
-				|| !_compare_type(it.base->value, value))
+			if (_compare_type(it.base->value, value) == false)
 				return it;
 		}
 		return end();
@@ -495,13 +478,13 @@ class rb_tree {
 		pointer z = RB_NULL;
 
 		while (root != RB_NULL) {
-			if (root->value == node->value)
+			if (_compare_type(node->value, root->value) == 0)
 				z = root;
 
-			if (root->value <= node->value)
-				root = root->right;
-			else
+			if (_compare_type(node->value, root->value) > 0)
 				root = root->left;
+			else
+				root = root->right;
 		}
 
 		if (z == RB_NULL)

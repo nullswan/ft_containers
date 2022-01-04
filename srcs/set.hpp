@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:50:22 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 11:20:05 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2022/01/04 17:53:39 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,11 @@
 	https://www.cplusplus.com/reference/set/set/
 */
 
+#include <iostream>		// prevent size_t error in iterator
 #include <memory>		// provides std::allocator
 #include <functional>   // provides std::less
+
+#include "types/type_trait.hpp"
 
 #include "tree/rb_tree.hpp"
 
@@ -43,13 +46,13 @@ class set {
 	typedef typename allocator_type::pointer pointer;
 	typedef typename allocator_type::const_pointer const_pointer;
 
-	typedef typename ft::rb_tree<value_type, key_compare>::iterator iterator;
+	typedef typename ft::rb_tree<value_type, value_compare>::iterator iterator;
 	typedef typename ft::rb_tree
-		<value_type, key_compare>::const_iterator const_iterator;
+		<value_type, value_compare>::const_iterator const_iterator;
 	typedef typename ft::rb_tree
-		<value_type, key_compare>::reverse_iterator reverse_iterator;
+		<value_type, value_compare>::reverse_iterator reverse_iterator;
 	typedef typename ft::rb_tree
-		<value_type, key_compare>::const_reverse_iterator const_reverse_iterator;
+		<value_type, value_compare>::const_reverse_iterator const_reverse_iterator;
 
 	typedef std::ptrdiff_t	difference_type;
 	typedef std::size_t		size_type;
@@ -58,7 +61,8 @@ class set {
 	allocator_type	_alloc;
 	key_compare		_key_compare;
 	value_compare	_value_compare;
-	ft::rb_tree<value_type, key_compare> _tree;
+
+	ft::rb_tree<value_type, value_compare> _tree;
 
  public:
 	/*
@@ -112,10 +116,12 @@ class set {
 		Assigns new contents to the container, replacing its current content.
 	*/
 	set &operator= (const set &x) {
-		_alloc = x._alloc;
-		_key_compare = x._key_compare;
-		_value_compare = x._value_compare;
-		_tree = x._tree;
+		if (this != &x) {
+			_alloc = x._alloc;
+			_key_compare = x._key_compare;
+			_value_compare = x._value_compare;
+			_tree = x._tree;
+		}
 		return *this;
 	}
 

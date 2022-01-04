@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 07:44:49 by c3b5aw            #+#    #+#             */
-/*   Updated: 2021/12/30 13:12:01 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2021/12/30 20:23:41 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,10 @@ class rb_tree_iterator {
 	/*
 		Operators used to compare iterators
 	*/
-	bool	operator== (const rb_tree_iterator& rhs) const {
+	bool	operator==	(const rb_tree_iterator& rhs) const {
 		return base == rhs.base;
 	}
-	bool	operator!= (const rb_tree_iterator& rhs) const {
+	bool	operator!=	(const rb_tree_iterator& rhs) const {
 		return base != rhs.base;
 	}
 

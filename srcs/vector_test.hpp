@@ -725,12 +725,12 @@ bool	benchmark_vector_insert_regular() {
 	std::vector<int> *v_og = new std::vector<int>(10000, 42);
 
 	time_t start = clock();
-	for (size_t i = 0; i < 1000; i++)
+	for (size_t i = 0; i < 10000; i++)
 		v->insert(v->begin(), 42);
 	time_t end = clock();
 
 	time_t start_og = clock();
-	for (size_t i = 0; i < 1000; i++)
+	for (size_t i = 0; i < 10000; i++)
 		v_og->insert(v_og->begin(), 42);
 	time_t end_og = clock();
 
@@ -809,12 +809,12 @@ bool	benchmark_vector_erase() {
 	std::vector<int> *v_og = new std::vector<int>(10000, 42);
 
 	time_t start = clock();
-	for (size_t i = 0; i < 1000; i++)
+	for (size_t i = 0; i < 10000; i++)
 		v->erase(v->begin());
 	time_t end = clock();
 
 	time_t start_og = clock();
-	for (size_t i = 0; i < 1000; i++)
+	for (size_t i = 0; i < 10000; i++)
 		v_og->erase(v_og->begin());
 	time_t end_og = clock();
 

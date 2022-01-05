@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 22:47:01 by c3b5aw            #+#    #+#             */
-/*   Updated: 2022/01/04 17:41:27 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2022/01/05 09:30:41 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 
 #include <stddef.h>		// Provide size_t
 
+#include <iostream>		// prevent warning: size_t wchar_t
 #include <string>
 #include <memory>		// provides std::allocator
 #include <exception>

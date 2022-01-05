@@ -629,7 +629,7 @@ bool	benchmark_map_constructor() {
 	ft::map<int, int> ftrf;
 	std::map<int, int> stdrf;
 
-	for (int i = 0; i < 10000; ++i) {
+	for (int i = 0; i < 100000; ++i) {
 		ftrf.insert(ft::make_pair(i, i));
 		stdrf.insert(std::make_pair(i, i));
 	}
@@ -671,7 +671,7 @@ bool	benchmark_map_assignement_operator() {
 	ft::map<int, int> ftrf;
 	std::map<int, int> stdrf;
 
-	for (int i = 0; i < 10000; ++i) {
+	for (int i = 0; i < 100000; ++i) {
 		ftrf.insert(ft::make_pair(i, i));
 		stdrf.insert(std::make_pair(i, i));
 	}
@@ -709,7 +709,7 @@ bool	benchmark_map_insert_iterator() {
 	ft::map<int, int> ftnums;
 	std::map<int, int> stdnums;
 
-	for (int i = 0; i < 10000; ++i) {
+	for (int i = 0; i < 1000000; ++i) {
 		ftrf.insert(ft::make_pair(i, i));
 		stdrf.insert(std::make_pair(i, i));
 	}
@@ -728,18 +728,18 @@ bool	benchmark_map_erase() {
 	ft::map<int, int> ftrf;
 	std::map<int, int> stdrf;
 
-	for (int i = 0; i < 10000; ++i) {
+	for (int i = 0; i < 1000000; ++i) {
 		ftrf.insert(ft::make_pair(i, i));
 		stdrf.insert(std::make_pair(i, i));
 	}
 
 	time_t start = clock();
-	for (int i = 0; i < 10000; ++i)
+	for (int i = 0; i < 1000000; ++i)
 		ftrf.erase(i);
 	time_t end = clock();
 
 	time_t start2 = clock();
-	for (int i = 0; i < 10000; ++i)
+	for (int i = 0; i < 1000000; ++i)
 		stdrf.erase(i);
 	time_t end2 = clock();
 
@@ -749,7 +749,7 @@ bool	benchmark_map_erase_iterator() {
 	ft::map<int, int> ftrf;
 	std::map<int, int> stdrf;
 
-	for (int i = 0; i < 10000; ++i) {
+	for (int i = 0; i < 100000; ++i) {
 		ftrf.insert(ft::make_pair(i, i));
 		stdrf.insert(std::make_pair(i, i));
 	}

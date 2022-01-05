@@ -6,7 +6,7 @@
 /*   By: c3b5aw <dev@c3b5aw.dev>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:21:46 by c3b5aw            #+#    #+#             */
-/*   Updated: 2022/01/04 17:58:27 by c3b5aw           ###   ########.fr       */
+/*   Updated: 2022/01/05 09:34:36 by c3b5aw           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -676,18 +676,18 @@ bool	benchmark_set_erase() {
 	ft::set<int> ftrf;
 	std::set<int> stdrf;
 
-	for (int i = 0; i < 10000; ++i) {
+	for (int i = 0; i < 100000; ++i) {
 		ftrf.insert(i);
 		stdrf.insert(i);
 	}
 
 	time_t start = clock();
-	for (int i = 0; i < 10000; ++i)
+	for (int i = 0; i < 100000; ++i)
 		ftrf.erase(i);
 	time_t end = clock();
 
 	time_t start2 = clock();
-	for (int i = 0; i < 10000; ++i)
+	for (int i = 0; i < 100000; ++i)
 		stdrf.erase(i);
 	time_t end2 = clock();
 
@@ -697,7 +697,7 @@ bool	benchmark_set_erase_iterator() {
 	ft::set<int> ftrf;
 	std::set<int> stdrf;
 
-	for (int i = 0; i < 10000; ++i) {
+	for (int i = 0; i < 100000; ++i) {
 		ftrf.insert(i);
 		stdrf.insert(i);
 	}
